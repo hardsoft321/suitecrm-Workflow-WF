@@ -3,7 +3,7 @@
 function wf_getNewStatuses($focus = null, $name = null, $value = null, $view = null) {
     require_once "custom/include/Workflow/WFManager.php";
     
-    if($view == 'SearchForm_basic_search' || $view == 'SearchForm_advanced_search' || $view == 'list_veiw') { /* list_view defined in upgrade_unsafe/../SugarBean.php */
+    if($view == 'SearchForm_basic_search' || $view == 'SearchForm_advanced_search' || $view == 'list_view') { /* list_view defined in upgrade_unsafe/../SugarBean.php */
         return WFManager::getAllStatuses($focus);
     }
     

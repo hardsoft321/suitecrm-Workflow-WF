@@ -4986,7 +4986,7 @@ class SugarBean
                                  "{$value['function']['name'][0]}::{$value['function']['name'][1]}", 
                                  $value['function']['params']);
                   else 
-                    $options = $value['function']($obj, $field, $obj->$field, 'list_veiw');
+                    $options = $value['function']($obj, $field, $obj->$field, 'list_view');
                   if(isset($options[$this->$field])) $return_array[$cache[$field]] = $options[$this->$field];
 /***********************************************
 * NLV END
