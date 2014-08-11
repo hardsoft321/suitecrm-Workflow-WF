@@ -1,19 +1,13 @@
 <?php
 
-global $sugar_config, $db;
+global $sugar_config;
 
 $README = <<<RDME
 Workflow.
-Должен быть установлен модуль /*Logic и*/ SecurityGroups 2.7.3.
-Чтобы подключить workflow к какому-либо модулю, нужен пакет для этого модуля. 
-Название пакета должно иметь имя как <moduleName>_workflow
+Чтобы подключить workflow к какому-либо модулю, нужен пакет для этого модуля, например Tasks_workflow 
 Добавлены модули для управления переходами: WFModules(Модули с маршрутизацией), WFWorkflows (Маршруты), WFStatuses (Статусы маршрутов), WFEvents (Переходы маршрутов).
-Добавлены роли.
+Добавлены поля для сохранения ролей.
 RDME;
-
-$q = "SELECT version FROM upgrade_history where name = 'SecurityGroups - Basic Edition' OR name = 'SecurityGroups - Full Edition' AND status = 'installed'";
-$qr = $db->query($q,true);
-if ($row = $db->fetchByAssoc($qr)) $sg_version = $row['version'];
 
 $manifest = array (
   0 => 
@@ -43,17 +37,12 @@ $manifest = array (
   'version' => '0.6.0',
   'remove_tables' => 'prompt',
   'dependencies' => array(
-    array(
-        'id_name' => 'SecurityGroups',
-        'version' => '2.7.3'
-    ),
   ),
 );
 
 
 $installdefs = array (
   'id' => 'Workflow-WF',
-  'image_dir' => '<basepath>/icons',
   'beans' =>
   array (
     array (
@@ -101,10 +90,6 @@ $installdefs = array (
     array (
       'from' => '<basepath>/SugarModules/modules',
       'to' => 'modules',
-    ),
-    array (
-      'from' => "<basepath>/SugarModules/upgrade_unsafe/{$sugar_config['sugar_version']}/SecurityGroups-basic-{$sg_version}/data/",
-      'to' => 'data',
     ),
     array (
       'from' => "<basepath>/SugarModules/upgrade_unsafe/{$sugar_config['sugar_version']}/include/",

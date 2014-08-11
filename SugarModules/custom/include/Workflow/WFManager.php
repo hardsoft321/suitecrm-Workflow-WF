@@ -124,12 +124,11 @@ class WFManager {
             uniq_name = '{$bean->$statusField}'
             AND wf_module = '{$bean->module_name}'
             AND deleted = 0
-        LIMIT 1
         ";
         
         $qr = $db->query($q);
         $status = BeanFactory::newBean('WFStatuses');
-        while ($row = $db->fetchByAssoc($qr)) {
+        if ($row = $db->fetchByAssoc($qr)) {
             $status->populateFromRow($row);
         }
         
@@ -191,7 +190,7 @@ class WFManager {
             '; ';
         $bean->confirm_list = $confirm_text . $bean->confirm_list;
         
-        if($saveToBean) {
+        if($saveBean) {
             $bean->save();
         }
     }
