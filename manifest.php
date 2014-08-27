@@ -37,6 +37,14 @@ $manifest = array (
   'version' => '0.6.0',
   'remove_tables' => 'prompt',
   'dependencies' => array(
+  
+      /*
+       * Из SecurityTeams (SecurityGroups v2.7.3) скопирован файл include/MVC/View/views/view.detail.php
+       */
+      array(
+          'id_name' => 'SecurityTeams321',
+          'version' => '0.0.0'
+      ),
   ),
 );
 

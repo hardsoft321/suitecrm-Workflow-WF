@@ -8,6 +8,8 @@ class WF_hooks {
   }
 
   function before_save (&$focus, $event) {
+    if(isset($focus->workflowData['skipWFHooks']) && $focus->workflowData['skipWFHooks'] === true)
+        return;
     require_once ('custom/include/Workflow/WFManager.php');
     if(empty($focus->fetched_row['id'])) {       
         $focus->wf_id = WFManager::getWorkflowForBean($focus);
@@ -16,6 +18,9 @@ class WF_hooks {
     if($statusField) {
         $status1 = empty($focus->fetched_row['id']) ? '' : $focus->fetched_row[$statusField];
         $status2 = $focus->$statusField;
+        if(!empty($focus->fetched_row['id'])) {
+            WFManager::checkOutRole($focus, $status1);
+        }
         if($status1 != $status2) {
             WFManager::checkIsEventAllowed($focus, $status1, $status2);
             WFManager::logStatusChange($focus, $status1, $status2, false);
@@ -28,6 +33,8 @@ class WF_hooks {
   }
   
   function after_save (&$focus, $event) {
+    if(isset($focus->workflowData['skipWFHooks']) && $focus->workflowData['skipWFHooks'] === true)
+        return;
     require_once ('custom/include/Workflow/WFManager.php');
     
     $statusField = WFManager::getBeanStatusField($focus);

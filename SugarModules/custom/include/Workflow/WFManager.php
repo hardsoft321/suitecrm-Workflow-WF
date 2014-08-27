@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/WFAclRoles.php';
 
 class WFManager {
     
@@ -36,8 +37,6 @@ class WFManager {
 
     public static function getNextStatuses($bean, $status1 = null) {
         global $db;
-        global $current_user;
-        $mustCheckRole = !is_admin($current_user);
         
         if($bean->wf_id && $status1 === null) {
             $statusField = self::getBeanStatusField($bean);
@@ -46,27 +45,16 @@ class WFManager {
             $status1 = $bean->$statusField;
         }
         if($bean->wf_id && $status1) {
-            if($mustCheckRole) //TODO: добавить роли, привязанные к группе
-                $q = "SELECT DISTINCT s2.uniq_name, s2.name, e.filter_function FROM wf_events e
-                LEFT JOIN wf_statuses s2 ON s2.id = e.status2_id
-                LEFT JOIN wf_statuses s1 ON s1.id = e.status1_id
-                INNER JOIN acl_roles_users aru ON (s1.role_id = aru.role_id)
-                WHERE
-                    e.status1_id IN (SELECT id FROM wf_statuses WHERE uniq_name='{$status1}' AND wf_module = '{$bean->module_name}' AND deleted = 0)
-                    AND e.workflow_id = '{$bean->wf_id}'
-                    AND e.deleted = 0
-                    AND aru.user_id = '{$current_user->id}'
-                ORDER BY e.sort
-                ";
-            else
-                $q = "SELECT s2.uniq_name, s2.name, e.filter_function FROM wf_events e
-                LEFT JOIN wf_statuses s2 ON s2.id = e.status2_id
-                WHERE
-                    e.status1_id IN (SELECT id FROM wf_statuses WHERE uniq_name='{$status1}' AND wf_module = '{$bean->module_name}' AND deleted = 0)
-                    AND e.workflow_id = '{$bean->wf_id}'
-                    AND e.deleted = 0
-                ORDER BY e.sort
-                ";
+            if(!self::isFitOutRole($bean, $status1))
+                return array();
+            $q = "SELECT s2.uniq_name, s2.name, e.filter_function FROM wf_events e
+            LEFT JOIN wf_statuses s2 ON s2.id = e.status2_id
+            WHERE
+                e.status1_id IN (SELECT id FROM wf_statuses WHERE uniq_name='{$status1}' AND wf_module = '{$bean->module_name}' AND deleted = 0)
+                AND e.workflow_id = '{$bean->wf_id}'
+                AND e.deleted = 0
+            ORDER BY e.sort
+            ";
         }
         else {
             $q = "SELECT s2.uniq_name, s2.name, e.filter_function FROM wf_events e
@@ -141,6 +129,33 @@ class WFManager {
         $nextStatuses = self::getNextStatuses($bean, $status1);
         if(!array_key_exists($status2, $nextStatuses))
             sugar_die('Status changing is not allowed');
+    }
+    
+    public static function checkOutRole($bean, $status) {
+        if(!self::isFitOutRole($bean, $status))
+            sugar_die('Access Denied');
+    }
+    
+    protected static function isFitOutRole($bean, $status) {
+        global $db;
+        global $current_user;
+        if(is_admin($current_user))
+            return true;
+        
+        if($bean->wf_id && $status === null) {
+            $statusField = self::getBeanStatusField($bean);
+            if(!$statusField)
+                sugar_die('Field for status not found');
+            $status = $bean->$statusField;
+        }
+        $q = "SELECT out_role_type, role_id FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module = '{$bean->module_name}' AND deleted = 0";
+        if($row = $db->fetchOne($q)) {
+            if($row['out_role_type'] == 'role') {//TODO: check has view access (i.e. in same group)
+                return WFAclRoles::userHasRole($row['role_id']);
+            }
+            return $bean->isOwner($current_user->id);
+        }
+        return false;
     }
     
     public static function getBeanStatusField($bean) {
