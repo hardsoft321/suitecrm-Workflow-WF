@@ -58,7 +58,7 @@ $dictionary['WFStatus'] = array(
         ),
   ),
 );
-//$dictionary["WFStatus"]['indices'][] = array('name'=>'wfstatus_uniqname_uk', 'type'=>'unique', 'fields'=>array('uniq_name')); //TODO: уникально в пределах модуля
+$dictionary["WFStatus"]['indices'][] = array('name'=>'idx_wfstatus_uniq_m_d', 'type'=>'index', 'fields'=>array('uniq_name', 'wf_module', 'deleted'));
 
 VardefManager::createVardef('WFStatuses', 'WFStatus', array('default'));
 ?>

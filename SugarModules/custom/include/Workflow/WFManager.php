@@ -27,12 +27,12 @@ class WFManager {
         $qr = $db->query($q);
         if($row = $db->fetchByAssoc($qr))
             return $row['id'];
-        sugar_die('No workflow for bean');
-        return false;
+        //sugar_die('No workflow for bean');
+        return '';
     }
 
     public static function isBeanInWorkflow($bean) {
-        return isset($bean->wf_id);
+        return isset($bean->wf_id) && $bean->wf_id;
     }
 
     public static function getNextStatuses($bean, $status1 = null) {
@@ -40,8 +40,10 @@ class WFManager {
         
         if($bean->wf_id && $status1 === null) {
             $statusField = self::getBeanStatusField($bean);
-            if(!$statusField)
-                sugar_die('Field for status not found');
+            if(!$statusField) {
+                //sugar_die('Field for status not found');
+                return array();
+            }
             $status1 = $bean->$statusField;
         }
         if($bean->wf_id && $status1) {
@@ -142,12 +144,6 @@ class WFManager {
         if(is_admin($current_user))
             return true;
         
-        if($bean->wf_id && $status === null) {
-            $statusField = self::getBeanStatusField($bean);
-            if(!$statusField)
-                sugar_die('Field for status not found');
-            $status = $bean->$statusField;
-        }
         $q = "SELECT out_role_type, role_id FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module = '{$bean->module_name}' AND deleted = 0";
         if($row = $db->fetchOne($q)) {
             if($row['out_role_type'] == 'role') {//TODO: check has view access (i.e. in same group)
@@ -234,7 +230,7 @@ class WFManager {
     
     protected static function translateStatus($status, $module_name) {
         global $db;
-        $q = "SELECT name FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module='{$module_name}'";
+        $q = "SELECT name FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module='{$module_name}' AND deleted = 0";
         $row = $db->fetchOne($q);
         if(!$row)
             return $status;

@@ -100,7 +100,7 @@ $dictionary['WFEvent'] = array(
 		),
   ),
 );
-//$dictionary["WFStatus"]['indices'][] = array('name'=>'wfstatus_name_uk', 'type'=>'unique', 'fields'=>array('name'));
+$dictionary["WFStatus"]['indices'][] = array('name'=>'idx_wfevents_st1', 'type'=>'index', 'fields'=>array('status1_id', 'deleted'));
 
 VardefManager::createVardef('WFEvents', 'WFEvent', array('default'));
 ?>

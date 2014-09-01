@@ -19,7 +19,6 @@ $dictionary['WFModule'] = array(
 		),		
   ),
 );
-//$dictionary["WFStatus"]['indices'][] = array('name'=>'wfstatus_name_uk', 'type'=>'unique', 'fields'=>array('name'));
 
 VardefManager::createVardef('WFModule', 'WFModule', array('default'));
 ?>

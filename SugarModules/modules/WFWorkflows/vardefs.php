@@ -40,7 +40,7 @@ $dictionary['WFWorkflow'] = array(
         ),
   ),
 );
-$dictionary["WFWorkflow"]['indices'][] = array('name'=>'workflow_uniqname_uk', 'type'=>'unique', 'fields'=>array('uniq_name', 'deleted'));
+$dictionary["WFWorkflow"]['indices'][] = array('name'=>'idx_workflow_uniq_d', 'type'=>'index', 'fields'=>array('uniq_name', 'deleted'));
 
 VardefManager::createVardef('WFWorkflows', 'WFWorkflow', array('default'));
 ?>
