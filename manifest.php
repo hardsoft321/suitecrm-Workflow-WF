@@ -128,5 +128,11 @@ $installdefs = array (
          'function' => 'after_entry_point',
       ),
   ),
+  'relationships' => array (
+    array (
+        'module' => 'Users',
+        'meta_data' => '<basepath>/SugarModules/relationships/wf_status_assignedMetaData.php',
+    ),
+  ),
 );
 

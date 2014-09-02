@@ -149,6 +149,10 @@ class WFManager {
             if($row['out_role_type'] == 'role') {//TODO: check has view access (i.e. in same group)
                 return WFAclRoles::userHasRole($row['role_id']);
             }
+            if($row['out_role_type'] == 'assigned') {
+                require_once __DIR__."/WFStatusAssigned.php";
+                return WFStatusAssigned::hasAssignedUser($row['role_id'], $bean->id, $bean->module_name, $current_user->id);
+            }
             return $bean->isOwner($current_user->id);
         }
         return false;
@@ -209,10 +213,21 @@ class WFManager {
     public static function runAfterEventHooks($bean, $status1, $status2) {
         global $db;
         
-        $q = "SELECT after_save FROM wf_events e
+        /* $q = "SELECT after_save FROM wf_events e
         WHERE
             e.status1_id IN (SELECT id FROM wf_statuses WHERE uniq_name='{$status1}' AND wf_module = '{$bean->module_name}' AND deleted = 0)
             AND e.status2_id IN (SELECT id FROM wf_statuses WHERE uniq_name='{$status2}' AND wf_module = '{$bean->module_name}' AND deleted = 0)
+            AND e.workflow_id = '{$bean->wf_id}'
+            AND e.after_save IS NOT NULL
+            AND e.deleted = 0
+        ";*/
+        $q = "SELECT e.after_save
+                    , s1.role_id AS s1_role_id
+                    , s2.role_id AS s2_role_id
+          FROM wf_events e, wf_statuses s1, wf_statuses s2
+          WHERE
+                e.status1_id = s1.id AND s1.uniq_name='{$status1}' AND s1.wf_module = '{$bean->module_name}' AND s1.deleted = 0
+            AND e.status2_id = s2.id AND s2.uniq_name='{$status2}' AND s2.wf_module = '{$bean->module_name}' AND s2.deleted = 0
             AND e.workflow_id = '{$bean->wf_id}'
             AND e.after_save IS NOT NULL
             AND e.deleted = 0
@@ -221,8 +236,15 @@ class WFManager {
         $res = $db->query($q);
         while ($row = $db->fetchByAssoc($res)) {
             if($row['after_save']) {
+                require_once __DIR__.'/functions/BaseProcedure.php';
                 require_once 'custom/include/Workflow/functions/procedures/'.$row['after_save'].'.php';
                 $proc = new $row['after_save'];
+                $proc->status1_data = array(
+                    'role_id' => $row['s1_role_id'],
+                );
+                $proc->status2_data = array(
+                    'role_id' => $row['s2_role_id'],
+                );
                 $proc->doWork($bean);
             }
         }

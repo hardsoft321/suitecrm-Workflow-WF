@@ -53,7 +53,7 @@ $dictionary['WFStatus'] = array(
           'type' => 'enum',
 		  'len' => '10',
 		  'options' => 'out_role_types',
-		  'default' => 'default',
+		  'default' => 'owner',
           'required' => true,
         ),
   ),

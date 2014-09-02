@@ -13,7 +13,8 @@ $app_list_strings['in_role_types'] = array(
 );
 $app_list_strings['out_role_types'] = array(
     'role' => 'All in Role',
-    'assign' => 'Assigned',
+    'assigned' => 'Assigned In Status',
+    'owner' => 'Record Owner',
 );
 
 $app_strings['LBL_CONFIRM_LIST'] = 'Confirm List';

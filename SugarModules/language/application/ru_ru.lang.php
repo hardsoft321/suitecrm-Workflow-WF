@@ -12,7 +12,8 @@ $app_list_strings['in_role_types'] = array(
 );
 $app_list_strings['out_role_types'] = array(
 	'role' => 'Все в роли',
-	'assign' => 'Ответственный',
+	'assigned' => 'Ответственный на статусе',
+	'owner' => 'Владелец записи',
 );
 
 $app_strings['LBL_CONFIRM_LIST'] = 'Журнал согласования';
