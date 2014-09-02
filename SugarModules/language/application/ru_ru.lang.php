@@ -1,9 +1,11 @@
 <?php
-
-$app_list_strings['moduleList']['WFModules'] = 'Модули в маршрутизации';
-$app_list_strings['moduleList']['WFWorkflows'] = 'Маршруты';
-$app_list_strings['moduleList']['WFStatuses'] = 'Статусы маршрутов';
-$app_list_strings['moduleList']['WFEvents'] = 'Переходы маршрутов';
+global $current_user;
+if(is_admin($current_user)) {
+    $app_list_strings['moduleList']['WFModules'] = 'Модули в маршрутизации';
+    $app_list_strings['moduleList']['WFWorkflows'] = 'Маршруты';
+    $app_list_strings['moduleList']['WFStatuses'] = 'Статусы маршрутов';
+    $app_list_strings['moduleList']['WFEvents'] = 'Переходы маршрутов';
+}
 
 $app_list_strings['in_role_types'] = array(
 	'role' => 'Все в роли',
