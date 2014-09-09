@@ -213,14 +213,6 @@ class WFManager {
     public static function runAfterEventHooks($bean, $status1, $status2) {
         global $db;
         
-        /* $q = "SELECT after_save FROM wf_events e
-        WHERE
-            e.status1_id IN (SELECT id FROM wf_statuses WHERE uniq_name='{$status1}' AND wf_module = '{$bean->module_name}' AND deleted = 0)
-            AND e.status2_id IN (SELECT id FROM wf_statuses WHERE uniq_name='{$status2}' AND wf_module = '{$bean->module_name}' AND deleted = 0)
-            AND e.workflow_id = '{$bean->wf_id}'
-            AND e.after_save IS NOT NULL
-            AND e.deleted = 0
-        ";*/
         $q = "SELECT e.after_save
                     , s1.role_id AS s1_role_id
                     , s2.role_id AS s2_role_id

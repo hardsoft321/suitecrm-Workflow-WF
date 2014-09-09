@@ -11,7 +11,23 @@ if(!$statusField)
 $bean->$statusField = $_POST['status'];
 $bean->last_resolution = $_POST['resolution'];
 
-$bean->save(true);
+$errors = array();
+if(!$bean->last_resolution) {
+    $errors[] = array(
+        'name' => 'resolution',
+        'message' => 'Поле "Резолюция" обязательно к заполнению'
+    );
+}
+
+if(empty($errors)) {
+    $bean->save(true);
+}
+else {
+    $errMsg = '';
+    foreach($errors as $err)
+        $errMsg .= $err['message']."<br/>\n";
+    SugarApplication::appendErrorMessage($errMsg);
+}
 
 $url = "index.php?action={$_POST['return_action']}&module={$_POST['return_module']}&record={$_POST['return_record']}";
 header("Location: $url");

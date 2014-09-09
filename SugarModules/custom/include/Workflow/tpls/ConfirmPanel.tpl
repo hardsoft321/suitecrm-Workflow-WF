@@ -22,6 +22,14 @@
               "{$u}" {if $smarty.foreach.e.last}{else},{/if} /* FIXME надо экранировать $u */
         {/foreach} ];
   {/foreach}
+  
+  {literal}
+    addToValidate('confirm', 'resolution', null, true, 'Резолюция');
+    $('#confirm input[name="submit"]').click(function() {
+      var _form = document.getElementById('confirm'); if(check_form('confirm'))SUGAR.ajaxUI.submitForm(_form);return false;
+    });
+  {/literal}
+  
   {rdelim});
 {literal}
 // TODO название формы и полей
@@ -102,11 +110,11 @@ function wf_toggle_panel (id) {
 
     <table border="0" margin="5" style="min-width:400px">
       <tr margin="15">
-        <td style="padding:5px"><label for="resolution">Резолюция:</label></td>
+        <td style="padding:5px"><label for="resolution">Резолюция:</label><span class="required">*</span></td>
        <td style="padding:5px"><textarea name="resolution" id="resolution" style="width:100%"></textarea></td> 
       </tr>
       <tr margin="15">
-        <td style="padding:5px"><label for="status">Новый статус:</label></td>
+        <td style="padding:5px"><label for="status">Новый статус:</label><span class="required">*</span></td>
        <td style="padding:5px">{html_options name=status options=$newStatuses id=newStatus style="width:100%"
                                              onchange="wf_onchange_new_status();"}</td> 
       </tr>
