@@ -10,7 +10,8 @@ function wf_getNewStatuses($focus = null, $name = null, $value = null, $view = n
     $res = array();
     if($view == 'DetailView' || ($view == 'EditView' && !empty($focus->fetched_row['id']))) {
         $status = WFManager::getBeanCurrentStatus($focus);
-        $res = array_merge($res, array($status->uniq_name => $status->name));
+        if($status)
+            $res = array_merge($res, array($status->uniq_name => $status->name));
     }
     if($view == 'EditView'/* && empty($focus->fetched_row['id'])*/ || $view == 'QuickCreate') {
         $res = array_merge($res, WFManager::getNextStatuses($focus));
