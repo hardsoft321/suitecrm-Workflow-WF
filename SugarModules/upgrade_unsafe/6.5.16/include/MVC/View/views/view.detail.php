@@ -69,36 +69,11 @@ class ViewDetail extends SugarView
      */
     public function preDisplay()
     {
-        /* BEGIN - SECURITY GROUPS */ 
-        /** moved to end of block
  	    $metadataFile = $this->getMetaDataFile();
-        */
-        $metadataFile = null;
-        $foundViewDefs = false;
-        if(empty($_SESSION['groupLayout'])) {
-            //get primary group id of current user and check to see if a layout exists for that group
-            require_once('modules/SecurityGroups/SecurityGroup.php');
-            $primary_group_id = SecurityGroup::getPrimaryGroupID();
-            if(!empty($primary_group_id) && file_exists('custom/modules/' . $this->module . '/metadata/'.$primary_group_id.'/detailviewdefs.php')){
-                $_SESSION['groupLayout'] = $primary_group_id;
-                $metadataFile = 'custom/modules/' . $this->module . '/metadata/'.$primary_group_id.'/detailviewdefs.php';
-            }       
-        } else {
-            if(file_exists('custom/modules/' . $this->module . '/metadata/'.$_SESSION['groupLayout'].'/detailviewdefs.php')){
-                $metadataFile = 'custom/modules/' . $this->module . '/metadata/'.$_SESSION['groupLayout'].'/detailviewdefs.php';
-            }       
-        }       
-        if(isset($metadataFile)){
-            $foundViewDefs = true;
-        }
-        else {      
-        $metadataFile = $this->getMetaDataFile();
-        }
-        /* END - SECURITY GROUPS */ 
  	    $this->dv = new DetailView2();
  	    $this->dv->ss =&  $this->ss;
  	    $this->dv->setup($this->module, $this->bean, $metadataFile, get_custom_file_if_exists('include/DetailView/DetailView.tpl'));
-		
+ 	    
 /*************************
 * NLV START
 **************************/
@@ -134,6 +109,7 @@ class ViewDetail extends SugarView
 /*************************
 * NLV END
 **************************/
+
     } 	
  	
     /**

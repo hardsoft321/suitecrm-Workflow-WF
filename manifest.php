@@ -7,6 +7,7 @@ Workflow.
 Чтобы подключить workflow к какому-либо модулю, нужен пакет для этого модуля, например Tasks_workflow 
 Добавлены модули для управления переходами: WFModules(Модули с маршрутизацией), WFWorkflows (Маршруты), WFStatuses (Статусы маршрутов), WFEvents (Переходы маршрутов).
 Добавлены поля для сохранения ролей.
+Есть upgradeunsafe файлы. Например, если также ставится SecurtySuite, необходимо разрешить конфликт в файле include/MVC/View/views/view.detail.php
 RDME;
 
 $manifest = array (
@@ -34,17 +35,9 @@ $manifest = array (
   'name' => 'Workflow-WF',
   'published_date' => '2014-06-24',
   'type' => 'module',
-  'version' => '0.6.0',
+  'version' => '0.6.0', //есть зависимости от Workflow-WF v0.6.0 в workflow_securitygroups, tasks_workflow
   'remove_tables' => 'prompt',
   'dependencies' => array(
-  
-      /*
-       * Из SecurityTeams (SecurityGroups v2.7.3) скопирован файл include/MVC/View/views/view.detail.php
-       */
-      array(
-          'id_name' => 'SecurityTeams321',
-          'version' => '0.0.0'
-      ),
   ),
 );
 
