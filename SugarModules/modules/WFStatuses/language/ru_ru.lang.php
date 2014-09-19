@@ -21,12 +21,17 @@ $mod_strings = array (
 'LBL_EXPORT_WF_MODULE' => 'Модуль',
 
 'LBL_UNIQ_NAME' => 'Уникальное имя',
+'LBL_PARENT_STATUS_NAME' => 'Родительский статус',
 
 'LBL_ROLE_ID' => 'ID роли:' ,
 'LBL_ROLE_NAME' => 'Роль:' ,
 
-'LBL_IN_ROLE_TYPE' => 'In',
-'LBL_OUT_ROLE_TYPE' => 'Out',
+// 'LBL_IN_ROLE_TYPE' => 'Кто может менять ответственного (In)',
+// 'LBL_OUT_ROLE_TYPE' => 'Кто может перевести на следующий статус (Out)',
+'LBL_EDIT_ROLE_TYPE' => 'Доступ на редактирование/удаление записи',
+'LBL_FRONT_ASSIGNED_LIST_FUNCTION' => 'Функция списка выбора ответственного',
+'LBL_ASSIGNED_LIST_FUNCTION' => 'Функция списка ответственных',
+'LBL_CONFIRM_LIST_FUNCTION' => 'Функция списка выбора согласующего',
 
 );
 

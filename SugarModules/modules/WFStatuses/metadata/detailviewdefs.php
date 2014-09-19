@@ -28,7 +28,11 @@ $viewdefs ['WFStatuses'] = array (  'DetailView' =>
       'lbl_information' => array (
         array ('name', 'uniq_name'),
 		array ('role_name', 'wf_module'),
-		array ('in_role_type', 'out_role_type'),
+//		array ('in_role_type', 'out_role_type'),
+		array ('edit_role_type', 'parent_status_name'),
+		array ('front_assigned_list_function'),
+		array ('assigned_list_function'),
+		array ('confirm_list_function'),
       ),
     ),
   ),

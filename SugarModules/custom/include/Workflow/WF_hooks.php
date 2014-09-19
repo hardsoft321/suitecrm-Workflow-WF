@@ -18,12 +18,39 @@ class WF_hooks {
     if($statusField) {
         $status1 = empty($focus->fetched_row['id']) ? '' : $focus->fetched_row[$statusField];
         $status2 = $focus->$statusField;
-        if(!empty($focus->fetched_row['id'])) {
-            WFManager::checkOutRole($focus, $status1);
-        }
+        $assigned1 = empty($focus->fetched_row['id']) ? '' : $focus->fetched_row['assigned_user_id'];
+        $assigned2 = $focus->assigned_user_id;
+        /*if(!empty($focus->fetched_row['id'])) {
+            //WFManager::checkOutRole($focus, $status1);
+            if(!WFManager::canChangeStatus($focus, $status1)) {
+                sugar_die('Access Denied');
+            }
+        }*/
         if($status1 != $status2) {
             WFManager::checkIsEventAllowed($focus, $status1, $status2);
+            
+            if(!empty($focus->fetched_row['id'])) {
+                if(!WFManager::canChangeStatus($focus, $status1)) {
+                    sugar_die('Access Denied');
+                }
+                
+                $possibleUsers = WFManager::getNextAssignedUsers($focus, $status2);
+                if(!array_key_exists($assigned2, $possibleUsers)) {
+                    sugar_die('Ответственный задан не верно');
+                }
+            }
+            
             WFManager::logStatusChange($focus, $status1, $status2, false);
+        }
+        else {
+            if(!empty($focus->fetched_row['id']) && $assigned1 != $assigned2) {
+                if(!WFManager::canChangeAssignedUser($focus, $status1)) { 
+                    sugar_die('У Вас нет прав на смену ответственного');
+                }
+                if(!WFManager::isInConfirmUsers($assigned2, $focus, $status1)) {
+                    sugar_die('Указанного пользователя нельзя назначить ответственным');
+                }
+            }
         }
     }
     
@@ -43,6 +70,7 @@ class WF_hooks {
         $status2 = $focus->$statusField;
         if($status1 != $status2) {
             WFManager::runAfterEventHooks($focus, $status1, $status2);
+            WFManager::autoFillAssignedUser($focus, $status1);
         }
     }
   }

@@ -19,6 +19,25 @@ $dictionary['WFStatus'] = array(
 		  'len' => '255',
           'required' => true,
         ),
+        'parent_status_id' => array (
+          'name' => 'parent_status_id',
+          'vname' => 'LBL_PARENT_STATUS_ID',
+          'type' => 'char',
+		  'len' => '36',
+          'required' => false,
+        ),
+        'parent_status_name' => array (
+			'name' => 'parent_status_name',
+			'rname' => 'name',
+			'id_name' => 'parent_status_id',
+			'vname' => 'LBL_PARENT_STATUS_NAME',
+			'type' => 'relate',
+			'table' => 'wf_statuses',
+			'module' => 'WFStatuses',
+			'source' => 'non-db',
+			'required' => false,
+		),
+        
 		'role_id' => array (
 			'name' => 'role_id',
 			'vname' => 'LBL_ROLE_ID',
@@ -38,7 +57,7 @@ $dictionary['WFStatus'] = array(
 			'required' => true,
 		),
 
-		'in_role_type' => array (
+	/*	'in_role_type' => array (
           'name' => 'in_role_type',
           'vname' => 'LBL_IN_ROLE_TYPE',
           'type' => 'enum',
@@ -55,7 +74,37 @@ $dictionary['WFStatus'] = array(
 		  'options' => 'out_role_types',
 		  'default' => 'owner',
           'required' => true,
+        ),*/
+        'edit_role_type' => array (
+          'name' => 'edit_role_type',
+          'vname' => 'LBL_EDIT_ROLE_TYPE',
+          'type' => 'enum',
+		  'len' => '10',
+		  'options' => 'edit_role_types',
+		  'default' => 'owner',
+          'required' => true,
         ),
+        'front_assigned_list_function' => array (
+			'name' => 'front_assigned_list_function',
+			'vname' => 'LBL_FRONT_ASSIGNED_LIST_FUNCTION',
+			'type' => 'enum',
+            'function' => 'wf_getAssignedListFunctions',
+			'len' => '50',
+		),
+        'assigned_list_function' => array (
+			'name' => 'assigned_list_function',
+			'vname' => 'LBL_ASSIGNED_LIST_FUNCTION',
+			'type' => 'enum',
+            'function' => 'wf_getAssignedListFunctions',
+			'len' => '50',
+		),
+		'confirm_list_function' => array (
+			'name' => 'confirm_list_function',
+			'vname' => 'LBL_CONFIRM_LIST_FUNCTION',
+			'type' => 'enum',
+            'function' => 'wf_getAssignedListFunctions',
+			'len' => '50',
+		),
   ),
 );
 $dictionary["WFStatus"]['indices'][] = array('name'=>'idx_wfstatus_uniq_m_d', 'type'=>'index', 'fields'=>array('uniq_name', 'wf_module', 'deleted'));

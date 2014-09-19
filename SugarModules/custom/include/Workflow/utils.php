@@ -52,4 +52,17 @@ function wf_getProcedures($focus = null, $name = null, $value = null, $view = nu
     return $res;
 }
 
+function wf_getAssignedListFunctions($focus = null, $name = null, $value = null, $view = null) {
+    $files = glob(__DIR__.'/functions/userlists/*.php');
+    $res = array(''=>'');
+    require_once __DIR__.'/functions/BaseUserList.php';
+    foreach($files as $f) {
+        $name = basename($f, '.php');
+        require_once $f;
+        $func = new $name;
+        $res[$name] = $func->getName();
+    }
+    return $res;
+}
+
 ?>

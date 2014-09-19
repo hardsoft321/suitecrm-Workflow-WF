@@ -20,12 +20,17 @@ $mod_strings = array (
 'LBL_EXPORT_WF_MODULE' => 'Module',
 
 'LBL_UNIQ_NAME' => 'Unique Name',
+'LBL_PARENT_STATUS_NAME' => 'Parent Status Name',
 
 'LBL_ROLE_ID' => 'Role ID:' ,
 'LBL_ROLE_NAME' => 'Role:' ,
 
-'LBL_IN_ROLE_TYPE' => 'In',
-'LBL_OUT_ROLE_TYPE' => 'Out',
+// 'LBL_IN_ROLE_TYPE' => 'In',
+// 'LBL_OUT_ROLE_TYPE' => 'Out',
+'LBL_EDIT_ROLE_TYPE' => 'Edit/delete access',
+'LBL_FRONT_ASSIGNED_LIST_FUNCTION' => 'Front Assigned List Function',
+'LBL_ASSIGNED_LIST_FUNCTION' => 'Assigned List Function',
+'LBL_CONFIRM_LIST_FUNCTION' => 'Confirm List Function',
 
 );
 

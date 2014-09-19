@@ -37,8 +37,7 @@
 *}
 {if !empty($workflow)}
   <div class="confirm-panel-wr" style="margin-bottom:5px">
-  {include file="custom/include/Workflow/tpls/ConfirmPanel.tpl" newStatuses=$workflow.newStatuses executers=$workflow.executers
-           errors=$workflow.errors}
+  {include file="custom/include/Workflow/tpls/ConfirmPanel.tpl" workflow=$workflow}
   </div>
 {/if}
 {{include file=$headerTpl}}

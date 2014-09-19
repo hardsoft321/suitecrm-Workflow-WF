@@ -7,15 +7,22 @@ if(is_admin($current_user)) {
     $app_list_strings['moduleList']['WFEvents'] = 'Workflow Events';
 }
 
-$app_list_strings['in_role_types'] = array(
+/*$app_list_strings['in_role_types'] = array(
     'role' => 'All in Role',
-    'old' => 'Recent Executer',
-    //'function' => '',
-);
-$app_list_strings['out_role_types'] = array(
+    // 'old' => 'Recent Executer',
+    'function' => 'From Assigned List Function',
+);*/
+/*$app_list_strings['out_role_types'] = array(
     'role' => 'All in Role',
     'assigned' => 'Assigned In Status',
     'owner' => 'Record Owner',
+);*/
+
+$app_list_strings['edit_role_types'] = array(
+    'nobody' => 'Nobody but Admin',
+//	'role' => 'All in Role',
+//	'assigned' => 'Assigned In Status',
+	'owner' => 'Owner',
 );
 
 $app_strings['LBL_CONFIRM_LIST'] = 'Confirm List';

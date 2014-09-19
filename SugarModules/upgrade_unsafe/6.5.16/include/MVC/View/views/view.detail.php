@@ -75,39 +75,21 @@ class ViewDetail extends SugarView
  	    $this->dv->setup($this->module, $this->bean, $metadataFile, get_custom_file_if_exists('include/DetailView/DetailView.tpl'));
  	    
 /*************************
-* NLV START
+* NLV WORKFLOW-WF START
 **************************/
         require_once ('custom/include/Workflow/WFManager.php');
-        //Если модуль в маршруте
-        if(WFManager::isBeanInWorkflow($this->bean)) {
-            global $current_user;
-            $statuses = WFManager::getNextStatuses($this->bean);
-
-            if (count($statuses) > 0) {
-              $this->dv->ss->assign("workflow", array (
-                  'newStatuses' => $statuses, 
-                  'executers' => array(),
-                  'errors' => array()
-              ));
-                    // TODO это вообще должно определятся и так
+        $workflowData = WFManager::getEditFormData($this->bean);
+        if(!empty($workflowData)) {
+            $this->dv->ss->assign('workflow', $workflowData);
+            
+                        // TODO это вообще должно определятся и так
                     //$this->dv->ss->assign("module", $this->module);
               $this->dv->ss->assign("return_module", $this->module);
               $this->dv->ss->assign("return_action", $this->action);
               $this->dv->ss->assign("return_record", $this->bean->id);
-            }
-            
-            /*$statusAudit = WFManager::getStatusAuditForBean($this->bean);
-            if($statusAudit) {
-                $timeDate = new TimeDate();
-                foreach($statusAudit as &$row) {
-                    $row['date'] = $timeDate->to_display_date_time($row['date_created'], true, true, $current_user);
-                }
-                unset($row);
-                $this->dv->ss->assign("wf_statusAudit", $statusAudit);
-            }*/
         }
 /*************************
-* NLV END
+* NLV WORKFLOW-WF END
 **************************/
 
     } 	

@@ -5,20 +5,9 @@ $bean = BeanFactory::getBean($_POST['module'], $_POST['record']);
 if (empty($bean->id))
     sugar_die ("Запись не найдена");
 
-$statusField = WFManager::getBeanStatusField($bean);
-if(!$statusField)
-    sugar_die('Field for status not found');
-$bean->$statusField = $_POST['status'];
-$bean->last_resolution = $_POST['resolution'];
-$bean->assigned_user_id = $_POST['assigned_user'];
+$bean->assigned_user_id = $_POST['new_assign_user'];
 
 $errors = array();
-if(!$bean->last_resolution) {
-    $errors[] = array(
-        'name' => 'resolution',
-        'message' => 'Поле "Резолюция" обязательно к заполнению'
-    );
-}
 
 if(empty($errors)) {
     $bean->save(true);

@@ -22,7 +22,7 @@ $popupMeta = array('moduleMain' => 'WFModule',
 								'link'    => true,
 							'default' => true),
 							'default' => true),
-                                                ),
+                                              
 						'searchdefs'   => array(
 										 	'wf_module', 'type_field'
 										  )

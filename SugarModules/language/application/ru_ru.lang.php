@@ -9,12 +9,19 @@ if(is_admin($current_user)) {
 
 $app_list_strings['in_role_types'] = array(
 	'role' => 'Все в роли',
-	'old' => 'Ранее закрепленный',
-	//'function' => '',
+	// 'old' => 'Ранее закрепленный',
+	'function' => 'Из функции выбора ответственного',
 );
 $app_list_strings['out_role_types'] = array(
 	'role' => 'Все в роли',
 	'assigned' => 'Ответственный на статусе',
+	'owner' => 'Владелец записи',
+);
+
+$app_list_strings['edit_role_types'] = array(
+    'nobody' => 'Никто кроме администратора',
+//	'role' => 'Все в роли',
+//	'assigned' => 'Ответственный на статусе',
 	'owner' => 'Владелец записи',
 );
 

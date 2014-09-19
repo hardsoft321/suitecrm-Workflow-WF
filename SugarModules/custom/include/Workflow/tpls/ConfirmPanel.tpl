@@ -1,20 +1,7 @@
-<!--
-<script type="text/javascript" src="custom/include/Workflow/js/wf_panels.js"></script>
-<script type="text/javascript" src="custom/include/Workflow/js/wf_confirm_panel.js"></script>
--->
 <script>
 
   YAHOO.util.Event.onDOMReady(function () {ldelim}
-  wf_executers = [];
-  {assign var="firstStatus" value=""}
-  {foreach name="l" from=$executers key="status" item="users"}
-    {if $smarty.foreach.l.first} {assign var="firstStatus" value=$status} {/if}
-    {append var=allExecuters key=$status value=$desc}
-    wf_executers["{$status}"] =
-        [ {foreach name="l" from=$users key="k" item="u"}
-              ["{$k}", "{$u}"] {if $smarty.foreach.l.last}{else},{/if}
-        {/foreach} ];
-  {/foreach}
+  
   wf_errors = [];
   {foreach name="l" from=$errors key="status" item="es"}
     wf_errors["{$status}"] =
@@ -22,12 +9,16 @@
               "{$u}" {if $smarty.foreach.e.last}{else},{/if} /* FIXME надо экранировать $u */
         {/foreach} ];
   {/foreach}
-  
+
+  wf_assignedUsers = {$workflow.assignedUsersString};
   {literal}
     addToValidate('confirm', 'resolution', null, true, 'Резолюция');
+    addToValidate('confirm', 'assigned_user', null, true, 'Ответственный');
     $('#confirm input[name="submit"]').click(function() {
-      var _form = document.getElementById('confirm'); if(check_form('confirm'))SUGAR.ajaxUI.submitForm(_form);return false;
+      var _form = document.getElementById('confirm'); return check_form('confirm');
     });
+    
+    wf_onchange_new_status();
   {/literal}
   
   {rdelim});
@@ -38,16 +29,15 @@ function wf_onchange_new_status () {
   var disable = true;
   if (statusSel.length > 0) {
     var status = statusSel[statusSel.selectedIndex].value;
-/*
-    var userSel = document.confirm.executer;
+
+    var userSel = document.confirm.assigned_user;
     userSel.options.length = 0;
-    if (status != "" && wf_executers[status] !== undefined && wf_executers[status].length > 0) {
+    if (status != "" && wf_assignedUsers[status] !== undefined && wf_assignedUsers[status].length > 0) {
       disable = false;
 
-      for (i = 0; i < wf_executers[status].length; i++) 
-         userSel.options[i] = new Option(wf_executers[status][i][1], wf_executers[status][i][0]);
+      for (i = 0; i < wf_assignedUsers[status].length; i++) 
+         userSel.options[i] = new Option(wf_assignedUsers[status][i][1], wf_assignedUsers[status][i][0]);
     }
-*/
 
     if (status != "" && wf_errors[status] !== undefined && wf_errors[status].length > 0) {
       var error_list = "<ul>"
@@ -90,19 +80,19 @@ function wf_toggle_panel (id) {
            onclick="wf_togle_panel('confirm_panel');"/>
   </a>
 </span>
-<div id="confirm_panel" style="display: none;
-                margin-top: 5px;
+
+<div id="confirm_panel" style="display:none">
+                
+  {if !empty($workflow.newStatuses)}  
+  <form id='confirm' name='confirm' action='index.php?entryPoint=wf_confirm' method='POST' 
+         style="margin-top: 5px;
                 border-style: solid;
                 border-width: 1px;
                 border-color: #abc3d7;
                 padding: 5px;
                 padding-right: 0px;">
-
-  <form id='confirm' name='confirm' action='index.php?entryPoint=wf_confirm' method='POST'>
     <input type='hidden' id='record' name='record' value='{$fields.id.value}'> 
-    <input type='hidden' id='action' name='action' value='confirm'>
     <input type='hidden' id='module' name='module' value='{$module}'>
-    <input type='hidden' id='wf_type' name='wf_type' value='{$fields.wf_type.value}'>
 
     <input type='hidden' id='return_module' name='return_module' value = '{$return_module}'>
     <input type='hidden' id='return_action' name='return_action' value = '{$return_action}'>
@@ -115,25 +105,49 @@ function wf_toggle_panel (id) {
       </tr>
       <tr margin="15">
         <td style="padding:5px"><label for="status">Новый статус:</label><span class="required">*</span></td>
-       <td style="padding:5px">{html_options name=status options=$newStatuses id=newStatus style="width:100%"
+       <td style="padding:5px">{html_options name=status options=$workflow.newStatuses id=newStatus style="width:100%"
                                              onchange="wf_onchange_new_status();"}</td> 
       </tr>
-<!--
+
       <tr margin="15">
-        <td style="padding:5px"><label for="executer">Исполнитель:</label></td>
-       <td style="padding:5px">{html_options name=executer options=$executers[$firstStatus] id=executer style="width:100%"}</td> 
+        <td style="padding:5px"><label for="assigned_user">Ответственный:</label><span class="required">*</span></td>
+       <td style="padding:5px">{html_options name=assigned_user options="" id=assigned_user style="width:100%"}</td> 
       </tr>
--->
+
       <tr margin="15">
       <td style="padding:5px"></td>
       <td style="padding:5px"><input type='submit' name='submit' value='Изменить'></td>
       </tr>
     </table>
   </form>
+  {/if}
+  
+  {if !empty($workflow.confirmUsers)}
+  <form id='assign' name='assign' action='index.php?entryPoint=wf_assign' method='POST'
+         style="margin-top: 5px;
+                border-style: solid;
+                border-width: 1px;
+                border-color: #abc3d7;
+                padding: 5px;
+                padding-right: 0px;">
+    <input type='hidden' id='record' name='record' value='{$fields.id.value}'> 
+    <input type='hidden' id='module' name='module' value='{$module}'>
+
+    <input type='hidden' id='return_module' name='return_module' value = '{$return_module}'>
+    <input type='hidden' id='return_action' name='return_action' value = '{$return_action}'>
+    <input type='hidden' id='return_record' name='return_record' value = '{$return_record}'>
+
+    <table border="0" margin="5" style="min-width:400px">
+      <tr margin="15">
+        <td style="padding:5px"><label for="status">Новый ответственный:</label><span class="required">*</span></td>
+        <td style="padding:5px">{html_options name=new_assign_user options=$workflow.confirmUsers id=new_assign_user style="width:100%"}</td> 
+      </tr>
+      <tr margin="15">
+        <td style="padding:5px"></td>
+        <td style="padding:5px"><input type='submit' name='submit' value='Изменить'></td>
+      </tr>
+    </table>
+  </form>
+  {/if}
   <div id="workflow_errors" class="required validation_message"></div>
 </div>
-<script>
-  {literal}
-  YAHOO.util.Event.onDOMReady(function(){ wf_onchange_new_status(); });
-  {/literal}
-</script>
