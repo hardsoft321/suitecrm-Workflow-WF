@@ -47,4 +47,19 @@ class WFStatusAssigned {
         }
         return $users;
     }
+    
+    public static function getAllAssignedUsers($record_id, $module) {
+        global $db;
+        $query = "SELECT DISTINCT a.role_id, acl_roles.name AS role_name, users.id AS user_id, users.last_name,  users.first_name
+        FROM wf_status_assigned a, users, acl_roles 
+        WHERE a.record_id = '$record_id' AND a.module = '$module' AND a.deleted = 0 
+            AND a.user_id = users.id AND users.deleted = 0
+            AND acl_roles.id = a.role_id AND acl_roles.deleted = 0";
+        $dbRes = $db->query($query);
+        $res = array();
+        while($row = $db->fetchByAssoc($dbRes)) {
+            $res[] = $row;
+        }
+        return $res;
+    }
 }

@@ -1,3 +1,27 @@
+<style>
+{literal}
+#status-assigned {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #abc3d7;
+    padding: 5px;
+    padding-right: 0px;
+}
+#status-assigned table {
+    border-spacing: 0px;
+}
+#status-assigned .role {
+    background-color: #F6F6F6;
+}
+#status-assigned td, #status-assigned th {
+    padding: 5px 6px 5px 6px;
+    font-size: 12px;
+}
+#status-assigned td {
+    border-bottom: 1px solid #CBDAE6;
+}
+{/literal}
+</style>
 <script>
 
   YAHOO.util.Event.onDOMReady(function () {ldelim}
@@ -101,7 +125,8 @@ function wf_toggle_panel (id) {
 
 <div id="confirm_panel" style="display:none">
                 
-  {if !empty($workflow.newStatuses)}  
+  {if !empty($workflow.newStatuses)}
+  <h4>Согласование</h4>
   <form id='confirm' name='confirm' action='index.php?entryPoint=wf_confirm' method='POST' 
          style="margin-top: 5px;
                 border-style: solid;
@@ -141,6 +166,7 @@ function wf_toggle_panel (id) {
   {/if}
   
   {if !empty($workflow.roles)}
+  <h4>Смена ответственного</h4>
   <form id='assign' name='assign' action='index.php?entryPoint=wf_assign' method='POST'
          style="margin-top: 5px;
                 border-style: solid;
@@ -172,5 +198,17 @@ function wf_toggle_panel (id) {
     </table>
   </form>
   {/if}
+  
+  {if !empty($workflow.statusAssignedUsers)}
+  <h4>Ответственные</h4>
+  <div id='status-assigned' style="margin-top: 5px; margin-bottom: 15px; border: 1px solid #abc3d7; padding: 5px; padding-right: 0px;">
+      <table>
+        <tr><th>Роль</th><th>Ответственный</th></tr>
+        {foreach from=$workflow.statusAssignedUsers item="sa"}
+          <tr><td class="role">{$sa.role_name}</td><td class="user_name">{$sa.first_name} {$sa.last_name}</td></tr>
+        {/foreach}
+      </table>
+  </div>
+  {/if}  
   <div id="workflow_errors" class="required validation_message"></div>
 </div>

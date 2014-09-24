@@ -21,7 +21,7 @@ if(empty($roleStatuses)) {
 }
 foreach($roleStatuses as $st) {
     if(!WFManager::canChangeAssignedUser($bean, $st)) { 
-        sugar_die('У Вас нет прав на смену ответственного');
+        sugar_die('У Вас нет прав на смену ответственного!');
     }
     if(!WFManager::isInConfirmUsers($assigned2, $bean, $st)) {
         sugar_die('Указанного пользователя нельзя назначить ответственным');
@@ -29,9 +29,9 @@ foreach($roleStatuses as $st) {
 }
 
 require_once 'custom/include/Workflow/WFStatusAssigned.php';
-if(!WFStatusAssigned::hasAssignedUser($role_id, $bean->id, $bean->module_name, $assigned2)) {
+//if(!WFStatusAssigned::hasAssignedUser($role_id, $bean->id, $bean->module_name, $assigned2)) {
     WFStatusAssigned::setAssignedUser($role_id, $bean->id, $bean->module_name, $assigned2);
-}
+//}
 
 if(in_array($status1, $roleStatuses)) {
     $bean->assigned_user_id = $assigned2;

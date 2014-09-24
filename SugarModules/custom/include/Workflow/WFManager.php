@@ -136,7 +136,9 @@ class WFManager {
         global $current_user;
         if(is_admin($current_user))
             return true;
-        return array_key_exists($current_user->id, self::getUserList($bean, $status1, 'confirm_check_list_function'));
+        return 
+            array_key_exists($current_user->id, self::getUserList($bean, $status1, 'confirm_check_list_function')) &&
+            array_key_exists($current_user->id, self::getUserList($bean, $status1, 'confirm_list_function'));
     }
     
     public static function isInFrontAssignedUsers($user_id, $bean, $status1) {
@@ -289,7 +291,7 @@ class WFManager {
             return;
         }
         require_once __DIR__."/WFStatusAssigned.php";
-        if(WFStatusAssigned::hasAssignedUser($statusBean->role_id, $bean->id, $bean->module_name, $current_user->id))
+        if(WFStatusAssigned::hasAssignedUser($statusBean->role_id, $bean->id, $bean->module_name))
             return;
         WFStatusAssigned::setAssignedUser($statusBean->role_id, $bean->id, $bean->module_name, $current_user->id);
     }
@@ -328,13 +330,17 @@ class WFManager {
                 }
             }
             
-            if (!empty($statuses) || !empty($confirmUsersData)) {
+            require_once __DIR__.'/WFStatusAssigned.php';
+            $statusAssignedUsers = WFStatusAssigned::getAllAssignedUsers($bean->id, $bean->module_name);
+            
+            if (!empty($statuses) || !empty($confirmUsersData) || !empty($statusAssignedUsers)) {
                 $data['newStatuses'] = $statuses;
                 $data['assignedUsersString'] = json_encode($assignedUsersData);
                 $data['errors'] = array();
                 $data['roles'] = $roles;
                 $data['confirmUsersString'] = json_encode($confirmUsersData);
                 $data['currentRole'] = $statusBean->role_id;
+                $data['statusAssignedUsers'] = $statusAssignedUsers;
             }            
         }
         return $data;
