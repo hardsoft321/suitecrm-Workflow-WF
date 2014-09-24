@@ -1,10 +1,9 @@
 <?php
 /**
- * Класс с функцией, определяющей список ответственных, 
- * появляющихся в списке выбора при переходе на статус.
+ * Базовый класс с функцией, определяющей список пользователей.
  */
 abstract class BaseUserList {
-    public $status2_data;
+    public $status_data;
     
     public abstract function getList($bean);
 

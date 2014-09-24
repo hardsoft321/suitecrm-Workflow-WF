@@ -19,7 +19,7 @@ $dictionary['WFStatus'] = array(
 		  'len' => '255',
           'required' => true,
         ),
-        'parent_status_id' => array (
+        /* 'parent_status_id' => array (
           'name' => 'parent_status_id',
           'vname' => 'LBL_PARENT_STATUS_ID',
           'type' => 'char',
@@ -36,7 +36,7 @@ $dictionary['WFStatus'] = array(
 			'module' => 'WFStatuses',
 			'source' => 'non-db',
 			'required' => false,
-		),
+		),*/
         
 		'role_id' => array (
 			'name' => 'role_id',
@@ -57,24 +57,25 @@ $dictionary['WFStatus'] = array(
 			'required' => true,
 		),
 
-	/*	'in_role_type' => array (
-          'name' => 'in_role_type',
-          'vname' => 'LBL_IN_ROLE_TYPE',
-          'type' => 'enum',
-		  'len' => '10',
-		  'options' => 'in_role_types',
-		  'default' => 'default',
-          'required' => true,
-        ),
-		'out_role_type' => array (
-          'name' => 'out_role_type',
-          'vname' => 'LBL_OUT_ROLE_TYPE',
-          'type' => 'enum',
-		  'len' => '10',
-		  'options' => 'out_role_types',
-		  'default' => 'owner',
-          'required' => true,
-        ),*/
+		'role2_id' => array (
+			'name' => 'role2_id',
+			'vname' => 'LBL_ROLE2_ID',
+			'type' => 'id',
+			'required' => false,
+		),
+        'role2_name' => array (
+			'name' => 'role2_name',
+			'rname' => 'name',
+			'id_name' => 'role2_id',
+			'vname' => 'LBL_ROLE2_NAME',
+			'type' => 'relate',
+			'table' => 'acl_roles',
+			'module' => 'ACLRoles',
+			'dbType' => 'varchar',
+			'source' => 'non-db',
+			'required' => false,
+		),
+
         'edit_role_type' => array (
           'name' => 'edit_role_type',
           'vname' => 'LBL_EDIT_ROLE_TYPE',
@@ -101,6 +102,13 @@ $dictionary['WFStatus'] = array(
 		'confirm_list_function' => array (
 			'name' => 'confirm_list_function',
 			'vname' => 'LBL_CONFIRM_LIST_FUNCTION',
+			'type' => 'enum',
+            'function' => 'wf_getAssignedListFunctions',
+			'len' => '50',
+		),
+		'confirm_check_list_function' => array (
+			'name' => 'confirm_check_list_function',
+			'vname' => 'LBL_CONFIRM_CHECK_LIST_FUNCTION',
 			'type' => 'enum',
             'function' => 'wf_getAssignedListFunctions',
 			'len' => '50',

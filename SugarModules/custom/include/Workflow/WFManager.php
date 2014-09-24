@@ -38,18 +38,17 @@ class WFManager {
     public static function getNextStatuses($bean, $status1 = null) {
         global $db;
         
-        if($bean->wf_id && $status1 === null) {
+        if(isset($bean->wf_id) && $bean->wf_id && $status1 === null) {
             $statusField = self::getBeanStatusField($bean);
             if(!$statusField) {
-                //sugar_die('Field for status not found');
                 return array();
             }
             $status1 = $bean->$statusField;
         }
-        if($bean->wf_id && $status1) {
-            //if(!self::isFitOutRole($bean, $status1))
-            if(!self::canChangeStatus($bean, $status1))
+        if(isset($bean->wf_id) && $bean->wf_id && $status1) {
+            if(!self::canChangeStatus($bean, $status1)) {
                 return array();
+            }
 
             $q = "SELECT s2.uniq_name, s2.name, e.filter_function FROM wf_events e
             LEFT JOIN wf_statuses s2 ON s2.id = e.status2_id
@@ -80,7 +79,6 @@ class WFManager {
             if($enabled)
                 $res[$row['uniq_name']] = $row['name'];
         }
-        
         return $res;
     }
     
@@ -123,82 +121,37 @@ class WFManager {
         if ($row = $db->fetchByAssoc($qr)) {
             $status->populateFromRow($row);
         }
+        else {
+            return false;
+        }    
         
         return $status;
     }
     
-    public static function checkIsEventAllowed($bean, $status1, $status2) {
-        if($status1 == $status2)
-            return;
-        $nextStatuses = self::getNextStatuses($bean, $status1);
-        if(!array_key_exists($status2, $nextStatuses))
-            sugar_die('Status changing is not allowed');
+    public static function isEventAllowed($bean, $status1, $status2) {
+        return $status1 == $status2 ? true : array_key_exists($status2, self::getNextStatuses($bean, $status1));
     }
-    
-    /*public static function checkOutRole($bean, $status) {
-        if(!self::isFitOutRole($bean, $status))
-            sugar_die('Access Denied');
-    }*/
-    
-    /*protected static function isFitOutRole($bean, $status) {
-        global $db;
-        global $current_user;
-        if(is_admin($current_user))
-            return true;
-        
-        $q = "SELECT id, out_role_type, role_id FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module = '{$bean->module_name}' AND deleted = 0";
-        if($row = $db->fetchOne($q)) {
-            if($row['out_role_type'] == 'role') {//TODO: check has view access (i.e. in same group)
-                return WFAclRoles::userHasRole($row['role_id']);
-            }
-            if($row['out_role_type'] == 'assigned') {
-                require_once __DIR__."/WFStatusAssigned.php";
-                return WFStatusAssigned::hasAssignedUser($row['id'], $bean->id, $bean->module_name, $current_user->id);
-            }
-            return $bean->isOwner($current_user->id);
-        }
-        return false;
-    }*/
-    
-    /*public static function getOutRoleUsers($bean, $status) {
-        global $db;
-        
-        $q = "SELECT id, out_role_type, role_id, assigned_list_function FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module = '{$bean->module_name}' AND deleted = 0";
-        if($row = $db->fetchOne($q)) {
-            if($row['out_role_type'] == 'role') {//TODO: check has view access (i.e. in same group)
-                return WFAclRoles::userHasRole($row['role_id']);
-            }
-            if($row['out_role_type'] == 'assigned') {
-                require_once __DIR__."/WFStatusAssigned.php";
-                return WFStatusAssigned::hasAssignedUser($row['id'], $bean->id, $bean->module_name, $current_user->id);
-            }
-            if($row['out_role_type'] == 'owner') {
-                return $bean->isOwner($current_user->id);
-            }
-        }
-        return array();
-    }*/
     
     public static function canChangeStatus($bean, $status1) {
         global $current_user;
-//        if($user_id === null)
-//            $user_id = $current_user;
         if(is_admin($current_user))
             return true;
-        return self::isInConfirmUsers($current_user->id, $bean, $status1);
+        return array_key_exists($current_user->id, self::getUserList($bean, $status1, 'confirm_check_list_function'));
+    }
+    
+    public static function isInFrontAssignedUsers($user_id, $bean, $status1) {
+        return array_key_exists($user_id, self::getUserList($bean, $status1, 'front_assigned_list_function'));
     }
     
     public static function isInConfirmUsers($user_id, $bean, $status1) {
-        $users = self::getConfirmUsers($bean, $status1, $user_id);
-        return array_key_exists($user_id, $users);
+        return array_key_exists($user_id, self::getUserList($bean, $status1, 'confirm_list_function'));
     }
     
     public static function canChangeAssignedUser($bean, $status) {
         global $current_user;
         if(is_admin($current_user))
             return true;
-        $assignedUsers = self::getAssignedUsers($bean, $status);
-        return array_key_exists($current_user->id, $assignedUsers);
+        return array_key_exists($current_user->id, self::getUserList($bean, $status, 'assigned_list_function'));
     }
     
     public static function checkAccess($bean, $action) {
@@ -330,110 +283,15 @@ class WFManager {
     
     public static function autoFillAssignedUser($bean, $status1) {
         global $current_user;
+        $statusBean = self::getStatusBeanByName($status1, $bean->module_name);
+        if(!$statusBean) {
+            $GLOBALS['log']->error("WFManager: status not found for {$bean->module_name} {$bean->id}");
+            return;
+        }
         require_once __DIR__."/WFStatusAssigned.php";
-        $status_id = self::getStatusIdByName($status1, $bean->module_name);
-        if(!$status_id) {
-            $GLOBALS['log']->error("WFManager: status id not found for {$bean->module_name} {$bean->id}");
+        if(WFStatusAssigned::hasAssignedUser($statusBean->role_id, $bean->id, $bean->module_name, $current_user->id))
             return;
-        }
-        if(WFStatusAssigned::hasAssignedUser($status_id, $bean->id, $bean->module_name, $current_user->id))
-            return;
-        WFStatusAssigned::addAssignedUser($status_id, $bean->id, $bean->module_name, $current_user->id);
-    }
-    
-    public static function getNextAssignedUsers($bean, $statuses) {
-        global $db;
-        
-        if(is_string($statuses)) {
-            $status = $statuses;
-            $statuses = array($status => $status);
-        }
-        if(empty($statuses)) {
-            return array();
-        }
-        
-        $q = "SELECT id, uniq_name, front_assigned_list_function, role_id 
-              FROM wf_statuses WHERE uniq_name IN ('".implode("','", array_keys($statuses))."') AND wf_module = '{$bean->module_name}' AND deleted = 0";
-        $qr = $db->query($q);
-        $res = array();
-        while ($row = $db->fetchByAssoc($qr)) {
-            $userList = array();
-            if($row['front_assigned_list_function']) {
-                require_once __DIR__.'/functions/BaseUserList.php';
-                if(file_exists('custom/include/Workflow/functions/userlists/'.$row['front_assigned_list_function'].'.php')) {
-                    require_once 'custom/include/Workflow/functions/userlists/'.$row['front_assigned_list_function'].'.php';
-                    $func = new $row['front_assigned_list_function'];
-                    $func->status2_data = array(
-                        'id' => $row['id'],
-                        'role_id' => $row['role_id'],
-                    );
-                    $userList = $func->getList($bean);
-                }
-                else
-                    $GLOBALS['log']->error('WFManager: user list function '.$row['front_assigned_list_function'].' not found');
-            }
-            $res[$row['uniq_name']] = $userList;
-        }
-        
-        if(isset($status) && isset($res[$status])) {
-            return $res[$status];
-        }
-        return $res;
-    }
-
-    public static function getAssignedUsers($bean, $status1) {
-        global $db;
-        $q = "SELECT id, uniq_name, assigned_list_function, role_id 
-              FROM wf_statuses WHERE uniq_name = '$status1' AND wf_module = '{$bean->module_name}' AND deleted = 0";
-        $res = array();
-        if ($row = $db->fetchOne($q)) {
-            if($row['assigned_list_function']) {
-                require_once __DIR__.'/functions/BaseUserList.php';
-                if(file_exists('custom/include/Workflow/functions/userlists/'.$row['assigned_list_function'].'.php')) {
-                    require_once 'custom/include/Workflow/functions/userlists/'.$row['assigned_list_function'].'.php';
-                    $func = new $row['assigned_list_function'];
-                    $func->status2_data = array(
-                        'id' => $row['id'],
-                        'role_id' => $row['role_id'],
-                    );
-                    $res = $func->getList($bean);
-                }
-                else
-                    $GLOBALS['log']->error('WFManager: assigned user list function '.$row['assigned_list_function'].' not found');
-            }
-        }
-        return $res;
-    }
-    
-    public static function getConfirmUsers($bean, $status1, $user_id = null) {
-        global $db;
-        $q = "SELECT id, uniq_name, confirm_list_function, role_id 
-              FROM wf_statuses WHERE uniq_name = '$status1' AND wf_module = '{$bean->module_name}' AND deleted = 0";
-        $res = array();
-        if ($row = $db->fetchOne($q)) {
-            if($row['confirm_list_function']) {
-                require_once __DIR__.'/functions/BaseUserList.php';
-                if(file_exists('custom/include/Workflow/functions/userlists/'.$row['confirm_list_function'].'.php')) {
-                    require_once 'custom/include/Workflow/functions/userlists/'.$row['confirm_list_function'].'.php';
-                    $func = new $row['confirm_list_function'];
-                    $func->status2_data = array(
-                        'id' => $row['id'],
-                        'role_id' => $row['role_id'],
-                    );
-                    if($user_id !== null && method_exists($func, 'checkUser')) {
-                        if($func->checkUser($bean, $user_id)) {
-                            $res[$user_id] = $user_id;
-                        }
-                    }
-                    else {
-                        $res = $func->getList($bean);
-                    }
-                }
-                else
-                    $GLOBALS['log']->error('WFManager: confirm user list function '.$row['confirm_list_function'].' not found');
-            }
-        }
-        return $res;
+        WFStatusAssigned::setAssignedUser($statusBean->role_id, $bean->id, $bean->module_name, $current_user->id);
     }
     
     public static function getEditFormData($bean) {
@@ -446,9 +304,10 @@ class WFManager {
                 return array();
             }
             $status1 = $bean->$statusField;
+            $statusBean = self::getStatusBeanByName($status1, $bean->module_name);
 
             $statuses = self::getNextStatuses($bean, $status1);
-            $assignedUsers = self::getNextAssignedUsers($bean, $statuses);
+            $assignedUsers = self::getUserList($bean, $statuses, 'front_assigned_list_function');
             $assignedUsersData = array();
             foreach($assignedUsers as $status => $userList) {
                 $assignedUsersData[$status] = array();
@@ -457,22 +316,109 @@ class WFManager {
                 }
             }
             
+            $rolesData = self::getAllowedRolesData($bean);
+            $roles = array();
             $confirmUsersData = array();
-            if(self::canChangeAssignedUser($bean, $status1)) {
-                $confirmUsers = self::getConfirmUsers($bean, $status1);
-                foreach($confirmUsers as $user) {
-                    $confirmUsersData[$user->id] = $user->first_name.' '.$user->last_name;
+            foreach($rolesData as $role_id => $roleData) {
+                $roles[$role_id] = $roleData['role_name'];
+                if(isset($roleData['users'])) {
+                    foreach($roleData['users'] as $user_id => $user) {
+                        $confirmUsersData[$role_id][] = array($user_id, $user->first_name.' '.$user->last_name);
+                    }
                 }
             }
-
+            
             if (!empty($statuses) || !empty($confirmUsersData)) {
                 $data['newStatuses'] = $statuses;
                 $data['assignedUsersString'] = json_encode($assignedUsersData);
                 $data['errors'] = array();
-                $data['confirmUsers'] = $confirmUsersData;
+                $data['roles'] = $roles;
+                $data['confirmUsersString'] = json_encode($confirmUsersData);
+                $data['currentRole'] = $statusBean->role_id;
             }            
         }
         return $data;
+    }
+    
+    public function getStatusesWithRole($role_id) {
+        global $db;
+        $q = "SELECT uniq_name FROM wf_statuses WHERE role_id = '$role_id' AND deleted = 0";
+        $qr = $db->query($q);
+        $statuses = array();
+        while($row = $db->fetchByAssoc($qr)) {
+            $statuses[] = $row['uniq_name'];
+        }
+        return $statuses;
+    }
+    
+    /**
+     * Вычисляет список пользователей
+     * $bean бин в маршруте
+     * $functionField string поле в статусе, которое хранит имя функции.
+     * $statuses string/array уникальное имя статуса или массив имен
+     * Возвращает массив пользователей или массив массивов для каждого статуса
+     */
+    protected static function getUserList($bean, $statuses, $functionField) {
+        global $db;
+        
+        if(is_string($statuses)) {
+            $status = $statuses;
+            $statuses = array($status => $status);
+        }
+        if(empty($statuses)) {
+            return array();
+        }
+        
+        $q = "SELECT id, uniq_name, $functionField, role_id, role2_id 
+              FROM wf_statuses WHERE uniq_name IN ('".implode("','", array_keys($statuses))."') AND wf_module = '{$bean->module_name}' AND deleted = 0";
+        $qr = $db->query($q);
+        $res = array();
+        while ($row = $db->fetchByAssoc($qr)) {
+            $userList = array();
+            $functionName = $row[$functionField] ? $row[$functionField] : 'DefaultUserList';
+            if(file_exists(__DIR__.'/functions/userlists/'.$functionName.'.php')) {
+                require_once __DIR__.'/functions/BaseUserList.php';
+                require_once __DIR__.'/functions/userlists/'.$functionName.'.php';
+                $func = new $functionName;
+                $func->status_data = array(
+                    'id' => $row['id'],
+                    'role_id' => $row['role_id'],
+                    'role2_id' => $row['role2_id'],
+                );
+                $userList = $func->getList($bean);
+            }
+            else {
+                $GLOBALS['log']->error('WFManager: user list function $functionName not found');
+            }
+            $res[$row['uniq_name']] = $userList;
+        }
+        
+        if(isset($status) && isset($res[$status])) {
+            return $res[$status];
+        }
+        return $res;
+    }
+    
+    protected static function getAllowedRolesData($bean) {
+        global $db;
+        $q = "SELECT s.uniq_name, s.role_id, r.name AS role_name 
+        FROM wf_statuses s, acl_roles r 
+        WHERE 
+            s.wf_module='{$bean->module_name}' AND s.deleted = 0
+            AND s.role_id = r.id
+            AND r.deleted = 0";
+        $qr = $db->query($q);
+        $res = array();
+        while($row = $db->fetchByAssoc($qr)) {
+            if(self::canChangeAssignedUser($bean, $row['uniq_name'])) {
+                $res[$row['role_id']]['role_name'] = $row['role_name'];
+                $users = self::getUserList($bean, $row['uniq_name'], 'confirm_list_function');
+                foreach($users as $user_id => $user) {
+                    $res[$row['role_id']]['users'][$user_id] = $user;
+                }
+            }
+        }
+        return $res;
     }
     
     protected static function translateStatus($status, $module_name) {
@@ -488,6 +434,17 @@ class WFManager {
         global $db;
         $row = $db->fetchOne("SELECT id FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module='{$module_name}' AND deleted = 0");
         return $row ? $row['id'] : false;
+    }
+    
+    protected static function getStatusBeanByName($status, $module_name) {
+        global $db;
+        $row = $db->fetchOne("SELECT * FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module='{$module_name}' AND deleted = 0");
+        if($row) {
+            $statusBean = BeanFactory::newBean('WFStatuses');
+            $statusBean->populateFromRow($row);
+            return $statusBean;
+        }
+        return false;
     }
     
     protected static function checkBeanAgainstFunction($bean, $filter_function) {

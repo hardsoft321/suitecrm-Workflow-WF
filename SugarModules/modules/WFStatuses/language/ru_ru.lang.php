@@ -25,13 +25,14 @@ $mod_strings = array (
 
 'LBL_ROLE_ID' => 'ID роли:' ,
 'LBL_ROLE_NAME' => 'Роль:' ,
+'LBL_ROLE2_ID' => 'ID роли 2:' ,
+'LBL_ROLE2_NAME' => 'Роль 2:' ,
 
-// 'LBL_IN_ROLE_TYPE' => 'Кто может менять ответственного (In)',
-// 'LBL_OUT_ROLE_TYPE' => 'Кто может перевести на следующий статус (Out)',
 'LBL_EDIT_ROLE_TYPE' => 'Доступ на редактирование/удаление записи',
-'LBL_FRONT_ASSIGNED_LIST_FUNCTION' => 'Функция списка выбора ответственного',
-'LBL_ASSIGNED_LIST_FUNCTION' => 'Функция списка ответственных',
-'LBL_CONFIRM_LIST_FUNCTION' => 'Функция списка выбора согласующего',
+'LBL_FRONT_ASSIGNED_LIST_FUNCTION' => 'Список при входе на статус',
+'LBL_ASSIGNED_LIST_FUNCTION' => 'Доступ к смене ответственного',
+'LBL_CONFIRM_LIST_FUNCTION' => 'Список в смене ответственного',
+'LBL_CONFIRM_CHECK_LIST_FUNCTION' => 'Доступ к смене статуса',
 
 );
 

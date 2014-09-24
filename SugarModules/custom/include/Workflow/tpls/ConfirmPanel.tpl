@@ -11,6 +11,7 @@
   {/foreach}
 
   wf_assignedUsers = {$workflow.assignedUsersString};
+  wf_confirmUsers = {$workflow.confirmUsersString};
   {literal}
     addToValidate('confirm', 'resolution', null, true, 'Резолюция');
     addToValidate('confirm', 'assigned_user', null, true, 'Ответственный');
@@ -19,6 +20,7 @@
     });
     
     wf_onchange_new_status();
+    wf_onchange_role();
   {/literal}
   
   {rdelim});
@@ -26,6 +28,8 @@
 // TODO название формы и полей
 function wf_onchange_new_status () {
   var statusSel = document.getElementById('newStatus');
+  if(!statusSel)
+    return;
   var disable = true;
   if (statusSel.length > 0) {
     var status = statusSel[statusSel.selectedIndex].value;
@@ -55,6 +59,20 @@ function wf_onchange_new_status () {
   document.confirm.submit.disabled = disable;
 
   
+}
+function wf_onchange_role () {
+  var masterSel = document.getElementById('role');
+  if(!masterSel)
+    return;
+  if (masterSel.length > 0) {
+    var status = masterSel[masterSel.selectedIndex].value;
+    var userSel = document.assign.new_assign_user;
+    userSel.options.length = 0;
+    if (status != "" && wf_confirmUsers[status] !== undefined && wf_confirmUsers[status].length > 0) {
+      for (i = 0; i < wf_confirmUsers[status].length; i++)
+         userSel.options[i] = new Option(wf_confirmUsers[status][i][1], wf_confirmUsers[status][i][0]);
+    }
+  }
 }
 
 function wf_toggle_panel (id) {
@@ -122,7 +140,7 @@ function wf_toggle_panel (id) {
   </form>
   {/if}
   
-  {if !empty($workflow.confirmUsers)}
+  {if !empty($workflow.roles)}
   <form id='assign' name='assign' action='index.php?entryPoint=wf_assign' method='POST'
          style="margin-top: 5px;
                 border-style: solid;
@@ -139,8 +157,13 @@ function wf_toggle_panel (id) {
 
     <table border="0" margin="5" style="min-width:400px">
       <tr margin="15">
+        <td style="padding:5px"><label for="status">Роль:</label><span class="required">*</span></td>
+        <td style="padding:5px">{html_options name=role options=$workflow.roles id=role selected=$workflow.currentRole style="width:100%"
+                                             onchange="wf_onchange_role();"}</td> 
+      </tr>
+      <tr margin="15">
         <td style="padding:5px"><label for="status">Новый ответственный:</label><span class="required">*</span></td>
-        <td style="padding:5px">{html_options name=new_assign_user options=$workflow.confirmUsers id=new_assign_user style="width:100%"}</td> 
+        <td style="padding:5px">{html_options name=new_assign_user options="" id=new_assign_user style="width:100%"}</td> 
       </tr>
       <tr margin="15">
         <td style="padding:5px"></td>

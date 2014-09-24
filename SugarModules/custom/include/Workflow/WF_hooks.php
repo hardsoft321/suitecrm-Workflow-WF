@@ -20,22 +20,17 @@ class WF_hooks {
         $status2 = $focus->$statusField;
         $assigned1 = empty($focus->fetched_row['id']) ? '' : $focus->fetched_row['assigned_user_id'];
         $assigned2 = $focus->assigned_user_id;
-        /*if(!empty($focus->fetched_row['id'])) {
-            //WFManager::checkOutRole($focus, $status1);
-            if(!WFManager::canChangeStatus($focus, $status1)) {
-                sugar_die('Access Denied');
-            }
-        }*/
         if($status1 != $status2) {
-            WFManager::checkIsEventAllowed($focus, $status1, $status2);
+            if(!WFManager::isEventAllowed($focus, $status1, $status2)) {
+                sugar_die('Status changing is not allowed');
+            }
             
             if(!empty($focus->fetched_row['id'])) {
                 if(!WFManager::canChangeStatus($focus, $status1)) {
                     sugar_die('Access Denied');
                 }
                 
-                $possibleUsers = WFManager::getNextAssignedUsers($focus, $status2);
-                if(!array_key_exists($assigned2, $possibleUsers)) {
+                if(!WFManager::isInFrontAssignedUsers($assigned2, $focus, $status2)) {
                     sugar_die('Ответственный задан не верно');
                 }
             }
