@@ -415,13 +415,18 @@ class WFManager {
             AND r.deleted = 0";
         $qr = $db->query($q);
         $res = array();
+        $rolesPermissions = array();
         while($row = $db->fetchByAssoc($qr)) {
-            if(self::canChangeAssignedUser($bean, $row['uniq_name'])) {
+            if((!isset($rolesPermissions[$row['role_id']]) || $rolesPermissions[$row['role_id']]) && self::canChangeAssignedUser($bean, $row['uniq_name'])) {
                 $res[$row['role_id']]['role_name'] = $row['role_name'];
                 $users = self::getUserList($bean, $row['uniq_name'], 'confirm_list_function');
                 foreach($users as $user_id => $user) {
                     $res[$row['role_id']]['users'][$user_id] = $user;
                 }
+            }
+            else {
+                $rolesPermissions[$row['role_id']] = false;
+                unset($res[$row['role_id']]);
             }
         }
         return $res;
