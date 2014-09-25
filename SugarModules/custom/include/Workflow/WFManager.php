@@ -242,7 +242,7 @@ class WFManager {
             self::translateStatus($status2, $bean->module_name) . '", '.
             $cur_date . ', '.
             $current_user->full_name.
-            (isset($bean->last_resolution) ? ' -- ' . $bean->last_resolution : '').
+            (isset($bean->last_resolution) && $bean->last_resolution ? ' -- ' . $bean->last_resolution : '').
             '; ';
         $bean->confirm_list = $confirm_text . (isset($bean->confirm_list) ? $bean->confirm_list : '');
         
