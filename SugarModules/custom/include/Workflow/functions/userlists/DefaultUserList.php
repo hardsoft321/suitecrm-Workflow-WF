@@ -5,9 +5,7 @@ class DefaultUserList extends BaseUserList {
     protected $additionalWhere = '';
     
     public function getList($bean) {
-        require_once('modules/SecurityGroups/SecurityGroup.php');
-        $groupFocus = new SecurityGroup();
-        $groups = $groupFocus->getAllRecordGroupsIds($bean->id, $bean->module_name);
+        $groups = $this->getBeanGroups($bean);
         if(empty($groups)) {
             return array();
         }
@@ -27,7 +25,19 @@ class DefaultUserList extends BaseUserList {
     }
 
     public function getName() {
-        return 'Все';
+        return 'Все в роли и в группе';
+    }
+    
+    protected function getBeanGroups($bean) {
+        if(!isset($bean->workflowData) || !isset($bean->workflowData['allRecordGroups'])) {
+            if(!isset($bean->workflowData)) {
+                $bean->workflowData = array();
+            }
+            require_once('modules/SecurityGroups/SecurityGroup.php');
+            $groupFocus = new SecurityGroup();
+            $bean->workflowData['allRecordGroups'] = $groupFocus->getAllRecordGroupsIds($bean->id, $bean->module_name);
+        }
+        return $bean->workflowData['allRecordGroups'];
     }
 }
 ?>

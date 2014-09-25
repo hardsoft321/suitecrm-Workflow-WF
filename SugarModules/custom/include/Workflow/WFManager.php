@@ -334,6 +334,7 @@ class WFManager {
             $statusAssignedUsers = WFStatusAssigned::getAllAssignedUsers($bean->id, $bean->module_name);
             
             if (!empty($statuses) || !empty($confirmUsersData) || !empty($statusAssignedUsers)) {
+                $data['currentStatus'] = $status1;
                 $data['newStatuses'] = $statuses;
                 $data['assignedUsersString'] = json_encode($assignedUsersData);
                 $data['errors'] = array();

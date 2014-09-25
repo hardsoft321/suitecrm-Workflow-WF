@@ -13,12 +13,12 @@ $bean->last_resolution = $_POST['resolution'];
 $bean->assigned_user_id = $_POST['assigned_user'];
 
 $errors = array();
-if(!$bean->last_resolution) {
+/*if(!$bean->last_resolution) {
     $errors[] = array(
         'name' => 'resolution',
         'message' => 'Поле "Резолюция" обязательно к заполнению'
     );
-}
+}*/
 
 if(empty($errors)) {
     $bean->save(true);

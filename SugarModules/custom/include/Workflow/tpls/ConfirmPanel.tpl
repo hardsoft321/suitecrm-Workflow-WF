@@ -127,6 +127,7 @@ function wf_toggle_panel (id) {
                 
   {if !empty($workflow.newStatuses)}
   <h4>Согласование</h4>
+  <input type="hidden" name="confirm_current_status" id="confirm_current_status" value="{$workflow.currentStatus}" />
   <form id='confirm' name='confirm' action='index.php?entryPoint=wf_confirm' method='POST' 
          style="margin-top: 5px;
                 border-style: solid;

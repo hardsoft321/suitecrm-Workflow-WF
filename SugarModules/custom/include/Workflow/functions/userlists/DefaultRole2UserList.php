@@ -9,7 +9,7 @@ class DefaultRole2UserList extends DefaultUserList {
     }
 
     public function getName() {
-        return 'Все в роли 2';
+        return 'Все в роли 2 и в группе';
     }
 }
 ?>
