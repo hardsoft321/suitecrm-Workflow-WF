@@ -83,8 +83,6 @@ class WFManager {
     }
     
     public static function getAllStatuses($bean) {
-        global $db;
-        
         if(isset(self::$allStatusesCache[$bean->module_name]))
             return self::$allStatusesCache[$bean->module_name];
         
@@ -94,9 +92,9 @@ class WFManager {
             AND deleted = 0
         ";
         
-        $qr = $db->query($q);
+        $qr = $bean->db->query($q);
         $res = array();
-        while ($row = $db->fetchByAssoc($qr)) {
+        while ($row = $bean->db->fetchByAssoc($qr)) {
             $res[$row['uniq_name']] = $row['name'];
         }
         self::$allStatusesCache[$bean->module_name] = $res;
