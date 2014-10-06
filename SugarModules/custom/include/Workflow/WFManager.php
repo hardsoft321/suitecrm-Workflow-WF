@@ -251,6 +251,69 @@ class WFManager {
         }
     }
     
+    public static function logAssignedChange($bean, $status1, $assigned2, $saveBean = true, $role_id = null) {
+        global $db;
+        global $timedate;
+        global $current_user;
+        global $app_list_strings;
+        
+        $role_name = null;
+        if($role_id === null) {
+            $q = "SELECT s.role_id, r.name FROM wf_statuses s, acl_roles r WHERE s.role_id = r.id AND s.id = '$status1'";
+            $row = $db->fetchOne($q);
+            if($row) {
+                $role_id = $row['role_id'];
+                $role_name = $row['name'];
+            }
+        }
+        
+        $assigned1_name = '';
+        if($role_id) {
+            $userList = WFStatusAssigned::getAssignedUsers($role_id, $bean->id, $bean->module_name);
+            if(count($userList) == 1) {
+                $assigned1_user = reset($userList);
+                if($assigned1_user->id == $assigned2) {
+                    return;
+                }
+            }
+
+            foreach($userList as $user) {
+                if($assigned1_name) {
+                    $assigned1_name .= ', ';
+                }
+                $assigned1_name .= $user->first_name.' '.$user->last_name;
+                $assigned1 = $user->id;
+            }
+            
+            if(!$role_name) {
+                $q = "SELECT name FROM acl_roles WHERE id = '$role_id'";
+                $row = $db->fetchOne($q);
+                if($row) {
+                    $role_name = $row['name'];
+                }
+            }
+        }
+        
+        $assigned2_user = BeanFactory::getBean('Users', $assigned2);
+        $assigned2_name = $assigned2_user ? $assigned2_user->full_name : '-';
+        
+        $cur_date = $timedate->handle_offset(gmdate($timedate->get_db_date_time_format()), 'd.m.Y H:i', 'd.m.Y H:i', $current_user, 'Europe/Moscow') . " (МСК)";
+        
+        $confirm_text = "{$assigned2_name} установлен как ответственный для роли '{$role_name}', ";
+        if($assigned1_name) {
+            $confirm_text .= "предыдущий ответственный $assigned1_name, ";
+        }
+        $confirm_text .= $cur_date . ', '.
+            $current_user->full_name.
+            '; ';
+
+        $bean->confirm_list = $confirm_text . (isset($bean->confirm_list) ? $bean->confirm_list : '');
+        
+        if($saveBean) {
+            $bean->save();
+        }
+    }
+    
     public static function runAfterEventHooks($bean, $status1, $status2) {
         global $db;
         

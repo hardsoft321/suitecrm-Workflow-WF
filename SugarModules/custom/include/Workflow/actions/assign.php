@@ -1,6 +1,7 @@
 <?php
 global $db;
-require_once ('custom/include/Workflow/WFManager.php');
+require_once 'custom/include/Workflow/WFManager.php';
+require_once 'custom/include/Workflow/WFStatusAssigned.php';
 
 $bean = BeanFactory::getBean($_POST['module'], $_POST['record']);
 if (empty($bean->id))
@@ -28,15 +29,13 @@ foreach($roleStatuses as $st) {
     }
 }
 
-require_once 'custom/include/Workflow/WFStatusAssigned.php';
-//if(!WFStatusAssigned::hasAssignedUser($role_id, $bean->id, $bean->module_name, $assigned2)) {
-    WFStatusAssigned::setAssignedUser($role_id, $bean->id, $bean->module_name, $assigned2);
-//}
-
 if(in_array($status1, $roleStatuses)) {
     $bean->assigned_user_id = $assigned2;
     $bean->save(true);
 }
+
+WFManager::logAssignedChange($bean, $status1, $assigned2, true, $role_id);
+WFStatusAssigned::setAssignedUser($role_id, $bean->id, $bean->module_name, $assigned2);
 
 $url = "index.php?action={$_POST['return_action']}&module={$_POST['return_module']}&record={$_POST['return_record']}";
 header("Location: $url");
