@@ -65,6 +65,7 @@ class WFManager {
             WHERE
                 (e.status1_id = '' OR e.status1_id IS NULL)
                 AND e.deleted = 0
+                AND s2.wf_module = '{$bean->module_name}'
             ORDER BY e.sort
             ";
         }

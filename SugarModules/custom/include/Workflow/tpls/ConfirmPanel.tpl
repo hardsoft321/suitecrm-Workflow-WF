@@ -118,8 +118,7 @@ function wf_toggle_panel (id) {
     <span style="text-decoration: underline;">
       Панель согласования
       <img src="themes/default/images/advanced_search.gif" id="confirm_panel_toggle_img" 
-           name="confirm_panel_toggle_img" border="0"
-           onclick="wf_togle_panel('confirm_panel');"/>
+           name="confirm_panel_toggle_img" border="0" />
   </a>
 </span>
 
