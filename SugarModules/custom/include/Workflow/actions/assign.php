@@ -1,4 +1,6 @@
 <?php
+if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+
 global $db;
 require_once 'custom/include/Workflow/WFManager.php';
 require_once 'custom/include/Workflow/WFStatusAssigned.php';

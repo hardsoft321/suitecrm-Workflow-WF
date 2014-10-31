@@ -396,10 +396,15 @@ class WFManager {
             $statusAssignedUsers = WFStatusAssigned::getAllAssignedUsers($bean->id, $bean->module_name);
             
             if (!empty($statuses) || !empty($confirmUsersData) || !empty($statusAssignedUsers)) {
-                $data['currentStatus'] = $status1;
-                $data['newStatuses'] = $statuses;
-                $data['assignedUsersString'] = json_encode($assignedUsersData);
-                $data['errors'] = array();
+                $data['include_script'] = self::getVersionedScript();
+                if(!empty($statuses)) {
+                    $data['confirmData'] = array(
+                        'currentStatus' => $status1,
+                        'newStatuses' => $statuses,
+                        'assignedUsersString' => json_encode($assignedUsersData),
+                    );
+                }
+                $data['assignedUsers'] = $assignedUsersData;
                 $data['roles'] = $roles;
                 $data['confirmUsersString'] = json_encode($confirmUsersData);
                 $data['currentRole'] = $statusBean->role_id;
@@ -409,7 +414,13 @@ class WFManager {
         return $data;
     }
     
-    public function getStatusesWithRole($role_id) {
+    public static function getVersionedScript() {
+        require_once __DIR__.'/config.php';
+        global $wf_config;
+        return getVersionedScript('custom/include/Workflow/js/wf_ui.js', $wf_config['js_custom_version']);
+    }
+    
+    public static function getStatusesWithRole($role_id) {
         global $db;
         $q = "SELECT uniq_name FROM wf_statuses WHERE role_id = '$role_id' AND deleted = 0";
         $qr = $db->query($q);

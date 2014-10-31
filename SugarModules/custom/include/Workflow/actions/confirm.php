@@ -1,4 +1,6 @@
 <?php
+if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+
 require_once ('custom/include/Workflow/WFManager.php');
 
 $bean = BeanFactory::getBean($_POST['module'], $_POST['record']);
