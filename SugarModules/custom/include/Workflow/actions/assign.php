@@ -18,7 +18,7 @@ if(!$statusField) {
 }
 $status1 = $bean->$statusField;
 
-$roleStatuses = WFManager::getStatusesWithRole($role_id);
+$roleStatuses = WFManager::getStatusesWithRole($role_id, $bean->wf_id);
 if(empty($roleStatuses)) {
     sugar_die('Статусы для указанной роли не найдены');
 }

@@ -8,27 +8,34 @@ class WFManager {
     
     /**
      * Выбирает workflow для записи.
-     * @return mixed string Workflow id или false
+     * @return string Workflow id или ''
      */
-    public static function getWorkflowForBean($bean) {
+    public static function getWorkflowForBean($bean, $typeField = null) {
         global $db;
-        $getTypeQuery = "SELECT type_field FROM wf_modules WHERE wf_module = '{$bean->module_name}' AND deleted = 0";
-        $typeResult = $db->query($getTypeQuery);
-        $row = $db->fetchByAssoc($typeResult);
-        $typeField = $row['type_field'];
-        
-        $q = "SELECT w.id FROM wf_workflows w
-	    WHERE
-	        w.wf_module = '{$bean->module_name}'
-            AND w.bean_type LIKE '%^{$bean->$typeField}^%'
-            AND w.deleted = 0
-            ";
-
-        $qr = $db->query($q);
-        if($row = $db->fetchByAssoc($qr))
-            return $row['id'];
-        //sugar_die('No workflow for bean');
+        if($typeField === null) {
+            $typeField = self::getWorkflowTypeField($bean);
+        }
+        if($typeField) {
+            $q = "SELECT w.id FROM wf_workflows w
+            WHERE
+                w.wf_module = '{$bean->module_name}'
+                AND w.bean_type LIKE '%^{$bean->$typeField}^%'
+                AND w.deleted = 0
+                ";
+            if($row = $db->fetchOne($q))
+                return $row['id'];
+        }
         return '';
+    }
+    
+    /**
+     * Возвращает имя поля, по которому определяется маршрут
+     */
+    public static function getWorkflowTypeField($bean) {
+        global $db;
+        $q = "SELECT type_field FROM wf_modules WHERE wf_module = '{$bean->module_name}' AND deleted = 0";
+        $row = $db->fetchOne($q);
+        return $row ? $row['type_field'] : false;
     }
 
     public static function isBeanInWorkflow($bean) {
@@ -407,7 +414,7 @@ class WFManager {
                 $data['assignedUsers'] = $assignedUsersData;
                 $data['roles'] = $roles;
                 $data['confirmUsersString'] = json_encode($confirmUsersData);
-                $data['currentRole'] = $statusBean->role_id;
+                $data['currentRole'] = $statusBean ? $statusBean->role_id : false;
                 $data['statusAssignedUsers'] = $statusAssignedUsers;
             }            
         }
@@ -420,9 +427,40 @@ class WFManager {
         return getVersionedScript('custom/include/Workflow/js/wf_ui.js', $wf_config['js_custom_version']);
     }
     
-    public static function getStatusesWithRole($role_id) {
+    public static function getStatusesWithRole($role_id, $wf_id) {
         global $db;
-        $q = "SELECT uniq_name FROM wf_statuses WHERE role_id = '$role_id' AND deleted = 0";
+        //$q = "SELECT uniq_name FROM wf_statuses WHERE role_id = '$role_id' AND deleted = 0";
+        $q = "SELECT DISTINCT s.uniq_name FROM wf_statuses s, wf_events e
+            WHERE s.role_id = '$role_id'
+                AND s.deleted = 0
+                AND e.deleted = 0
+                AND e.workflow_id = '$wf_id'
+                AND (e.status1_id = s.id OR e.status2_id = s.id)";
+        $qr = $db->query($q);
+        $statuses = array();
+        while($row = $db->fetchByAssoc($qr)) {
+            $statuses[] = $row['uniq_name'];
+        }
+        return $statuses;
+    }
+    
+    /**
+     * Возвращает статусы маршрута, которые идут после пустого.
+     * Из начального статуса должен существовать переход в следующий статус.
+     */
+    public static function getFirstNonEmptyStatuses($wf_id) {
+        global $db;
+        $q = "SELECT DISTINCT s2.uniq_name
+            FROM wf_events e12
+            INNER JOIN wf_statuses s2 ON s2.id = e12.status2_id
+            INNER JOIN wf_events e23 ON s2.id = e23.status1_id
+            INNER JOIN wf_statuses s3 ON s3.id = e23.status2_id
+            WHERE
+                e12.status1_id = ''
+                AND e23.workflow_id = '{$wf_id}'
+                AND e12.deleted = 0
+                AND e23.deleted = 0
+            ORDER BY e12.sort";
         $qr = $db->query($q);
         $statuses = array();
         while($row = $db->fetchByAssoc($qr)) {

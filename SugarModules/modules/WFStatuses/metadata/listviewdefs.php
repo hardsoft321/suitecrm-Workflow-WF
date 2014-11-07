@@ -8,5 +8,11 @@ $listViewDefs['WFStatuses'] = array(
     'link' => true,
     'default' => true
   ),
+  'WF_MODULE' => array(
+    'width' => '40',
+    'label' => 'LBL_WF_MODULE',
+    'default' => true,
+    'link' => true,
+  ),
 );
 ?>
