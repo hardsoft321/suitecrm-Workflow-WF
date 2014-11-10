@@ -140,6 +140,8 @@ class WFManager {
     
     public static function canChangeStatus($bean, $status1) {
         global $current_user;
+        if(isset($bean->workflowData['autosave']) && $bean->workflowData['autosave'] === true)
+            return true;
         if(is_admin($current_user))
             return true;
         return 
@@ -151,12 +153,18 @@ class WFManager {
         return array_key_exists($user_id, self::getUserList($bean, $status1, 'front_assigned_list_function'));
     }
     
+    public static function getFrontAssignedUserList($bean, $status) {
+        return self::getUserList($bean, $status, 'front_assigned_list_function');
+    }
+    
     public static function isInConfirmUsers($user_id, $bean, $status1) {
         return array_key_exists($user_id, self::getUserList($bean, $status1, 'confirm_list_function'));
     }
     
     public static function canChangeAssignedUser($bean, $status) {
         global $current_user;
+        if(isset($bean->workflowData['autosave']) && $bean->workflowData['autosave'] === true)
+            return true;
         if(is_admin($current_user))
             return true;
         return array_key_exists($current_user->id, self::getUserList($bean, $status, 'assigned_list_function'));

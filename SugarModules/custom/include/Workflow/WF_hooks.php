@@ -81,6 +81,9 @@ class WF_hooks {
     }
     $typeField = WFManager::getWorkflowTypeField($focus);
     if($focus->fetched_row[$typeField] != $focus->$typeField) {
+        if(!WFManager::isBeanInWorkflow($focus)) {
+            return WFManager::getWorkflowForBean($focus, $typeField);
+        }
         $statusField = WFManager::getBeanStatusField($focus);
         $possibleFirstStatuses = WFManager::getFirstNonEmptyStatuses($focus->wf_id);
         $status1 = $focus->fetched_row[$statusField];
