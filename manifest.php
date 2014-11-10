@@ -35,7 +35,7 @@ $manifest = array (
   'name' => 'Workflow-WF',
   'published_date' => '2014-06-24',
   'type' => 'module',
-  'version' => '0.7.5', //есть зависимости от Workflow-WF в workflow_securitygroups, tasks_workflow
+  'version' => '0.7.5.1', //есть зависимости от Workflow-WF в workflow_securitygroups, tasks_workflow
   'remove_tables' => 'prompt',
   'dependencies' => array(
   ),

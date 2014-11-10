@@ -20,7 +20,7 @@ class WF_hooks {
         if($status1 == '') {
             $possibleFirstStatuses = WFManager::getFirstNonEmptyStatuses($focus->wf_id);
             /* Сами установим первый статус */
-            $focus->$statusField = !empty($possibleFirstStatuses) && !in_array($focus->$statusField, $possibleFirstStatuses) ? reset($possibleFirstStatuses) : '';
+            $focus->$statusField = !empty($possibleFirstStatuses) && !in_array($focus->$statusField, $possibleFirstStatuses) ? reset($possibleFirstStatuses) : $focus->$statusField;
         }
         $status2 = $focus->$statusField;
         $assigned1 = empty($focus->fetched_row['id']) ? '' : $focus->fetched_row['assigned_user_id'];
