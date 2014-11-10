@@ -455,11 +455,11 @@ class WFManager {
             INNER JOIN wf_statuses s2 ON s2.id = e12.status2_id
             INNER JOIN wf_events e23 ON s2.id = e23.status1_id
             WHERE
-                e12.status1_id = ''
+                (e12.status1_id IS NULL OR e12.status1_id = '')
                 AND e23.workflow_id = '{$wf_id}'
                 AND e12.deleted = 0
                 AND e23.deleted = 0
-            ORDER BY e12.sort";
+            ";
         $qr = $db->query($q);
         $statuses = array();
         while($row = $db->fetchByAssoc($qr)) {
