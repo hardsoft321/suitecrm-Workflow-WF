@@ -454,7 +454,6 @@ class WFManager {
             FROM wf_events e12
             INNER JOIN wf_statuses s2 ON s2.id = e12.status2_id
             INNER JOIN wf_events e23 ON s2.id = e23.status1_id
-            INNER JOIN wf_statuses s3 ON s3.id = e23.status2_id
             WHERE
                 e12.status1_id = ''
                 AND e23.workflow_id = '{$wf_id}'
