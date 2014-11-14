@@ -27,9 +27,16 @@ class WFMassUpdate {
             return;
         }
         
+        $beanClass = BeanFactory::getBeanName($module);
+        if (empty($beanClass) || !class_exists($beanClass)) {
+            $this->errors[] = "Модуль не найден";
+            return false;
+        }
+
         foreach($beansIds as $id) {
-            $bean = BeanFactory::getBean($module, $id);
-            if($bean) { 
+            $bean = new $beanClass();        // BeanFactory::getBean вернет бин из кэша
+            $bean = $bean->retrieve($id);    // тогда fetched_row покажет не актуальную информацию
+            if($bean) {                      // поэтому retrieve
                 $this->beans[] = $bean;
             }
             else {
