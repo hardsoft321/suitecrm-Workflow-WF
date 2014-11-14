@@ -8,6 +8,12 @@ $listViewDefs['WFStatuses'] = array(
     'link' => true,
     'default' => true
   ),
+  'UNIQ_NAME' => array(
+    'width' => '40',
+    'label' => 'LBL_UNIQ_NAME',
+    'default' => true,
+    'link' => true,
+  ),
   'WF_MODULE' => array(
     'width' => '40',
     'label' => 'LBL_WF_MODULE',
