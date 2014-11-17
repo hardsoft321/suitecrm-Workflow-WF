@@ -526,26 +526,33 @@ class WFManager {
     
     protected static function getAllowedRolesData($bean) {
         global $db;
-        $q = "SELECT s.uniq_name, s.role_id, r.name AS role_name 
-        FROM wf_statuses s, acl_roles r 
-        WHERE 
+        $q = "SELECT DISTINCT s.uniq_name, s.role_id, r.name AS role_name
+        FROM wf_statuses s, acl_roles r, wf_events e
+        WHERE
             s.wf_module='{$bean->module_name}' AND s.deleted = 0
             AND s.role_id = r.id
-            AND r.deleted = 0";
+            AND r.deleted = 0
+            AND e.deleted = 0 AND (e.status1_id = s.id OR e.status2_id = s.id)
+            AND e.workflow_id = '{$bean->wf_id}'";
         $qr = $db->query($q);
         $res = array();
         $rolesPermissions = array();
         while($row = $db->fetchByAssoc($qr)) {
-            if((!isset($rolesPermissions[$row['role_id']]) || $rolesPermissions[$row['role_id']]) && self::canChangeAssignedUser($bean, $row['uniq_name'])) {
+            if(isset($rolesPermissions[$row['role_id']]) && $rolesPermissions[$row['role_id']] === false) {
+                continue;
+            }
+            if(self::canChangeAssignedUser($bean, $row['uniq_name'])) {
                 $res[$row['role_id']]['role_name'] = $row['role_name'];
                 $users = self::getUserList($bean, $row['uniq_name'], 'confirm_list_function');
                 foreach($users as $user_id => $user) {
                     $res[$row['role_id']]['users'][$user_id] = $user;
                 }
+                $GLOBALS['log']->debug('WFManager getAllowedRolesData '.$row['uniq_name'].' '.$row['role_name'].' add');
             }
             else {
                 $rolesPermissions[$row['role_id']] = false;
                 unset($res[$row['role_id']]);
+                $GLOBALS['log']->debug('WFManager getAllowedRolesData '.$row['uniq_name'].' '.$row['role_name'].' unset');
             }
         }
         return $res;
