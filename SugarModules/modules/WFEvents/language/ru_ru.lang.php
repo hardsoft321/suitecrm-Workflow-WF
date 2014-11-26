@@ -21,6 +21,7 @@ $mod_strings = array (
 'LBL_SORT' => 'Сортировка:' ,
 'LBL_FUNCTION' => 'Функция:' ,
 'LBL_FILTER_FUNCTION' => 'Функция фильтрования статуса:' ,
+'LBL_VALIDATE_FUNCTION' => 'Функция валидации перехода:' ,
 'LBL_AFTER_SAVE' => 'Функция, вызываемая после перехода:' ,
 
 'LBL_LIST_NAME' => 'Название',

@@ -20,6 +20,7 @@ $mod_strings = array (
 'LBL_SORT' => 'Sort:' ,
 'LBL_FUNCTION' => 'Function:' ,
 'LBL_FILTER_FUNCTION' => 'Filter Function:' ,
+'LBL_VALIDATE_FUNCTION' => 'Validate Function:' ,
 'LBL_AFTER_SAVE' => 'After Status Change Function:',
 
 'LBL_LIST_NAME' => 'Name',

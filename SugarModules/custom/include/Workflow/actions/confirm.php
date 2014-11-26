@@ -22,16 +22,31 @@ $errors = array();
     );
 }*/
 
+$saved = null;
 if(empty($errors)) {
-    $bean->save(true);
-}
-else {
-    $errMsg = '';
-    foreach($errors as $err)
-        $errMsg .= $err['message']."<br/>\n";
-    SugarApplication::appendErrorMessage($errMsg);
+    try {
+        $saved = $bean->save(true);
+    }
+    catch(WFEventValidationException $ex) {
+        $errors = $ex->getErrors();
+    }
 }
 
-$url = "index.php?action={$_POST['return_action']}&module={$_POST['return_module']}&record={$_POST['return_record']}";
-header("Location: $url");
+if(isset($_REQUEST['is_ajax_call']) && $_REQUEST['is_ajax_call']) {
+    echo json_encode(array(
+        'errors' => $errors,
+        'saved' => $saved,
+    ));
+}
+else {
+    if(!empty($errors)) {
+        $errMsg = '';
+        foreach($errors as $err)
+            $errMsg .= $err['message']."<br/>\n";
+        SugarApplication::appendErrorMessage($errMsg);
+    }
+
+    $url = "index.php?action={$_POST['return_action']}&module={$_POST['return_module']}&record={$_POST['return_record']}";
+    header("Location: $url");
+}
 ?>

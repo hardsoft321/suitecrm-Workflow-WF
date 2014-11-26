@@ -138,6 +138,50 @@ class WFManager {
         return $status1 == $status2 ? true : array_key_exists($status2, self::getNextStatuses($bean, $status1));
     }
     
+    public static function validateEvent($bean, $status1, $status2) {
+        global $db;
+
+        if($status1 == $status2) {
+            return array();
+        }
+
+        $q = "SELECT e.validate_function
+            , s1.uniq_name AS s1_uniq_name
+            , s2.uniq_name AS s2_uniq_name
+        FROM wf_events e, wf_statuses s1, wf_statuses s2
+        WHERE e.workflow_id = '{$bean->wf_id}'
+            AND e.status1_id = s1.id
+            AND e.status2_id = s2.id
+            AND e.validate_function IS NOT NULL
+            AND e.deleted = 0
+            AND s1.uniq_name = '$status1' AND s1.wf_module = '{$bean->module_name}' AND s1.deleted = 0
+            AND s2.uniq_name = '$status2' AND s2.wf_module = '{$bean->module_name}' AND s2.deleted = 0
+        ";
+        $qr = $db->query($q);
+        $res = array();
+        while ($row = $db->fetchByAssoc($qr)) {
+            $userList = array();
+            $functionName = $row['validate_function'];
+            if(file_exists(__DIR__.'/functions/validators/'.$functionName.'.php')) {
+                require_once __DIR__.'/functions/BaseValidator.php';
+                require_once __DIR__.'/functions/validators/'.$functionName.'.php';
+                $func = new $functionName;
+                $func->status1_data = array(
+                    'uniq_name' => $row['s1_uniq_name'],
+                );
+                $func->status2_data = array(
+                    'uniq_name' => $row['s2_uniq_name'],
+                );
+                $errors = $func->validate($bean);
+                $res = array_merge($res, $errors);
+            }
+            else {
+                $GLOBALS['log']->error("WFManager: validate function $functionName not found");
+            }
+        }
+        return $res;
+    }
+
     public static function canChangeStatus($bean, $status1) {
         global $current_user;
         if(isset($bean->workflowData['autosave']) && $bean->workflowData['autosave'] === true)
@@ -513,7 +557,7 @@ class WFManager {
                 $userList = $func->getList($bean);
             }
             else {
-                $GLOBALS['log']->error('WFManager: user list function $functionName not found');
+                $GLOBALS['log']->error("WFManager: user list function $functionName not found");
             }
             $res[$row['uniq_name']] = $userList;
         }

@@ -42,6 +42,19 @@ function wf_getFilterFunctions($focus = null, $name = null, $value = null, $view
     return $res;
 }
 
+function wf_getValidateFunctions($focus = null, $name = null, $value = null, $view = null) {
+    $files = glob(__DIR__.'/functions/validators/*.php');
+    $res = array(''=>'');
+    require_once __DIR__.'/functions/BaseValidator.php';
+    foreach($files as $f) {
+        $name = basename($f, '.php');
+        require_once $f;
+        $func = new $name;
+        $res[$name] = $func->getName();
+    }
+    return $res;
+}
+
 function wf_getProcedures($focus = null, $name = null, $value = null, $view = null) {
     $files = glob(__DIR__.'/functions/procedures/*.php');
     $res = array(''=>'');

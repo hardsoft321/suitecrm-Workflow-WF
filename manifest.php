@@ -8,6 +8,9 @@ Workflow.
 Добавлены модули для управления переходами: WFModules(Модули с маршрутизацией), WFWorkflows (Маршруты), WFStatuses (Статусы маршрутов), WFEvents (Переходы маршрутов).
 Добавлены поля для сохранения ролей.
 Есть upgradeunsafe файлы. Например, если также ставится SecurtySuite, необходимо разрешить конфликт в файле include/MVC/View/views/view.detail.php
+
+Чтобы использовать WorkflowSecurityForm и SFFormFieldsRequired должен быть установлен пакет SecurityForms.
+
 RDME;
 
 $manifest = array (
@@ -35,7 +38,7 @@ $manifest = array (
   'name' => 'Workflow-WF',
   'published_date' => '2014-06-24',
   'type' => 'module',
-  'version' => '0.7.5.6', //есть зависимости от Workflow-WF в workflow_securitygroups, tasks_workflow
+  'version' => '0.7.6', //есть зависимости от Workflow-WF в workflow_securitygroups, tasks_workflow
   'remove_tables' => 'prompt',
   'dependencies' => array(
   ),

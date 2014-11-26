@@ -30,6 +30,12 @@ class WF_hooks {
                 sugar_die('Status changing is not allowed');
             }
             
+            $validationErrors = WFManager::validateEvent($focus, $status1, $status2);
+            if(!empty($validationErrors)) {
+                require_once __DIR__.'/WFEventValidationException.php';
+                throw new WFEventValidationException($validationErrors);
+            }
+
             if(!empty($focus->fetched_row['id'])) {
                 if(!WFManager::canChangeStatus($focus, $status1)) {
                     sugar_die('Access Denied');

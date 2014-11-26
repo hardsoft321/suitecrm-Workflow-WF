@@ -52,7 +52,7 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
 
       <tr margin="15">
       <td style="padding:5px"></td>
-      <td style="padding:5px"><input type='submit' name='submit_btn' value='Изменить'></td>
+      <td style="padding:5px"><input type='submit' name='submit_btn' value='Изменить' onclick="lab321.wf.confirm();return false;"></td>
       </tr>
     </table>
 </form>

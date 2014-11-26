@@ -21,6 +21,7 @@ class WFEvent extends SugarBean {
 	var $sort;
 	var $function;
     var $filter_function;
+    var $validate_function;
     var $after_save;
 	
 	var $table_name = "wf_events";

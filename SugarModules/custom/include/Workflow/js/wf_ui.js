@@ -28,6 +28,44 @@ lab321.wf.setStatusOptions = function(statuses) {
     $('#newStatus').html(html);
 };
 
+lab321.wf.confirm = function() {
+    if(!lab321.wf.confirmRequest) {
+        lab321.wf.confirmRequest = {};
+    }
+    if(lab321.wf.confirmRequest.status == 'sent') {
+        return;
+    }
+    ajaxStatus.showStatus(SUGAR.language.get('app_strings','LBL_SAVING'));
+    lab321.wf.confirmRequest.status = 'sent';
+    lab321.wf.confirmRequest.saveButtonOnclickValue = $('#confirm input[type="submit"]').attr('onclick');
+    $('#confirm input[type="submit"]').attr('onclick', 'return false');
+
+    $.ajax('index.php?entryPoint=wf_confirm', {
+        data: {
+            record: $('#confirm #record').val(),
+            module: $('#confirm #module').val(),
+            status: $('#confirm select[name="status"]').val(),
+            assigned_user: $('#confirm select[name="assigned_user"]').val(),
+            resolution: $('#confirm #resolution').val(),
+            is_ajax_call: 1,
+        },
+        type: 'POST',
+        dataType: 'json'
+    }).done(function(data) {
+        lab321.wf.setConfirmErrors(data.errors);
+        ajaxStatus.hideStatus();
+        if(data.saved) {
+            ajaxStatus.flashStatus(SUGAR.language.get('app_strings','LBL_SAVED'), 3000);
+            location.reload();
+        }
+    }).fail(function() {
+        ajaxStatus.hideStatus();
+    }).always(function() {
+        $('#confirm input[type="submit"]').attr('onclick', lab321.wf.confirmRequest.saveButtonOnclickValue || '');
+        lab321.wf.confirmRequest.status = 'done';
+    });
+}
+
 lab321.wf.massConfirm = function(action) {
     if(!lab321.wf.massConfirmRequest) {
         lab321.wf.massConfirmRequest = {};
@@ -45,7 +83,6 @@ lab321.wf.massConfirm = function(action) {
     var checkedRecords = lab321.getSugarListViewCheckedRecords();
     $('#confirm input[type="submit"]').attr('onclick', 'lab321.wf.massConfirmRequest.bSubmitAfterCheck = true; return false');
 
-    var formname = 'EditView';
     var module = $('#MassUpdate input[name="module"]').val();
     
     $.ajax('index.php?entryPoint=wf_mass_confirm', {
@@ -130,6 +167,9 @@ lab321.wf.setMassConfirmHandler = function() {
 lab321.wf.setConfirmErrors = function(errors) {
     var html = '';
     html = '<ul>';
+    if(errors.length > 0) {
+        html += '<li>Чтобы перевести запись на выбранный статус, необходимо исправить следующие ошибки:</li>';
+    }
     for(var i in errors) {
         if(typeof errors[i] == 'string') { //jit.js добавляет Array.prototype.sum
             html += '<li>'+errors[i]+'</li>';

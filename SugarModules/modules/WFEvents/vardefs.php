@@ -91,6 +91,13 @@ $dictionary['WFEvent'] = array(
             'function' => 'wf_getFilterFunctions',
 			'len' => '50',
 		),
+        'validate_function' => array (
+			'name' => 'validate_function',
+			'vname' => 'LBL_VALIDATE_FUNCTION',
+			'type' => 'enum',
+            'function' => 'wf_getValidateFunctions',
+			'len' => '50',
+		),
         'after_save' => array (
 			'name' => 'after_save',
 			'vname' => 'LBL_AFTER_SAVE',
