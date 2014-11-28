@@ -2,14 +2,16 @@
 class SFFormFieldsRequired extends BaseValidator {
 
     public function validate($bean) {
-        require_once 'modules/FormFieldsScenarios/FormFieldsScenario.php';
         $errors = array();
-        $scenario = $this->status1_data['uniq_name'].'-'.$this->status2_data['uniq_name'].'-rqr-wf';
-        $fields = FormFieldsScenario::getScenarioFieldsNames($scenario, $bean->module_name);
-        foreach($fields as $field) {
-            $val = $bean->$field;
-            if(empty($val)) {
-                $errors[] = "Не заполнено поле '".$this->translateField($bean, $field)."'";
+        $list = BeanFactory::newBean('FormFieldsLists');
+        $list = $list->retrieve_by_string_fields(array('parent_id' => $this->event_id, 'parent_type' => 'WFEvents', 'list_type' => 'required_fields'));
+        if($list && $list->load_relationship('fields')) {
+            foreach($list->fields->getBeans() as $fieldBean) {
+                $field = $fieldBean->name;
+                $val = $bean->$field;
+                if(empty($val)) {
+                    $errors[] = "Не заполнено поле '".$this->translateField($bean, $field)."'";
+                }
             }
         }
         return $errors;

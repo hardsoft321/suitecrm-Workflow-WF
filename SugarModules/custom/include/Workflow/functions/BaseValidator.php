@@ -5,6 +5,7 @@
  * Например, проверяется заполненность полей в записи.
  */
 abstract class BaseValidator {
+    public $event_id;
     public $status1_data;
     public $status2_data;
 

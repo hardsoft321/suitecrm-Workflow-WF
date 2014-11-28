@@ -145,7 +145,7 @@ class WFManager {
             return array();
         }
 
-        $q = "SELECT e.validate_function
+        $q = "SELECT e.id, e.validate_function
             , s1.uniq_name AS s1_uniq_name
             , s2.uniq_name AS s2_uniq_name
         FROM wf_events e, wf_statuses s1, wf_statuses s2
@@ -166,6 +166,7 @@ class WFManager {
                 require_once __DIR__.'/functions/BaseValidator.php';
                 require_once __DIR__.'/functions/validators/'.$functionName.'.php';
                 $func = new $functionName;
+                $func->event_id = $row['id'];
                 $func->status1_data = array(
                     'uniq_name' => $row['s1_uniq_name'],
                 );
@@ -300,6 +301,7 @@ class WFManager {
             self::translateStatus($status2, $bean->module_name) . '", '.
             $cur_date . ', '.
             $current_user->full_name.
+            (isset($bean->workflowData['autosave']) && $bean->workflowData['autosave'] === true ? ' (автопереход)' : '').
             (isset($bean->last_resolution) && $bean->last_resolution ? ' -- ' . $bean->last_resolution : '').
             '; ';
         $bean->confirm_list = $confirm_text . (isset($bean->confirm_list) ? $bean->confirm_list : '');
@@ -406,6 +408,8 @@ class WFManager {
     
     public static function autoFillAssignedUser($bean, $status1) {
         global $current_user;
+        if(isset($bean->workflowData['autosave']) && $bean->workflowData['autosave'] === true)
+            return;
         $statusBean = self::getStatusBeanByName($status1, $bean->module_name);
         if(!$statusBean) {
             $GLOBALS['log']->error("WFManager: status not found for {$bean->module_name} {$bean->id}");
@@ -611,7 +615,7 @@ class WFManager {
         return $row['name'];
     }
     
-    protected static function getStatusIdByName($status, $module_name) {
+    public static function getStatusIdByName($status, $module_name) {
         global $db;
         $row = $db->fetchOne("SELECT id FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module='{$module_name}' AND deleted = 0");
         return $row ? $row['id'] : false;

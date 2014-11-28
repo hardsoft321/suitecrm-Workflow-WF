@@ -11,42 +11,55 @@ class WorkflowSecurityForm extends SecurityForm {
     }
 
     public function setBean($bean) {
-        $status = $this->getStatus($bean);
-        if($status) {
-            require_once 'modules/FormFieldsScenarios/FormFieldsScenario.php';
-            $scenario = $status.'-upd-wf';
-            if(FormFieldsScenario::hasScenario($scenario, $bean->module_name)) {
-                $this->setDefaultDisabledMode();
-                $this->setEnabledFields(FormFieldsScenario::getScenarioFieldsNames($scenario, $bean->module_name));
-                return;
-            }
+        parent::setBean($bean);
+        $statusId = $this->getStatusId($bean);
+        if($statusId) {
+            $this->setupFieldsByStatusId($statusId);
+            $this->setupRelationshipsByStatusId($statusId);
+            return;
         }
-        $this->setDefaultEnabledMode();
+        $this->setDefaultFieldsMode(SecurityForm::MODE_DEFAULT_ENABLED);
         $this->setDisabledFields(array());
     }
 
-    public function beforeSave($bean, $event) {
-        $this->setBean($bean);
-        parent::beforeSave($bean, $event);
+    protected function setupFieldsByStatusId($statusId) {
+        $list = BeanFactory::newBean('FormFieldsLists');
+        $list = $list->retrieve_by_string_fields(array('parent_id' => $statusId, 'parent_type' => 'WFStatuses', 'list_type' => 'enabled_fields'));
+        if($list) {
+            $this->setDefaultFieldsMode(SecurityForm::MODE_DEFAULT_DISABLED);
+            $fields = array();
+            if($list->load_relationship('fields')) {
+                foreach($list->fields->getBeans() as $fieldBean) {
+                    $fields[] = $fieldBean->name;
+                }
+            }
+            $this->setEnabledFields($fields);
+        }
     }
 
-    public function getAfterEditView() {
-        if(isset($_REQUEST['module']) && isset($_REQUEST['record'])) {
-            $bean = BeanFactory::getBean($_REQUEST['module'], $_REQUEST['record']);
-            if($bean) {
-                $this->setBean($bean);
-                return parent::getAfterEditView();
+    protected function setupRelationshipsByStatusId($statusId) {
+        $list = BeanFactory::newBean('FormFieldsLists');
+        $list = $list->retrieve_by_string_fields(array('parent_id' => $statusId, 'parent_type' => 'WFStatuses', 'list_type' => 'disabled_rels'));
+        if($list) {
+            $this->setDefaultRelationshipsMode(SecurityForm::MODE_DEFAULT_ENABLED);
+            $fields = array();
+            if($list->load_relationship('fields')) {
+                foreach($list->fields->getBeans() as $fieldBean) {
+                    $fields[] = $fieldBean->name;
+                }
+            }
+            $this->setDisabledRelationships($fields);
+        }
+    }
+
+    protected function getStatusId($bean) {
+        require_once 'custom/include/Workflow/WFManager.php';
+        if(WFManager::isBeanInWorkflow($bean)) {
+            $statusField = WFManager::getBeanStatusField($bean);
+            if($statusField && $bean->$statusField) {
+                return WFManager::getStatusIdByName($bean->$statusField, $bean->module_name);
             }
         }
-        return '';
-    }
-
-    protected function getStatus($bean) {   
-        require_once 'custom/include/Workflow/WFManager.php';
-        if(!WFManager::isBeanInWorkflow($bean)) {
-            return false;
-        }
-        $statusField = WFManager::getBeanStatusField($bean);
-        return $statusField ? $bean->$statusField : false;
+        return false;
     }
 }
