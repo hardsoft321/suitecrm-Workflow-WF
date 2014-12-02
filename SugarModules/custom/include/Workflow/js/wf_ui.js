@@ -28,7 +28,7 @@ lab321.wf.setStatusOptions = function(statuses) {
     $('#newStatus').html(html);
 };
 
-lab321.wf.confirm = function() {
+lab321.wf.confirmStatus = function() {
     if(!lab321.wf.confirmRequest) {
         lab321.wf.confirmRequest = {};
     }
@@ -161,13 +161,6 @@ lab321.wf.setListViewHandlers = function() {
     }
 };
 
-lab321.wf.setMassConfirmHandler = function() {
-    $('#confirm').submit(function(event) {
-        lab321.wf.massConfirm('save');
-        event.preventDefault();
-    });
-}
-
 lab321.wf.setConfirmErrors = function(errors) {
     var html = '';
     html = '<ul>';
@@ -203,7 +196,7 @@ lab321.wf.onChangeNewStatus = function() {
     if (!statusSel)
         return;
     var disable = true;
-    var userSel = document.confirm.assigned_user;
+    var userSel = document.confirmForm.assigned_user;
     userSel.options.length = 0;
     if (statusSel.length > 0) {
         var status = statusSel[statusSel.selectedIndex].value;
@@ -214,7 +207,7 @@ lab321.wf.onChangeNewStatus = function() {
                 userSel.options[i] = new Option(lab321.wf.assignedUsers[status][i][1], lab321.wf.assignedUsers[status][i][0]);
         }
     }
-    document.confirm.submit_btn.disabled = disable;
+    document.confirmForm.submit_btn.disabled = disable;
 }
 
 lab321.wf.onChangeRole = function() {
