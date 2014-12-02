@@ -18,7 +18,7 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
 <div id="confirm_block">
 <h4 class="formHeader h3Row" style="padding-top: 8px">Согласование</h4>
 <input type="hidden" name="confirm_current_status" id="confirm_current_status" value="{$workflow.confirmData.currentStatus}" />
-<form id='confirm' name='confirm' action='index.php?entryPoint=wf_confirm' method='POST' 
+<form id='confirm' name='confirmForm' action='index.php?entryPoint=wf_confirm' method='POST' 
          style="margin-top: 5px;
                 border-style: solid;
                 border-width: 1px;
@@ -52,7 +52,7 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
 
       <tr margin="15">
       <td style="padding:5px"></td>
-      <td style="padding:5px"><input type='submit' name='submit_btn' value='Изменить' onclick="{if !empty($workflow.confirmData.confirmFunc)}{$workflow.confirmData.confirmFunc}();{else}lab321.wf.confirm();{/if}return false;"></td>
+      <td style="padding:5px"><input type='submit' name='submit_btn' value='Изменить' onclick="{if !empty($workflow.confirmData.confirmFunc)}{$workflow.confirmData.confirmFunc}();{else}lab321.wf.confirmStatus();{/if}return false;"></td>
       
 
       </tr>
