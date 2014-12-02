@@ -66,6 +66,10 @@ lab321.wf.confirm = function() {
     });
 }
 
+lab321.wf.massConfirmSave = function() {
+    lab321.wf.massConfirm('save');
+};
+
 lab321.wf.massConfirm = function(action) {
     if(!lab321.wf.massConfirmRequest) {
         lab321.wf.massConfirmRequest = {};

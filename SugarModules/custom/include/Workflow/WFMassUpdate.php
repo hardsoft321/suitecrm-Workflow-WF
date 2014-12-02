@@ -158,6 +158,7 @@ class WFMassUpdate {
                 'newStatuses' => array(),
                 'assignedUsersString' => '[]',
                 'currentStatus' => '',
+                'confirmFunc' => 'lab321.wf.massConfirmSave',
             ),
         );
         $ss->assign('workflow', $workflow);
