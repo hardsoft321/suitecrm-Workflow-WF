@@ -17,10 +17,11 @@ class WF_hooks {
     $statusField = WFManager::getBeanStatusField($focus);
     if($statusField) {
         $status1 = empty($focus->fetched_row['id']) ? '' : $focus->fetched_row[$statusField];
-        if($status1 == '') {
+        if($focus->fetched_row['id'] != $focus->wf_id) {
             $possibleFirstStatuses = WFManager::getFirstNonEmptyStatuses($focus->wf_id);
             /* Сами установим первый статус */
             $focus->$statusField = !empty($possibleFirstStatuses) && !in_array($focus->$statusField, $possibleFirstStatuses) ? reset($possibleFirstStatuses) : $focus->$statusField;
+            $status1 = '';
         }
         $status2 = $focus->$statusField;
         $assigned1 = empty($focus->fetched_row['id']) ? '' : $focus->fetched_row['assigned_user_id'];
