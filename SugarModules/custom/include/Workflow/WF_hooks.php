@@ -17,7 +17,7 @@ class WF_hooks {
     $statusField = WFManager::getBeanStatusField($focus);
     if($statusField) {
         $status1 = empty($focus->fetched_row['id']) ? '' : $focus->fetched_row[$statusField];
-        if($focus->fetched_row['id'] != $focus->wf_id) {
+        if($focus->fetched_row['wf_id'] != $focus->wf_id) {
             $possibleFirstStatuses = WFManager::getFirstNonEmptyStatuses($focus->wf_id);
             /* Сами установим первый статус */
             $focus->$statusField = !empty($possibleFirstStatuses) && !in_array($focus->$statusField, $possibleFirstStatuses) ? reset($possibleFirstStatuses) : $focus->$statusField;
