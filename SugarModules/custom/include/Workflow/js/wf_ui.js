@@ -74,7 +74,12 @@ lab321.wf.massConfirm = function(action) {
     if(!lab321.wf.massConfirmRequest) {
         lab321.wf.massConfirmRequest = {};
     }
+    if(lab321.wf.massConfirmRequest.status == 'resend') {
+        return;
+    }
     if(lab321.wf.massConfirmRequest.status == 'sent') {
+        lab321.wf.massConfirmRequest.status = 'resend';
+        lab321.wf.massConfirmRequest.resendAction = action;
         return;
     }
     if(action == 'save') {
@@ -120,7 +125,11 @@ lab321.wf.massConfirm = function(action) {
             $('#confirm input[type="submit"]').click();
         }
         lab321.wf.massConfirmRequest.bSubmitAfterCheck = false;
+        var status = lab321.wf.massConfirmRequest.status;
         lab321.wf.massConfirmRequest.status = 'done';
+        if(status == 'resend') {
+            lab321.wf.massConfirm(lab321.wf.massConfirmRequest.resendAction);
+        }
     });
 };
 
