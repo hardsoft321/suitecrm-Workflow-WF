@@ -52,6 +52,18 @@ class WorkflowSecurityForm extends SecurityForm {
         }
     }
 
+    protected function getDataChangesToUnset($bean) {
+        require_once 'custom/include/workflow/WFManager.php';
+        $diff = parent::getDataChangesToUnset($bean);
+        $statusField = WFManager::getBeanStatusField($bean);
+        foreach($diff as $field => $changes) {
+            if($field == $statusField) {
+                unset($diff[$field]);
+            }
+        }
+        return $diff;
+    }
+
     protected function getStatusId($bean) {
         require_once 'custom/include/Workflow/WFManager.php';
         if(WFManager::isBeanInWorkflow($bean)) {
