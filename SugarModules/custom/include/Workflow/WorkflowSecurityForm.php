@@ -53,7 +53,7 @@ class WorkflowSecurityForm extends SecurityForm {
     }
 
     protected function getDataChangesToUnset($bean) {
-        require_once 'custom/include/workflow/WFManager.php';
+        require_once 'custom/include/Workflow/WFManager.php';
         $diff = parent::getDataChangesToUnset($bean);
         $statusField = WFManager::getBeanStatusField($bean);
         foreach($diff as $field => $changes) {
