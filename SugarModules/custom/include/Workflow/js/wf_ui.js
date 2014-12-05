@@ -35,6 +35,9 @@ lab321.wf.confirmStatus = function() {
     if(lab321.wf.confirmRequest.status == 'sent') {
         return;
     }
+    if(!check_form('confirmForm') || !check_form('confirm')/*legacy*/) {
+        return;
+    }
     ajaxStatus.showStatus(SUGAR.language.get('app_strings','LBL_SAVING'));
     lab321.wf.confirmRequest.status = 'sent';
     lab321.wf.confirmRequest.saveButtonOnclickValue = $('#confirm input[type="submit"]').attr('onclick');
