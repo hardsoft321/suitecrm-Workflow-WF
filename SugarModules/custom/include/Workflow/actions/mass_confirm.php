@@ -2,11 +2,12 @@
 if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
 
 require_once ('custom/include/Workflow/WFMassUpdate.php');
+require_once 'custom/include/Workflow/utils.php';
 
 $out = array();
 $errors = array();
 if($_REQUEST['checkedRecords']['mode'] == 'entire') {
-    $errors[] = "Перевод всех записей не поддерживается. Пожалуйcта, выберите записи, находящиеся на одном статусе.";
+    $errors[] = wf_translate('ERR_ENTIRE_LIST_MASS_CONFIRM');
 }
 else {
     $massUpdate = new WFMassUpdate();

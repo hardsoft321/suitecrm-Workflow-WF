@@ -29,3 +29,5 @@ $app_strings['LBL_CONFIRM_LIST'] = 'Журнал согласования';
 $app_strings['LBL_USER'] = 'Пользователь';
 $app_strings['LBL_STATUS_CHANGE'] = 'Перевод на статус';
 $app_strings['LBL_RESOLUTION'] = 'Резолюция';
+
+$app_strings['LBL_CONFIRM_ERRORS_TITLE'] = 'Чтобы перевести запись на выбранный статус, необходимо исправить следующие ошибки: ';

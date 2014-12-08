@@ -1,7 +1,11 @@
 <?php
+/**
+ * Проверка обязательных для статуса полей
+ */
 class SFFormFieldsRequired extends BaseValidator {
 
     public function validate($bean) {
+        require_once 'custom/include/Workflow/utils.php';
         $errors = array();
         $list = BeanFactory::newBean('FormFieldsLists');
         $list = $list->retrieve_by_string_fields(array('parent_id' => $this->event_id, 'parent_type' => 'WFEvents', 'list_type' => 'required_fields'));
@@ -10,15 +14,11 @@ class SFFormFieldsRequired extends BaseValidator {
                 $field = $fieldBean->name;
                 $val = $bean->$field;
                 if(empty($val)) {
-                    $errors[] = "Не заполнено поле '".$this->translateField($bean, $field)."'";
+                    $errors[] = wf_translate('ERR_FIELD_REQUIRED')." '".$this->translateField($bean, $field)."'";
                 }
             }
         }
         return $errors;
-    }
-
-    public function getName() {
-        return 'Проверка обязательных для статуса полей';
     }
 
     protected function translateField($bean, $field) {

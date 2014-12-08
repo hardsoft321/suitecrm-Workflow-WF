@@ -78,4 +78,27 @@ function wf_getAssignedListFunctions($focus = null, $name = null, $value = null,
     return $res;
 }
 
+function wf_assign_die($msg) {
+    sugar_die(wf_translate($msg));
+}
+
+function wf_confirm_die($msg) {
+    sugar_die(wf_translate($msg));
+}
+
+function wf_before_save_die($msg) {
+    sugar_die(wf_translate($msg));
+}
+
+function wf_translate($msg, $arrReplace = array()) {
+    global $current_language;
+    $mod_strings = return_module_language($current_language, 'WFWorkflows');
+    if(isset($mod_strings[$msg])) {
+        $msg = $mod_strings[$msg];
+    }
+    foreach($arrReplace as $search => $replace) {
+        $msg = str_replace($search, $replace, $msg);
+    }
+    return $msg;
+}
 ?>

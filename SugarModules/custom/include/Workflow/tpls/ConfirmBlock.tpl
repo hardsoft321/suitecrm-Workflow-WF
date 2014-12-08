@@ -3,9 +3,11 @@
 SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefined" && typeof lab321.wf != "undefined"', function() {
 {/literal}
     lab321.wf.assignedUsers = {$workflow.confirmData.assignedUsersString};
+    var resolutionLabel = '{sugar_translate label='LBL_RESOLUTION' module='WFWorkflows'}';
+    var assignedLabel = '{sugar_translate label='LBL_ASSIGNED' module='WFWorkflows'}';
 {literal}
-    addToValidate('confirm', 'resolution', null, true, 'Резолюция');
-    addToValidate('confirm', 'assigned_user', null, true, 'Ответственный');
+    addToValidate('confirm', 'resolution', null, true, resolutionLabel);
+    addToValidate('confirm', 'assigned_user', null, true, assignedLabel);
     $('#confirm input[type="submit"]').click(function() {
         return check_form('confirm');
     });
@@ -16,7 +18,7 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
 </script>
 
 <div id="confirm_block">
-<h4 class="formHeader h3Row" style="padding-top: 8px">Согласование</h4>
+<h4 class="formHeader h3Row" style="padding-top: 8px">{sugar_translate label='LBL_CONFIRM_STATUS' module='WFWorkflows'}</h4>
 <input type="hidden" name="confirm_current_status" id="confirm_current_status" value="{$workflow.confirmData.currentStatus}" />
 <form id='confirm' name='confirmForm' action='index.php?entryPoint=wf_confirm' method='POST' 
          style="margin-top: 5px;
@@ -36,23 +38,23 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
     
     <table border="0" margin="5" style="min-width:400px">
       <tr margin="15">
-        <td style="padding:5px"><label for="resolution">Резолюция:</label><span class="required">*</span></td>
+        <td style="padding:5px"><label for="resolution">{sugar_translate label='LBL_RESOLUTION' module='WFWorkflows'}:</label><span class="required">*</span></td>
        <td style="padding:5px"><textarea name="resolution" id="resolution" style="width:100%"></textarea></td> 
       </tr>
       <tr margin="15">
-        <td style="padding:5px"><label for="status">Новый статус:</label><span class="required">*</span></td>
+        <td style="padding:5px"><label for="status">{sugar_translate label='LBL_NEW_STATUS' module='WFWorkflows'}:</label><span class="required">*</span></td>
        <td style="padding:5px">{html_options name=status options=$workflow.confirmData.newStatuses id=newStatus style="width:100%"
                                              onchange="lab321.wf.onChangeNewStatus();"}</td> 
       </tr>
 
       <tr margin="15">
-        <td style="padding:5px"><label for="assigned_user">Ответственный:</label><span class="required">*</span></td>
+        <td style="padding:5px"><label for="assigned_user">{sugar_translate label='LBL_ASSIGNED' module='WFWorkflows'}:</label><span class="required">*</span></td>
        <td style="padding:5px">{html_options name=assigned_user options="" id=assigned_user style="width:100%"}</td> 
       </tr>
 
       <tr margin="15">
       <td style="padding:5px"></td>
-      <td style="padding:5px"><input type='submit' name='submit_btn' value='Изменить' onclick="{if !empty($workflow.confirmData.confirmFunc)}{$workflow.confirmData.confirmFunc}();{else}lab321.wf.confirmStatus();{/if}return false;"></td>
+      <td style="padding:5px"><input type='submit' name='submit_btn' value='{sugar_translate label='LBL_CONFIRM_SUBMIT' module='WFWorkflows'}' onclick="{if !empty($workflow.confirmData.confirmFunc)}{$workflow.confirmData.confirmFunc}();{else}lab321.wf.confirmStatus();{/if}return false;"></td>
       
 
       </tr>

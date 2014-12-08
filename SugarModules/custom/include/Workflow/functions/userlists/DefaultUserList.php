@@ -1,4 +1,7 @@
 <?php
+/**
+ * Все в роли и в группе
+ */
 class DefaultUserList extends BaseUserList {
     
     protected $statusRoleField = 'role_id';
@@ -24,10 +27,6 @@ class DefaultUserList extends BaseUserList {
         return parent::getUsersBySql($q);
     }
 
-    public function getName() {
-        return 'Все в роли и в группе';
-    }
-    
     protected function getBeanGroups($bean) {
         if(!isset($bean->workflowData) || !isset($bean->workflowData['allRecordGroups'])) {
             if(!isset($bean->workflowData)) {

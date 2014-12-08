@@ -2,32 +2,34 @@
 if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
 
 global $db;
+
 require_once 'custom/include/Workflow/WFManager.php';
 require_once 'custom/include/Workflow/WFStatusAssigned.php';
+require_once 'custom/include/Workflow/utils.php';
 
 $bean = BeanFactory::getBean($_POST['module'], $_POST['record']);
 if (empty($bean->id))
-    sugar_die ("Запись не найдена");
+    wf_assign_die('ERR_RECORD_NOT_FOUND');
 
 $role_id = $db->quote($_POST['role']);
 $assigned2 = $db->quote($_POST['new_assign_user']);
 
 $statusField = WFManager::getBeanStatusField($bean);
 if(!$statusField) {
-    sugar_die('Поле статуса не найдено');
+    wf_assign_die('ERR_STATUS_FIELD_NOT_FOUND');
 }
 $status1 = $bean->$statusField;
 
 $roleStatuses = WFManager::getStatusesWithRole($role_id, $bean->wf_id);
 if(empty($roleStatuses)) {
-    sugar_die('Статусы для указанной роли не найдены');
+    wf_assign_die('ERR_ROLE_STATUS_NOT_FOUND');
 }
 foreach($roleStatuses as $st) {
     if(!WFManager::canChangeAssignedUser($bean, $st)) { 
-        sugar_die('У Вас нет прав на смену ответственного!');
+        wf_assign_die('ERR_ASSIGN_DENIED');
     }
     if(!WFManager::isInConfirmUsers($assigned2, $bean, $st)) {
-        sugar_die('Указанного пользователя нельзя назначить ответственным');
+        wf_assign_die('ERR_INVALID_ASSIGNED');
     }
 }
 

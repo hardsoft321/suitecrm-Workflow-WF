@@ -294,7 +294,6 @@ class WFManager {
     public static function logStatusChange($bean, $status1, $status2, $saveBean = true) {
         global $timedate;
         global $current_user;
-        global $app_list_strings;
         
         $cur_date = $timedate->handle_offset(gmdate($timedate->get_db_date_time_format()), 'd.m.Y H:i', 'd.m.Y H:i', $current_user, 'Europe/Moscow') . " (МСК)";
         $confirm_text = 'Перевод на "'.
@@ -315,7 +314,6 @@ class WFManager {
         global $db;
         global $timedate;
         global $current_user;
-        global $app_list_strings;
         
         $role_name = null;
         if($role_id === null) {

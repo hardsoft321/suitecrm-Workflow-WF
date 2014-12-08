@@ -29,3 +29,5 @@ $app_strings['LBL_CONFIRM_LIST'] = 'Confirm List';
 $app_strings['LBL_USER'] = 'User';
 $app_strings['LBL_STATUS_CHANGE'] = 'Status Changed To';
 $app_strings['LBL_RESOLUTION'] = 'Resolution';
+
+$app_strings['LBL_CONFIRM_ERRORS_TITLE'] = 'Errors: ';

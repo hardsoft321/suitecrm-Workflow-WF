@@ -1,5 +1,6 @@
 <?php
 require_once ('custom/include/Workflow/WFManager.php');
+require_once ('custom/include/Workflow/utils.php');
 
 class WFMassUpdate {
 
@@ -23,13 +24,13 @@ class WFMassUpdate {
         $this->beans = array();
         $this->firstWorkflowBean = null;
         if(empty($beansIds)) {
-            $this->errors[] = "Ни одна запись не выбрана";
+            $this->errors[] = wf_translate('ERR_NO_RECORD');
             return;
         }
         
         $beanClass = BeanFactory::getBeanName($module);
         if (empty($beanClass) || !class_exists($beanClass)) {
-            $this->errors[] = "Модуль не найден";
+            $this->errors[] = wf_translate('ERR_MODULE_NOT_FOUND');
             return false;
         }
 
@@ -40,7 +41,7 @@ class WFMassUpdate {
                 $this->beans[] = $bean;
             }
             else {
-                $this->errors[] = "Не все записи найдены";
+                $this->errors[] = wf_translate('ERR_SOME_RECORD_NOT_FOUND');
                 return;
             }
         }
@@ -51,7 +52,9 @@ class WFMassUpdate {
                 $workflows[$bean->wf_id][] = $bean;
             }
             else {
-                $this->errors[] = "Нет маршрута для записи '{$bean->name}'";
+                $this->errors[] = wf_translate('ERR_NO_WORKFLOW_FOR', array(
+                    '#NAME#' => $bean->name,
+                ));
             }
         }
         
@@ -65,14 +68,17 @@ class WFMassUpdate {
         if(count($workflows) > 1) {    
             $lastWorkflow = end($workflows);
             $lastWorkflowBean = reset($lastWorkflow);
-            $this->errors[] = "Невозможно перевести на один статус записи, находящиеся в разных маршрутах (записи '$firstWorkflowBean->name' и '$lastWorkflowBean->name')";
+            $this->errors[] = wf_translate('ERR_NOT_SAME_WORKFLOW', array(
+                '#NAME1#' => $firstWorkflowBean->name,
+                '#NAME2#' => $lastWorkflowBean->name,
+            ));
             return;
         }
         
         $statuses1 = array();
         $statusField = WFManager::getBeanStatusField($firstWorkflowBean);
         if(!$statusField) {
-            $this->errors[] = "Не удается определить статус";
+            $this->errors[] = wf_translate('ERR_STATUS_FIELD_NOT_FOUND');
             return;
         }
         $this->statusField = $statusField;
@@ -87,22 +93,25 @@ class WFMassUpdate {
             $firstStatusBean = reset($firstStatus);
             $lastStatus = end($statuses1);
             $lastStatusBean = reset($lastStatus);
-            $this->errors[] = "Невозможно перевести на один статус записи, находящиеся на разных статусах (записи '$firstStatusBean->name' и '$lastStatusBean->name')";
+            $this->errors[] = wf_translate('ERR_NOT_SAME_STATUS', array(
+                '#NAME1#' => $firstStatusBean->name,
+                '#NAME2#' => $lastStatusBean->name,
+            ));
             return;
         }
     }
     
     public function setNextStatus($status2, $assigned2) {
         if(!$status2) {
-            $this->errors[] = "Необходимо выбрать статус";
+            $this->errors[] = wf_translate('ERR_STATUS_REQUIRED');
             return;
         }
         if($this->status1 == $status2) {
-            $this->errors[] = "Необходимо выбрать следующий статус";
+            $this->errors[] = wf_translate('ERR_STATUS_NOT_CHANGING');
             return;
         }
         if(!$assigned2) {
-            $this->errors[] = "Необходимо выбрать ответственного";
+            $this->errors[] = wf_translate('ERR_ASSIGNED_REQUIRED');
             return;
         }
         $this->status2 = $status2;
@@ -110,14 +119,20 @@ class WFMassUpdate {
         
         foreach($this->beans as $bean) {
             if(!WFManager::isEventAllowed($bean, $this->status1, $this->status2)) {
-                $this->errors[] = "Невозможно сменить статус для записи '$bean->name'";
+                $this->errors[] = wf_translate('ERR_CONFIRM_INVALID_FOR', array(
+                    '#NAME#' => $bean->name,
+                ));
             }
             if(!empty($bean->fetched_row['id'])) {
                 if(!WFManager::canChangeStatus($bean, $this->status1)) {
-                    $this->errors[] = "Вы не можете сменить статус для записи '$bean->name'";
+                    $this->errors[] = wf_translate('ERR_CONFIRM_DENIED_FOR', array(
+                        '#NAME#' => $bean->name,
+                    ));
                 }
                 if(!WFManager::isInFrontAssignedUsers($this->assigned2, $bean, $this->status2)) {
-                    $this->errors[] = "Ответственный задан не верно для записи '$bean->name'";
+                    $this->errors[] = wf_translate('ERR_ASSIGNED_INVALID_FOR', array(
+                        '#NAME#' => $bean->name,
+                    ));
                 }
             }
         }

@@ -11,6 +11,7 @@ class WF_hooks {
     if(isset($focus->workflowData['skipWFHooks']) && $focus->workflowData['skipWFHooks'] === true)
         return;
     require_once ('custom/include/Workflow/WFManager.php');
+    require_once ('custom/include/Workflow/utils.php');
     
     $focus->wf_id = $this->getNewWfId($focus);
     
@@ -28,7 +29,7 @@ class WF_hooks {
         $assigned2 = $focus->assigned_user_id;
         if($status1 != '' && $status1 != $status2) {
             if(!WFManager::isEventAllowed($focus, $status1, $status2)) {
-                sugar_die('Status changing is not allowed');
+                wf_before_save_die('ERR_INVALID_EVENT');
             }
             
             $validationErrors = WFManager::validateEvent($focus, $status1, $status2);
@@ -39,11 +40,11 @@ class WF_hooks {
 
             if(!empty($focus->fetched_row['id'])) {
                 if(!WFManager::canChangeStatus($focus, $status1)) {
-                    sugar_die('Access Denied');
+                    wf_before_save_die('ERR_CONFIRM_DENIED');
                 }
                 
                 if(!WFManager::isInFrontAssignedUsers($assigned2, $focus, $status2)) {
-                    sugar_die('Ответственный задан не верно');
+                    wf_before_save_die('ERR_INVALID_ASSIGNED');
                 }
             }
             
@@ -52,10 +53,10 @@ class WF_hooks {
         else {
             if(!empty($focus->fetched_row['id']) && $assigned1 != $assigned2) {
                 if(!WFManager::canChangeAssignedUser($focus, $status1)) { 
-                    sugar_die('У Вас нет прав на смену ответственного');
+                    wf_before_save_die('ERR_ASSIGN_DENIED');
                 }
                 if(!WFManager::isInConfirmUsers($assigned2, $focus, $status1)) {
-                    sugar_die('Указанного пользователя нельзя назначить ответственным');
+                    wf_before_save_die('ERR_INVALID_ASSIGNED');
                 }
             }
         }

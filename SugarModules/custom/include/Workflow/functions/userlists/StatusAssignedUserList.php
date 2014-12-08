@@ -2,6 +2,9 @@
 require_once __DIR__.'/DefaultUserList.php';
 require_once 'custom/include/Workflow/WFStatusAssigned.php';
 
+/**
+ * Закрепленный за ролью или групповой
+ */
 class StatusAssignedUserList extends DefaultUserList {
     
     public function getList($bean) {
@@ -11,10 +14,6 @@ class StatusAssignedUserList extends DefaultUserList {
         }
         $this->additionalWhere = 'users.is_group = 1';
         return parent::getList($bean);
-    }
-
-    public function getName() {
-        return 'Закрепленный за ролью или групповой';
     }
 }
 ?>

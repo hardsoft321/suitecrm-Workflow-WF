@@ -2,14 +2,15 @@
 if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
 
 require_once ('custom/include/Workflow/WFManager.php');
+require_once 'custom/include/Workflow/utils.php';
 
 $bean = BeanFactory::getBean($_POST['module'], $_POST['record']);
 if (empty($bean->id))
-    sugar_die ("Запись не найдена");
+    wf_confirm_die('ERR_RECORD_NOT_FOUND');
 
 $statusField = WFManager::getBeanStatusField($bean);
 if(!$statusField)
-    sugar_die('Field for status not found');
+    wf_confirm_die('ERR_STATUS_FIELD_NOT_FOUND');
 $bean->$statusField = $_POST['status'];
 $bean->last_resolution = $_POST['resolution'];
 $bean->assigned_user_id = $_POST['assigned_user'];

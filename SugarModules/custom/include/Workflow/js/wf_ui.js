@@ -177,7 +177,8 @@ lab321.wf.setConfirmErrors = function(errors) {
     var html = '';
     html = '<ul>';
     if(errors.length > 0) {
-        html += '<li>Чтобы перевести запись на выбранный статус, необходимо исправить следующие ошибки:</li>';
+        var title = SUGAR.language.get('app_strings','LBL_CONFIRM_ERRORS_TITLE');
+        html += '<li>'+(title != 'undefined' ? title : '')+'</li>';
     }
     for(var i in errors) {
         if(typeof errors[i] == 'string') { //jit.js добавляет Array.prototype.sum
