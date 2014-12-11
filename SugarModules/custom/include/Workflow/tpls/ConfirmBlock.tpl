@@ -19,7 +19,6 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
 
 <div id="confirm_block">
 <h4 class="formHeader h3Row" style="padding-top: 8px">{sugar_translate label='LBL_CONFIRM_STATUS' module='WFWorkflows'}</h4>
-<input type="hidden" name="confirm_current_status" id="confirm_current_status" value="{$workflow.confirmData.currentStatus}" />
 <form id='confirm' name='confirmForm' action='index.php?entryPoint=wf_confirm' method='POST' 
          style="margin-top: 5px;
                 border-style: solid;

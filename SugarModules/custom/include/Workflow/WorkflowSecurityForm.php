@@ -12,11 +12,13 @@ class WorkflowSecurityForm extends SecurityForm {
 
     public function setBean($bean) {
         parent::setBean($bean);
-        $statusId = $this->getStatusId($bean);
-        if($statusId) {
-            $this->setupFieldsByStatusId($statusId);
-            $this->setupRelationshipsByStatusId($statusId);
-            return;
+        if(!isset($bean->workflowData['autosave']) || !$bean->workflowData['autosave']) {
+            $statusId = $this->getStatusId($bean);
+            if($statusId) {
+                $this->setupFieldsByStatusId($statusId);
+                $this->setupRelationshipsByStatusId($statusId);
+                return;
+            }
         }
         $this->setDefaultFieldsMode(SecurityForm::MODE_DEFAULT_ENABLED);
         $this->setDisabledFields(array());

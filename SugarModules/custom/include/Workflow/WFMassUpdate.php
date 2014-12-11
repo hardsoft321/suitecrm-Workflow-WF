@@ -169,10 +169,10 @@ class WFMassUpdate {
         $ss = new Sugar_Smarty();
         $workflow = array(
             'include_script' => WFManager::getVersionedScript(),
+            'currentStatus' => '',
             'confirmData' => array(
                 'newStatuses' => array(),
                 'assignedUsersString' => '[]',
-                'currentStatus' => '',
                 'confirmFunc' => 'lab321.wf.massConfirmSave',
             ),
         );

@@ -15,7 +15,7 @@ abstract class BaseValidator {
      */
     public abstract function validate($bean);
 
-    public function getName($bean) {
+    public function getName() {
         return get_class($this);
     }
 }

@@ -7,7 +7,7 @@ abstract class BaseUserList {
     
     public abstract function getList($bean);
 
-    public function getName($bean) {
+    public function getName() {
         return get_class($this);
     }
     
