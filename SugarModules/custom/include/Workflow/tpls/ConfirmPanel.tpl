@@ -1,3 +1,5 @@
+<input type="hidden" name="current_status" id="current_status" value="{$workflow.currentStatus}" />
+{if !empty($workflow.confirmData) or !empty($workflow.roles) or !empty($workflow.statusAssignedUsers)}
 <style>{* TODO: вынести css в файл (и из inline-style) *}
 {literal}
 #status-assigned {
@@ -22,10 +24,10 @@
 }
 {/literal}
 </style>
+
 {$workflow.include_script}
 {include file="custom/include/Workflow/tpls/ToggleButton.tpl"}
 <div id="confirm_panel" style="display:none">
-  <input type="hidden" name="current_status" id="current_status" value="{$workflow.currentStatus}" />
   {if !empty($workflow.confirmData)}
     {include file="custom/include/Workflow/tpls/ConfirmBlock.tpl"}
   {/if}
@@ -36,3 +38,4 @@
     {include file="custom/include/Workflow/tpls/LogBlock.tpl"}
   {/if}  
 </div>
+{/if}

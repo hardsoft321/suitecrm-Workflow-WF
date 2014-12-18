@@ -456,21 +456,19 @@ class WFManager {
             require_once __DIR__.'/WFStatusAssigned.php';
             $statusAssignedUsers = WFStatusAssigned::getAllAssignedUsers($bean->id, $bean->module_name);
             
-            if (!empty($statuses) || !empty($confirmUsersData) || !empty($statusAssignedUsers)) {
-                $data['currentStatus'] = $status1;
-                $data['include_script'] = self::getVersionedScript();
-                if(!empty($statuses)) {
-                    $data['confirmData'] = array(
-                        'newStatuses' => $statuses,
-                        'assignedUsersString' => json_encode($assignedUsersData),
-                    );
-                }
-                $data['assignedUsers'] = $assignedUsersData;
-                $data['roles'] = $roles;
-                $data['confirmUsersString'] = json_encode($confirmUsersData);
-                $data['currentRole'] = $statusBean ? $statusBean->role_id : false;
-                $data['statusAssignedUsers'] = $statusAssignedUsers;
-            }            
+            $data['currentStatus'] = $status1;
+            $data['include_script'] = self::getVersionedScript();
+            if(!empty($statuses)) {
+                $data['confirmData'] = array(
+                    'newStatuses' => $statuses,
+                    'assignedUsersString' => json_encode($assignedUsersData),
+                );
+            }
+            $data['assignedUsers'] = $assignedUsersData;
+            $data['roles'] = $roles;
+            $data['confirmUsersString'] = json_encode($confirmUsersData);
+            $data['currentRole'] = $statusBean ? $statusBean->role_id : false;
+            $data['statusAssignedUsers'] = $statusAssignedUsers;
         }
         return $data;
     }
