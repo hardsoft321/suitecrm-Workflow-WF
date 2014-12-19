@@ -297,7 +297,11 @@ class WFManager {
         global $app_list_strings;
 
         $cur_date = $timedate->handle_offset(gmdate($timedate->get_db_date_time_format()), 'd.m.Y H:i', 'd.m.Y H:i', $current_user, 'Europe/Moscow') . " (МСК)";
-        $confirm_text = 'Перевод на "'.
+        $statusFinal = self::logFinalStatusToArchive($status2, $bean->module_name);
+        if(!empty($statusFinal)) {
+            $confirm_text = $statusFinal.", ".$cur_date.", ".$current_user->full_name."; ";
+        }
+        $confirm_text .= 'Перевод на "'.
             self::translateStatus($status2, $bean->module_name) . '", '.
             $cur_date . ', '.
             $current_user->full_name.
@@ -308,6 +312,16 @@ class WFManager {
 
         if($saveBean) {
             $bean->save();
+        }
+    }
+
+    protected static function logFinalStatusToArchive($status, $module) {
+        $finalStatuses = self::getFinalStatuses($module);
+            if(in_array($status, $finalStatuses)) {
+                return 'Перевод задачи в архив ';
+            }
+        else {
+            return '';
         }
     }
 
