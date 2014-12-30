@@ -38,7 +38,7 @@ $manifest = array (
   'name' => 'Workflow-WF',
   'published_date' => '2014-06-24',
   'type' => 'module',
-  'version' => '0.7.7.3', //есть зависимости от Workflow-WF в workflow_securitygroups, tasks_workflow
+  'version' => '0.7.7.4', //есть зависимости от Workflow-WF в workflow_securitygroups, tasks_workflow
   'remove_tables' => 'prompt',
   'dependencies' => array(
   ),
@@ -111,6 +111,11 @@ $installdefs = array (
       'from' => '<basepath>/SugarModules/language/application/ru_ru.lang.php',
       'to_module' => 'application',
       'language' => 'ru_ru',
+    ),
+    array (
+      'from' => '<basepath>/SugarModules/language/application/ge_ge.lang.php',
+      'to_module' => 'application',
+      'language' => 'ge_ge',
     ),
   ),
   'logic_hooks' => array (
