@@ -110,6 +110,7 @@ lab321.wf.massConfirm = function(action) {
         dataType: 'json'
     }).done(function(data) {
         lab321.wf.setConfirmErrors(data.errors);
+        $('#current_status').val(data.editFormData.currentStatus);
         if(data.editFormData) {
             lab321.wf.assignedUsers = data.editFormData.assignedUsers || [];
             lab321.wf.setStatusOptions((data.editFormData.confirmData || {}).newStatuses || []);

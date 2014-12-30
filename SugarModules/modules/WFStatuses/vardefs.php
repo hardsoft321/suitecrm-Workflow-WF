@@ -113,6 +113,15 @@ $dictionary['WFStatus'] = array(
             'function' => 'wf_getAssignedListFunctions',
 			'len' => '50',
 		),
+            'isfinal' => array (
+                        'name' => 'isfinal',
+                        'vname' => 'LBL_ISFINAL',
+                        'type' => 'bool',
+                        'reportable'=>false,
+                        'default'=>'0',
+                        'comment' => 'Indicates if item has been archived'
+                ),
+
   ),
 );
 $dictionary["WFStatus"]['indices'][] = array('name'=>'idx_wfstatus_uniq_m_d', 'type'=>'index', 'fields'=>array('uniq_name', 'wf_module', 'deleted'));

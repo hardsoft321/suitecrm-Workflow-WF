@@ -34,6 +34,8 @@ $mod_strings = array (
 'LBL_CONFIRM_LIST_FUNCTION' => 'Список в смене ответственного',
 'LBL_CONFIRM_CHECK_LIST_FUNCTION' => 'Доступ к смене статуса',
 
+'LBL_ISFINAL' => 'Финальный',
+
 );
 
 

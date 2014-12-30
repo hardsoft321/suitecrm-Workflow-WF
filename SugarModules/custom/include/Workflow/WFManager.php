@@ -2,10 +2,10 @@
 require_once __DIR__.'/WFAclRoles.php';
 
 class WFManager {
-    
+
     private static $statusFieldCache = array();
     private static $allStatusesCache = array();
-    
+
     /**
      * Выбирает workflow для записи.
      * @return string Workflow id или ''
@@ -27,7 +27,7 @@ class WFManager {
         }
         return '';
     }
-    
+
     /**
      * Возвращает имя поля, по которому определяется маршрут
      */
@@ -44,7 +44,7 @@ class WFManager {
 
     public static function getNextStatuses($bean, $status1 = null) {
         global $db;
-        
+
         if(isset($bean->wf_id) && $bean->wf_id && $status1 === null) {
             $statusField = self::getBeanStatusField($bean);
             if(!$statusField) {
@@ -76,7 +76,7 @@ class WFManager {
             ORDER BY e.sort
             ";
         }
-        
+
         $qr = $db->query($q);
         $res = array();
         while ($row = $db->fetchByAssoc($qr)) {
@@ -89,17 +89,17 @@ class WFManager {
         }
         return $res;
     }
-    
+
     public static function getAllStatuses($bean) {
         if(isset(self::$allStatusesCache[$bean->module_name]))
             return self::$allStatusesCache[$bean->module_name];
-        
-        $q = "SELECT uniq_name, name FROM wf_statuses 
+
+        $q = "SELECT uniq_name, name FROM wf_statuses
         WHERE
             wf_module = '{$bean->module_name}'
             AND deleted = 0
         ";
-        
+
         $qr = $bean->db->query($q);
         $res = array();
         while ($row = $bean->db->fetchByAssoc($qr)) {
@@ -108,20 +108,20 @@ class WFManager {
         self::$allStatusesCache[$bean->module_name] = $res;
         return $res;
     }
-    
+
     public static function getBeanCurrentStatus($bean) {
         global $db;
-        
+
         $statusField = self::getBeanStatusField($bean);
         if(!$statusField)
             return '';
-        $q = "SELECT uniq_name, name FROM wf_statuses 
+        $q = "SELECT uniq_name, name FROM wf_statuses
         WHERE
             uniq_name = '{$bean->$statusField}'
             AND wf_module = '{$bean->module_name}'
             AND deleted = 0
         ";
-        
+
         $qr = $db->query($q);
         $status = BeanFactory::newBean('WFStatuses');
         if ($row = $db->fetchByAssoc($qr)) {
@@ -129,15 +129,15 @@ class WFManager {
         }
         else {
             return false;
-        }    
-        
+        }
+
         return $status;
     }
-    
+
     public static function isEventAllowed($bean, $status1, $status2) {
         return $status1 == $status2 ? true : array_key_exists($status2, self::getNextStatuses($bean, $status1));
     }
-    
+
     public static function validateEvent($bean, $status1, $status2) {
         global $db;
 
@@ -189,23 +189,23 @@ class WFManager {
             return true;
         if(is_admin($current_user))
             return true;
-        return 
+        return
             array_key_exists($current_user->id, self::getUserList($bean, $status1, 'confirm_check_list_function')) &&
             array_key_exists($current_user->id, self::getUserList($bean, $status1, 'confirm_list_function'));
     }
-    
+
     public static function isInFrontAssignedUsers($user_id, $bean, $status1) {
         return array_key_exists($user_id, self::getUserList($bean, $status1, 'front_assigned_list_function'));
     }
-    
+
     public static function getFrontAssignedUserList($bean, $status) {
         return self::getUserList($bean, $status, 'front_assigned_list_function');
     }
-    
+
     public static function isInConfirmUsers($user_id, $bean, $status1) {
         return array_key_exists($user_id, self::getUserList($bean, $status1, 'confirm_list_function'));
     }
-    
+
     public static function canChangeAssignedUser($bean, $status) {
         global $current_user;
         if(isset($bean->workflowData['autosave']) && $bean->workflowData['autosave'] === true)
@@ -214,7 +214,7 @@ class WFManager {
             return true;
         return array_key_exists($current_user->id, self::getUserList($bean, $status, 'assigned_list_function'));
     }
-    
+
     public static function checkAccess($bean, $action) {
         if($action == 'edit' || $action == 'delete') {
             if(self::isBeanInWorkflow($bean)) {
@@ -228,13 +228,13 @@ class WFManager {
         }
         return true;
     }
-    
+
     protected static function isFitEditRole($bean, $status) {
         global $db;
         global $current_user;
         //if(is_admin($current_user))
         //    return true;
-        
+
         $q = "SELECT edit_role_type, role_id FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module = '{$bean->module_name}' AND deleted = 0";
         if($row = $db->fetchOne($q)) {
             if($row['edit_role_type'] == 'nobody') {
@@ -253,7 +253,7 @@ class WFManager {
         }
         return false;
     }
-    
+
     public static function getBeanStatusField($bean) {
         global $db;
         if(!$bean->wf_id)
@@ -266,7 +266,7 @@ class WFManager {
         self::$statusFieldCache[$bean->wf_id] = $row['status_field'];
         return $row['status_field'];
     }
-    
+
     /**
      * Выбирает из таблицы аудита информацию о переходах.
      * Вместо этой функции следует использовать функцию logStatusChange, так как она сохраняет текст резолюции
@@ -290,13 +290,18 @@ class WFManager {
         }
         return $audit;
     }
-    
+
     public static function logStatusChange($bean, $status1, $status2, $saveBean = true) {
         global $timedate;
         global $current_user;
-        
+        global $app_list_strings;
+
         $cur_date = $timedate->handle_offset(gmdate($timedate->get_db_date_time_format()), 'd.m.Y H:i', 'd.m.Y H:i', $current_user, 'Europe/Moscow') . " (МСК)";
-        $confirm_text = 'Перевод на "'.
+        $statusFinal = self::logFinalStatusToArchive($status2, $bean->module_name);
+        if(!empty($statusFinal)) {
+            $confirm_text = $statusFinal.", ".$cur_date.", ".$current_user->full_name."; ";
+        }
+        $confirm_text .= 'Перевод на "'.
             self::translateStatus($status2, $bean->module_name) . '", '.
             $cur_date . ', '.
             $current_user->full_name.
@@ -304,17 +309,28 @@ class WFManager {
             (isset($bean->last_resolution) && $bean->last_resolution ? ' -- ' . $bean->last_resolution : '').
             '; ';
         $bean->confirm_list = $confirm_text . (isset($bean->confirm_list) ? $bean->confirm_list : '');
-        
+
         if($saveBean) {
             $bean->save();
         }
     }
-    
+
+    protected static function logFinalStatusToArchive($status, $module) {
+        $finalStatuses = self::getFinalStatuses($module);
+            if(in_array($status, $finalStatuses)) {
+                return 'Перевод задачи в архив ';
+            }
+        else {
+            return '';
+        }
+    }
+
     public static function logAssignedChange($bean, $status1, $assigned2, $saveBean = true, $role_id = null) {
         global $db;
         global $timedate;
         global $current_user;
-        
+        global $app_list_strings;
+
         $role_name = null;
         if($role_id === null) {
             $q = "SELECT s.role_id, r.name FROM wf_statuses s, acl_roles r WHERE s.role_id = r.id AND s.id = '$status1'";
@@ -324,7 +340,7 @@ class WFManager {
                 $role_name = $row['name'];
             }
         }
-        
+
         $assigned1_name = '';
         if($role_id) {
             $userList = WFStatusAssigned::getAssignedUsers($role_id, $bean->id, $bean->module_name);
@@ -342,7 +358,7 @@ class WFManager {
                 $assigned1_name .= $user->first_name.' '.$user->last_name;
                 $assigned1 = $user->id;
             }
-            
+
             if(!$role_name) {
                 $q = "SELECT name FROM acl_roles WHERE id = '$role_id'";
                 $row = $db->fetchOne($q);
@@ -351,12 +367,12 @@ class WFManager {
                 }
             }
         }
-        
+
         $assigned2_user = BeanFactory::getBean('Users', $assigned2);
         $assigned2_name = $assigned2_user ? $assigned2_user->full_name : '-';
-        
+
         $cur_date = $timedate->handle_offset(gmdate($timedate->get_db_date_time_format()), 'd.m.Y H:i', 'd.m.Y H:i', $current_user, 'Europe/Moscow') . " (МСК)";
-        
+
         $confirm_text = "{$assigned2_name} установлен как ответственный для роли '{$role_name}', ";
         if($assigned1_name) {
             $confirm_text .= "предыдущий ответственный $assigned1_name, ";
@@ -366,15 +382,15 @@ class WFManager {
             '; ';
 
         $bean->confirm_list = $confirm_text . (isset($bean->confirm_list) ? $bean->confirm_list : '');
-        
+
         if($saveBean) {
             $bean->save();
         }
     }
-    
+
     public static function runAfterEventHooks($bean, $status1, $status2) {
         global $db;
-        
+
         $q = "SELECT e.after_save
                     , s1.role_id AS s1_role_id
                     , s2.role_id AS s2_role_id
@@ -386,7 +402,7 @@ class WFManager {
             AND e.after_save IS NOT NULL
             AND e.deleted = 0
         ";
-        
+
         $res = $db->query($q);
         while ($row = $db->fetchByAssoc($res)) {
             if($row['after_save']) {
@@ -403,7 +419,7 @@ class WFManager {
             }
         }
     }
-    
+
     public static function autoFillAssignedUser($bean, $status1) {
         global $current_user;
         if(isset($bean->workflowData['autosave']) && $bean->workflowData['autosave'] === true)
@@ -418,12 +434,12 @@ class WFManager {
             return;
         WFStatusAssigned::setAssignedUser($statusBean->role_id, $bean->id, $bean->module_name, $current_user->id);
     }
-    
+
     public static function getEditFormData($bean) {
         $data = array();
         if(self::isBeanInWorkflow($bean)) {
             global $current_user;
-            
+
             $statusField = self::getBeanStatusField($bean);
             if(!$statusField) {
                 return array();
@@ -440,7 +456,7 @@ class WFManager {
                     $assignedUsersData[$status][] = array($user->id, $user->first_name.' '.$user->last_name);
                 }
             }
-            
+
             $rolesData = self::getAllowedRolesData($bean);
             $roles = array();
             $confirmUsersData = array();
@@ -452,7 +468,7 @@ class WFManager {
                     }
                 }
             }
-            
+
             require_once __DIR__.'/WFStatusAssigned.php';
             $statusAssignedUsers = WFStatusAssigned::getAllAssignedUsers($bean->id, $bean->module_name);
             
@@ -472,13 +488,13 @@ class WFManager {
         }
         return $data;
     }
-    
+
     public static function getVersionedScript() {
         require_once __DIR__.'/config.php';
         global $wf_config;
         return getVersionedScript('custom/include/Workflow/js/wf_ui.js', $wf_config['js_custom_version']);
     }
-    
+
     public static function getStatusesWithRole($role_id, $wf_id) {
         global $db;
         //$q = "SELECT uniq_name FROM wf_statuses WHERE role_id = '$role_id' AND deleted = 0";
@@ -495,7 +511,7 @@ class WFManager {
         }
         return $statuses;
     }
-    
+
     /**
      * Возвращает статусы маршрута, которые идут после пустого.
      * Из начального статуса должен существовать переход в следующий статус.
@@ -519,7 +535,7 @@ class WFManager {
         }
         return $statuses;
     }
-    
+
     /**
      * Вычисляет список пользователей
      * $bean бин в маршруте
@@ -529,7 +545,7 @@ class WFManager {
      */
     protected static function getUserList($bean, $statuses, $functionField) {
         global $db;
-        
+
         if(is_string($statuses)) {
             $status = $statuses;
             $statuses = array($status => $status);
@@ -537,8 +553,8 @@ class WFManager {
         if(empty($statuses)) {
             return array();
         }
-        
-        $q = "SELECT id, uniq_name, $functionField, role_id, role2_id 
+
+        $q = "SELECT id, uniq_name, $functionField, role_id, role2_id
               FROM wf_statuses WHERE uniq_name IN ('".implode("','", array_keys($statuses))."') AND wf_module = '{$bean->module_name}' AND deleted = 0";
         $qr = $db->query($q);
         $res = array();
@@ -561,13 +577,13 @@ class WFManager {
             }
             $res[$row['uniq_name']] = $userList;
         }
-        
+
         if(isset($status) && isset($res[$status])) {
             return $res[$status];
         }
         return $res;
     }
-    
+
     protected static function getAllowedRolesData($bean) {
         global $db;
         $q = "SELECT DISTINCT s.uniq_name, s.role_id, r.name AS role_name
@@ -601,7 +617,7 @@ class WFManager {
         }
         return $res;
     }
-    
+
     protected static function translateStatus($status, $module_name) {
         global $db;
         $q = "SELECT name FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module='{$module_name}' AND deleted = 0";
@@ -610,13 +626,13 @@ class WFManager {
             return $status;
         return $row['name'];
     }
-    
+
     public static function getStatusIdByName($status, $module_name) {
         global $db;
         $row = $db->fetchOne("SELECT id FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module='{$module_name}' AND deleted = 0");
         return $row ? $row['id'] : false;
     }
-    
+
     protected static function getStatusBeanByName($status, $module_name) {
         global $db;
         $row = $db->fetchOne("SELECT * FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module='{$module_name}' AND deleted = 0");
@@ -627,11 +643,21 @@ class WFManager {
         }
         return false;
     }
-    
+
     protected static function checkBeanAgainstFunction($bean, $filter_function) {
         require_once 'custom/include/Workflow/functions/filters/'.$filter_function.'.php';
         $filter = new $filter_function();
         return $filter->checkBean($bean);
+    }
+
+    public static function getFinalStatuses($module) {
+        global $db;
+        $row = $db->query("SELECT uniq_name FROM wf_statuses WHERE wf_module = '{$module}' AND isfinal = 1 AND deleted = 0");
+        $finStatuses = array();
+        while ($res = $db->fetchByAssoc($row)) {
+            $finStatuses[] = $res['uniq_name'];
+        }
+        return $finStatuses;
     }
 }
 ?>
