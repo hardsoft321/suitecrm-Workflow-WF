@@ -91,6 +91,8 @@ class WFManager {
     }
 
     public static function getAllStatuses($bean) {
+        if(!$bean)
+            return array();
         if(isset(self::$allStatusesCache[$bean->module_name]))
             return self::$allStatusesCache[$bean->module_name];
 
