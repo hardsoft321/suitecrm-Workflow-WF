@@ -79,15 +79,21 @@ function wf_getAssignedListFunctions($focus = null, $name = null, $value = null,
 }
 
 function wf_assign_die($msg) {
-    sugar_die(wf_translate($msg));
+    $msg = wf_translate($msg);
+    $GLOBALS['log']->fatal('WFWorkflow: '.$msg);
+    sugar_die($msg);
 }
 
 function wf_confirm_die($msg) {
-    sugar_die(wf_translate($msg));
+    $msg = wf_translate($msg);
+    $GLOBALS['log']->fatal('WFWorkflow: '.$msg);
+    sugar_die($msg);
 }
 
 function wf_before_save_die($msg) {
-    sugar_die(wf_translate($msg));
+    $msg = wf_translate($msg);
+    $GLOBALS['log']->fatal('WFWorkflow: '.$msg);
+    sugar_die($msg);
 }
 
 function wf_translate($msg, $arrReplace = array()) {

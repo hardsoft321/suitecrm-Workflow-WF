@@ -1,17 +1,15 @@
+{assign var='formName' value=$workflow.assignFormName}
+
 <script>
-{literal}
-SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefined" && typeof lab321.wf != "undefined"', function() {
-{/literal}
-    lab321.wf.confirmUsers = {$workflow.confirmUsersString};
-{literal}
-    lab321.wf.onChangeRole();
-});
-{/literal}
+SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefined" && typeof lab321.wf != "undefined"', function() {ldelim}
+    lab321.wf.onChangeRole('{$formName}');
+{rdelim});
 </script>
 
 <div id="assign_block">
   <h4>{sugar_translate label='LBL_ASSIGNED_CHANGE_TITLE' module='WFWorkflows'}</h4>
-  <form id='assign' name='assign' action='index.php?entryPoint=wf_assign' method='POST'
+  <form id='{$formName}' name='{$formName}' action='index.php?entryPoint=wf_assign' method='POST'
+        data-confirmusers = "{$workflow.confirmUsersString|escape:"html"}"
          style="margin-top: 5px;
                 border-style: solid;
                 border-width: 1px;
@@ -29,7 +27,7 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
       <tr margin="15">
         <td style="padding:5px"><label for="status">{sugar_translate label='LBL_ROLE' module='WFWorkflows'}:</label><span class="required">*</span></td>
         <td style="padding:5px">{html_options name=role options=$workflow.roles id=role selected=$workflow.currentRole style="width:100%"
-                                             onchange="lab321.wf.onChangeRole();"}</td> 
+                                             onchange="lab321.wf.onChangeRole('$formName');"}</td>
       </tr>
       <tr margin="15">
         <td style="padding:5px"><label for="status">{sugar_translate label='LBL_NEW_ASSIGNED' module='WFWorkflows'}:</label><span class="required">*</span></td>

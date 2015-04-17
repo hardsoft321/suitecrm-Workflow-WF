@@ -18,7 +18,7 @@ class DefaultUserList extends BaseUserList {
             securitygroups.id IN ('".implode("','", $groups)."')
             AND securitygroups.id = securitygroups_users.securitygroup_id AND securitygroups_users.user_id = users.id
             AND acl_roles_users.user_id = users.id
-            AND securitygroups.deleted = 0 AND securitygroups_users.deleted = 0 AND users.deleted = 0 AND acl_roles_users.deleted = 0
+            AND securitygroups.deleted = 0 AND securitygroups_users.deleted = 0 AND users.deleted = 0 AND users.status != 'Inactive' AND acl_roles_users.deleted = 0
             AND acl_roles_users.role_id = '".$this->status_data[$this->statusRoleField]."'"; //Роль через securitygroups здесь не проверяется, т.е. роль должна быть привязана напрямую к пользователю
         if($this->additionalWhere) {
             $q .= " AND ".$this->additionalWhere;

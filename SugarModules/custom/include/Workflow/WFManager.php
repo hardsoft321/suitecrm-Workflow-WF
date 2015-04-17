@@ -296,12 +296,12 @@ class WFManager {
     public static function logStatusChange($bean, $status1, $status2, $saveBean = true) {
         global $timedate;
         global $current_user;
-        global $app_list_strings;
 
         $cur_date = $timedate->handle_offset(gmdate($timedate->get_db_date_time_format()), 'd.m.Y H:i', 'd.m.Y H:i', $current_user, 'Europe/Moscow') . " (МСК)";
         $statusFinal = self::logFinalStatusToArchive($status2, $bean->module_name);
+        $confirm_text = '';
         if(!empty($statusFinal)) {
-            $confirm_text = $statusFinal.", ".$cur_date.", ".$current_user->full_name."; ";
+            $confirm_text .= $statusFinal.", ".$cur_date.", ".$current_user->full_name."; ";
         }
         $confirm_text .= 'Перевод на "'.
             self::translateStatus($status2, $bean->module_name) . '", '.
@@ -314,6 +314,30 @@ class WFManager {
 
         if($saveBean) {
             $bean->save();
+        }
+    }
+
+    /**
+     * Добавляет сообщение в журнал согласования записи $toBean из $fromBean.
+     * В текущей реализации эту функцию следует вызывать сразу после
+     * сохранения новой резолюции $fromBean под этим же пользователем.
+     */
+    public static function copyLastLog($fromBean, $toBean, $saveBean = true) {
+        global $timedate;
+        global $current_user;
+        $statusField = self::getBeanStatusField($fromBean);
+        $status2 = $statusField ? $fromBean->$statusField : '';
+        $cur_date = $timedate->handle_offset(gmdate($timedate->get_db_date_time_format()), 'd.m.Y H:i', 'd.m.Y H:i', $current_user, 'Europe/Moscow') . " (МСК)";
+        $confirm_text = 'Перевод на "'.
+            ($status2 ? self::translateStatus($status2, $fromBean->module_name) : '_') . '", '.
+            $cur_date . ', '.
+            $current_user->full_name.
+            (isset($fromBean->workflowData['autosave']) && $fromBean->workflowData['autosave'] === true ? ' (автопереход)' : '').
+            (isset($fromBean->last_resolution) && $fromBean->last_resolution ? ' -- ' . $fromBean->last_resolution : '').
+            '; ';
+        $toBean->confirm_list = $confirm_text . (isset($toBean->confirm_list) ? $toBean->confirm_list : '');
+        if($saveBean) {
+            $toBean->save();
         }
     }
 
@@ -412,9 +436,11 @@ class WFManager {
                 require_once 'custom/include/Workflow/functions/procedures/'.$row['after_save'].'.php';
                 $proc = new $row['after_save'];
                 $proc->status1_data = array(
+                    'uniq_name' => $status1,
                     'role_id' => $row['s1_role_id'],
                 );
                 $proc->status2_data = array(
+                    'uniq_name' => $status2,
                     'role_id' => $row['s2_role_id'],
                 );
                 $proc->doWork($bean);
@@ -478,15 +504,26 @@ class WFManager {
             $data['include_script'] = self::getVersionedScript();
             if(!empty($statuses)) {
                 $data['confirmData'] = array(
+                    'formName' => 'confirmForm',
                     'newStatuses' => $statuses,
                     'assignedUsersString' => json_encode($assignedUsersData),
                 );
             }
             $data['assignedUsers'] = $assignedUsersData;
             $data['roles'] = $roles;
+            $data['assignFormName'] = 'assignForm';
             $data['confirmUsersString'] = json_encode($confirmUsersData);
             $data['currentRole'] = $statusBean ? $statusBean->role_id : false;
             $data['statusAssignedUsers'] = $statusAssignedUsers;
+
+            $logicHook = new LogicHook();
+            $logicHook->setBean($bean);
+            ob_start();
+            $logicHook->call_custom_logic($bean->module_dir, 'wf_after_editform', $data);
+            $customView = ob_get_clean();
+            if($customView) {
+                $data['customView'] = $customView;
+            }
         }
         return $data;
     }

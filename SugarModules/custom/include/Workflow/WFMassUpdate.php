@@ -171,6 +171,7 @@ class WFMassUpdate {
             'include_script' => WFManager::getVersionedScript(),
             'currentStatus' => '',
             'confirmData' => array(
+                'formName' => 'confirmForm',
                 'newStatuses' => array(),
                 'assignedUsersString' => '[]',
                 'confirmFunc' => 'lab321.wf.massConfirmSave',
