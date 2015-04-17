@@ -69,11 +69,12 @@ lab321.wf.confirmStatus = function(formName) {
     });
 }
 
-lab321.wf.massConfirmSave = function(formName) {
-    lab321.wf.massConfirm('save', formName);
+lab321.wf.massConfirmSave = function() {
+    lab321.wf.massConfirm('save');
 };
 
-lab321.wf.massConfirm = function(action, formName) {
+lab321.wf.massConfirm = function(action) {
+    var formName = 'confirmForm';
     if(!lab321.wf.massConfirmRequest) {
         lab321.wf.massConfirmRequest = {};
     }
@@ -112,10 +113,10 @@ lab321.wf.massConfirm = function(action, formName) {
         lab321.wf.setConfirmErrors(data.errors, formName);
         $('#'+formName+' #current_status').val(data.editFormData.currentStatus);
         if(data.editFormData) {
-            $('#'+formName).data('assignedUsers', data.editFormData.assignedUsers || []);
+            $('#'+formName).data('assignedusers', data.editFormData.assignedUsers || []);
             lab321.wf.setStatusOptions((data.editFormData.confirmData || {}).newStatuses || [], formName);
         }
-        lab321.wf.onChangeNewStatus();
+        lab321.wf.onChangeNewStatus(formName);
         ajaxStatus.hideStatus();
         if(data.saved) {
             ajaxStatus.flashStatus(SUGAR.language.get('app_strings','LBL_SAVED'), 3000);
@@ -132,7 +133,7 @@ lab321.wf.massConfirm = function(action, formName) {
         var status = lab321.wf.massConfirmRequest.status;
         lab321.wf.massConfirmRequest.status = 'done';
         if(status == 'resend') {
-            lab321.wf.massConfirm(lab321.wf.massConfirmRequest.resendAction, formName);
+            lab321.wf.massConfirm(lab321.wf.massConfirmRequest.resendAction);
         }
     });
 };
