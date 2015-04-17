@@ -58,6 +58,7 @@ $mod_strings = array (
 'ERR_CONFIRM_INVALID_FOR' => "Kann nicht Status ändern '#NAME#'",
 'ERR_CONFIRM_DENIED_FOR' => "Sie können nicht Status ändern '#NAME#'",
 'ERR_ASSIGNED_INVALID_FOR' => "Ungültige zugewiesen Benutzer '#NAME#'",
+'ERR_VALIDATE_FUNCTION_NOT_FOUND' => 'Kann nicht validieren',
 
 'DefaultGroupUserList' => 'Group Users in Role within Group',
 'DefaultRole2UserList' => 'Users in Role 2 within Group',

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/WFAclRoles.php';
+require_once __DIR__.'/utils.php';
 
 class WFManager {
 
@@ -178,8 +179,10 @@ class WFManager {
                 $errors = $func->validate($bean);
                 $res = array_merge($res, $errors);
             }
-            else {
+            elseif($functionName) {
                 $GLOBALS['log']->error("WFManager: validate function $functionName not found");
+                $errors = array(wf_translate('ERR_VALIDATE_FUNCTION_NOT_FOUND'));
+                $res = array_merge($res, $errors);
             }
         }
         return $res;

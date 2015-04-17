@@ -61,6 +61,7 @@ $mod_strings = array (
 'ERR_CONFIRM_INVALID_FOR' => "Невозможно сменить статус для записи '#NAME#'",
 'ERR_CONFIRM_DENIED_FOR' => "Вы не можете сменить статус для записи '#NAME#'",
 'ERR_ASSIGNED_INVALID_FOR' => "Ответственный задан не верно для записи '#NAME#'",
+'ERR_VALIDATE_FUNCTION_NOT_FOUND' => 'При валидации перехода произошла ошибка',
 
 'DefaultGroupUserList' => 'Групповые пользователи в роли и в группе',
 'DefaultRole2UserList' => 'Все в роли 2 и в группе',
