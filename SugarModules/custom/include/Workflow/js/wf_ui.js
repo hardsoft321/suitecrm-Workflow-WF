@@ -207,23 +207,15 @@ lab321.wf.togglePanel = function() {
 }
 
 lab321.wf.onChangeNewStatus = function(formName) {
-    var statusSel = $('#'+formName+' #newStatus').get(0);
-    if (!statusSel)
-        return;
-    var disable = true;
-    var userSel = document[formName].assigned_user;
-    userSel.options.length = 0;
-    if (statusSel.length > 0) {
-        var status = statusSel[statusSel.selectedIndex].value;
-        var assignedUsers = $('#'+formName).data('assignedusers');
-        if (status != "" && assignedUsers[status] !== undefined && assignedUsers[status].length > 0) {
-            disable = false;
-
-            for (i = 0; i < assignedUsers[status].length; i++)
-                userSel.options[i] = new Option(assignedUsers[status][i][1], assignedUsers[status][i][0]);
+    var status = $('#'+formName+' #newStatus').val();
+    $('#'+formName+' select[data-assignedusers]').each(function(){
+        var assignedUsers = $(this).data('assignedusers');
+        if (status && assignedUsers[status] && assignedUsers[status].length > 0) {
+            $(this).html('').append($.map(assignedUsers[status], function(v){
+                return $('<option>', {value: v[0]}).html(v[1]).get(0);
+            }));
         }
-    }
-    document[formName].submit_btn.disabled = disable;
+    });
 }
 
 lab321.wf.onChangeRole = function(formName) {
@@ -237,7 +229,7 @@ lab321.wf.onChangeRole = function(formName) {
         userSel.options.length = 0;
         if (status != "" && confirmUsers[status] !== undefined && confirmUsers[status].length > 0) {
             for (i = 0; i < confirmUsers[status].length; i++)
-                userSel.options[i] = new Option(confirmUsers[status][i][1], confirmUsers[status][i][0]);
+                userSel.options[i] = new Option($('<p>').html(confirmUsers[status][i][1]).text(), confirmUsers[status][i][0]);
         }
     }
 }

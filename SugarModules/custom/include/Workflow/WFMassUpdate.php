@@ -173,7 +173,7 @@ class WFMassUpdate {
             'confirmData' => array(
                 'formName' => 'confirmForm',
                 'newStatuses' => array(),
-                'assignedUsersString' => '[]',
+                'assignedUsersData' => array(),
                 'confirmFunc' => 'lab321.wf.massConfirmSave',
             ),
         );

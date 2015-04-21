@@ -509,7 +509,7 @@ class WFManager {
                 $data['confirmData'] = array(
                     'formName' => 'confirmForm',
                     'newStatuses' => $statuses,
-                    'assignedUsersString' => json_encode($assignedUsersData),
+                    'assignedUsersData' => $assignedUsersData,
                 );
             }
             $data['assignedUsers'] = $assignedUsersData;
@@ -519,6 +519,19 @@ class WFManager {
             $data['currentRole'] = $statusBean ? $statusBean->role_id : false;
             $data['statusAssignedUsers'] = $statusAssignedUsers;
 
+            /* Кастомный код внутри блока согласования перед сабмитом */
+            if(isset($data['confirmData'])) {
+                $logicHook = new LogicHook();
+                $logicHook->setBean($bean);
+                ob_start();
+                $logicHook->call_custom_logic($bean->module_dir, 'wf_after_confirm_fields', $data);
+                $customView = ob_get_clean();
+                if($customView) {
+                    $data['confirmData']['customFields'] = $customView;
+                }
+            }
+
+            /* Кастомный код внутри панели под всеми блоками */
             $logicHook = new LogicHook();
             $logicHook->setBean($bean);
             ob_start();

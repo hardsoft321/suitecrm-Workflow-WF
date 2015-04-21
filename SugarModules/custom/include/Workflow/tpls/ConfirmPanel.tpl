@@ -23,6 +23,19 @@
 #status-assigned td {
     border-bottom: 1px solid #CBDAE6;
 }
+.confirmForm {
+    margin-top: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #abc3d7;
+    padding: 5px;
+    padding-right: 0px;
+}
+.confirmForm tr {margin:15px}
+.confirmForm td {padding:5px}
+.confirmForm select {width:100%}
+.confirmForm textarea {width:100%}
+.confirmForm table {border:none; margin:5px; min-width:400px}
 {/literal}
 </style>
 
