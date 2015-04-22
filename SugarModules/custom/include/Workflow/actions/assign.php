@@ -9,27 +9,27 @@ require_once 'custom/include/Workflow/utils.php';
 
 $bean = BeanFactory::getBean($_POST['module'], $_POST['record']);
 if (empty($bean->id))
-    wf_assign_die('ERR_RECORD_NOT_FOUND');
+    wf_assign_die('ERR_RECORD_NOT_FOUND', $bean);
 
 $role_id = $db->quote($_POST['role']);
 $assigned2 = $db->quote($_POST['new_assign_user']);
 
 $statusField = WFManager::getBeanStatusField($bean);
 if(!$statusField) {
-    wf_assign_die('ERR_STATUS_FIELD_NOT_FOUND');
+    wf_assign_die('ERR_STATUS_FIELD_NOT_FOUND', $bean);
 }
 $status1 = $bean->$statusField;
 
 $roleStatuses = WFManager::getStatusesWithRole($role_id, $bean->wf_id);
 if(empty($roleStatuses)) {
-    wf_assign_die('ERR_ROLE_STATUS_NOT_FOUND');
+    wf_assign_die('ERR_ROLE_STATUS_NOT_FOUND', $bean);
 }
 foreach($roleStatuses as $st) {
     if(!WFManager::canChangeAssignedUser($bean, $st)) { 
-        wf_assign_die('ERR_ASSIGN_DENIED');
+        wf_assign_die('ERR_ASSIGN_DENIED', $bean);
     }
     if(!WFManager::isInConfirmUsers($assigned2, $bean, $st)) {
-        wf_assign_die('ERR_INVALID_ASSIGNED');
+        wf_assign_die('ERR_INVALID_ASSIGNED', $bean);
     }
 }
 

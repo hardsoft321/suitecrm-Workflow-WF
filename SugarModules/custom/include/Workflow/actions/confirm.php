@@ -6,11 +6,11 @@ require_once 'custom/include/Workflow/utils.php';
 
 $bean = BeanFactory::getBean($_POST['module'], $_POST['record']);
 if (empty($bean->id))
-    wf_confirm_die('ERR_RECORD_NOT_FOUND');
+    wf_confirm_die('ERR_RECORD_NOT_FOUND', $bean);
 
 $statusField = WFManager::getBeanStatusField($bean);
 if(!$statusField)
-    wf_confirm_die('ERR_STATUS_FIELD_NOT_FOUND');
+    wf_confirm_die('ERR_STATUS_FIELD_NOT_FOUND', $bean);
 $notify_on_save = false;
 if(!empty($_POST['assigned_user']) && $_POST['assigned_user'] != $bean->assigned_user && $_POST['assigned_user'] != $GLOBALS['current_user']->id && empty($GLOBALS['sugar_config']['exclude_notifications'][$bean->module_dir])) {
     $notify_on_save = true;

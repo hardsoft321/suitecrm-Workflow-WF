@@ -29,7 +29,7 @@ class WF_hooks {
         $assigned2 = $focus->assigned_user_id;
         if($status1 != '' && $status1 != $status2) {
             if(!WFManager::isEventAllowed($focus, $status1, $status2)) {
-                wf_before_save_die('ERR_INVALID_EVENT');
+                wf_before_save_die('ERR_INVALID_EVENT', $focus);
             }
             
             $validationErrors = WFManager::validateEvent($focus, $status1, $status2);
@@ -40,11 +40,11 @@ class WF_hooks {
 
             if(!empty($focus->fetched_row['id']) && (!isset($focus->workflowData['autosave']) || $focus->workflowData['autosave'] !== true)) {
                 if(!WFManager::canChangeStatus($focus, $status1)) {
-                    wf_before_save_die('ERR_CONFIRM_DENIED');
+                    wf_before_save_die('ERR_CONFIRM_DENIED', $focus);
                 }
                 
                 if(!WFManager::isInFrontAssignedUsers($assigned2, $focus, $status2)) {
-                    wf_before_save_die('ERR_INVALID_ASSIGNED');
+                    wf_before_save_die('ERR_INVALID_ASSIGNED', $focus);
                 }
             }
             
@@ -53,10 +53,10 @@ class WF_hooks {
         else {
             if(!empty($focus->fetched_row['id']) && $assigned1 != $assigned2) {
                 if(!WFManager::canChangeAssignedUser($focus, $status1)) { 
-                    wf_before_save_die('ERR_ASSIGN_DENIED');
+                    wf_before_save_die('ERR_ASSIGN_DENIED', $focus);
                 }
                 if(!WFManager::isInConfirmUsers($assigned2, $focus, $status1)) {
-                    wf_before_save_die('ERR_INVALID_ASSIGNED');
+                    wf_before_save_die('ERR_INVALID_ASSIGNED', $focus);
                 }
             }
         }

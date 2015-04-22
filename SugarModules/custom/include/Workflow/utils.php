@@ -78,21 +78,21 @@ function wf_getAssignedListFunctions($focus = null, $name = null, $value = null,
     return $res;
 }
 
-function wf_assign_die($msg) {
-    $msg = wf_translate($msg);
-    $GLOBALS['log']->fatal('WFWorkflow: '.$msg);
-    sugar_die($msg);
+function wf_assign_die($msg, $bean = null) {
+    wf_die($msg, $bean);
 }
 
-function wf_confirm_die($msg) {
-    $msg = wf_translate($msg);
-    $GLOBALS['log']->fatal('WFWorkflow: '.$msg);
-    sugar_die($msg);
+function wf_confirm_die($msg, $bean = null) {
+    wf_die($msg, $bean);
 }
 
-function wf_before_save_die($msg) {
+function wf_before_save_die($msg, $bean = null) {
+    wf_die($msg, $bean);
+}
+
+function wf_die($msg, $bean = null) {
     $msg = wf_translate($msg);
-    $GLOBALS['log']->fatal('WFWorkflow: '.$msg);
+    $GLOBALS['log']->fatal('WFWorkflow: '.$msg.($bean ? $bean->module_name.' '.$bean->id : ''));
     sugar_die($msg);
 }
 
