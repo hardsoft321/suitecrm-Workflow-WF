@@ -28,7 +28,7 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
     <input type='hidden' id='return_module' name='return_module' value = '{$return_module}'>
     <input type='hidden' id='return_action' name='return_action' value = '{$return_action}'>
     <input type='hidden' id='return_record' name='return_record' value = '{$return_record}'>
-    <input type="hidden" name="current_status" id="current_status" value="{$workflow.currentStatus}" />
+    <input type="hidden" name="current_status" id="{$formName}_current_status" value="{$workflow.currentStatus}" />
 
     <div class="errors required validation_message"><ul></ul></div>
 

@@ -1,4 +1,4 @@
-<input type="hidden" name="current_status" id="current_status" value="{$workflow.currentStatus}" />
+<input type="hidden" name="current_status" id="confirmForm_current_status" value="{$workflow.currentStatus}" /> {* Для автотеста *}
 {if !empty($workflow.confirmData) or !empty($workflow.roles) or !empty($workflow.statusAssignedUsers)
     or !empty($workflow.customView)}
 <style>{* TODO: вынести css в файл (и из inline-style) *}
