@@ -38,7 +38,7 @@ class WF_hooks {
                 throw new WFEventValidationException($validationErrors);
             }
 
-            if(!empty($focus->fetched_row['id'])) {
+            if(!empty($focus->fetched_row['id']) && (!isset($focus->workflowData['autosave']) || $focus->workflowData['autosave'] !== true)) {
                 if(!WFManager::canChangeStatus($focus, $status1)) {
                     wf_before_save_die('ERR_CONFIRM_DENIED');
                 }

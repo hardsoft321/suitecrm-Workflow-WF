@@ -123,7 +123,7 @@ class WFMassUpdate {
                     '#NAME#' => $bean->name,
                 ));
             }
-            if(!empty($bean->fetched_row['id'])) {
+            if(!empty($bean->fetched_row['id']) && (!isset($bean->workflowData['autosave']) || $bean->workflowData['autosave'] !== true)) {
                 if(!WFManager::canChangeStatus($bean, $this->status1)) {
                     $this->errors[] = wf_translate('ERR_CONFIRM_DENIED_FOR', array(
                         '#NAME#' => $bean->name,
@@ -141,12 +141,16 @@ class WFMassUpdate {
     public function saveBeans($attributes) {
         $res = true;
         foreach($this->beans as $bean) {
+            $notify_on_save = false;
+            if($this->assigned2 != $bean->assigned_user && $this->assigned2 != $GLOBALS['current_user']->id && empty($GLOBALS['sugar_config']['exclude_notifications'][$bean->module_dir])) {
+                $notify_on_save = true;
+            }
             $bean->{$this->statusField} = $this->status2;
             $bean->assigned_user_id = $this->assigned2;
             foreach($attributes as $name => $value) {
                 $bean->$name = $value;
             }
-            $res = $bean->save(true) && $res;
+            $res = $bean->save($notify_on_save) && $res;
         }
         return $res;
     }

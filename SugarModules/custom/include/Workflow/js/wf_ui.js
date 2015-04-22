@@ -44,14 +44,7 @@ lab321.wf.confirmStatus = function(formName) {
     $('#'+formName+' input[type="submit"]').attr('onclick', 'return false');
 
     $.ajax('index.php?entryPoint=wf_confirm', {
-        data: {
-            record: $('#'+formName+' #record').val(),
-            module: $('#'+formName+' #module').val(),
-            status: $('#'+formName+' select[name="status"]').val(),
-            assigned_user: $('#'+formName+' select[name="assigned_user"]').val(),
-            resolution: $('#'+formName+' #resolution').val(),
-            is_ajax_call: 1,
-        },
+        data: $('#'+formName).serialize() + '&' + $.param({is_ajax_call: 1}),
         type: 'POST',
         dataType: 'json'
     }).done(function(data) {
