@@ -12,7 +12,7 @@ $statusField = WFManager::getBeanStatusField($bean);
 if(!$statusField)
     wf_confirm_die('ERR_STATUS_FIELD_NOT_FOUND', $bean);
 $notify_on_save = false;
-if(!empty($_POST['assigned_user']) && $_POST['assigned_user'] != $bean->assigned_user && $_POST['assigned_user'] != $GLOBALS['current_user']->id && empty($GLOBALS['sugar_config']['exclude_notifications'][$bean->module_dir])) {
+if(!empty($_POST['assigned_user']) && $_POST['assigned_user'] != $bean->assigned_user_id && $_POST['assigned_user'] != $GLOBALS['current_user']->id && empty($GLOBALS['sugar_config']['exclude_notifications'][$bean->module_dir])) {
     $notify_on_save = true;
 }
 $bean->$statusField = $_POST['status'];

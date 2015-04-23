@@ -107,4 +107,12 @@ function wf_translate($msg, $arrReplace = array()) {
     }
     return $msg;
 }
+
+function wf_set_mod_strings($mod) {
+    global $current_language;
+    if(isset($_REQUEST['login_language'])){
+        $current_language = ($_REQUEST['login_language'] == $current_language)? $current_language : $_REQUEST['login_language'];
+    }
+    $GLOBALS['mod_strings'] = return_module_language($current_language, $mod);
+}
 ?>

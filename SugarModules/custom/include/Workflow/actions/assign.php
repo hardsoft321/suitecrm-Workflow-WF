@@ -35,7 +35,7 @@ foreach($roleStatuses as $st) {
 
 if(in_array($status1, $roleStatuses)) {
     $notify_on_save = false;
-    if($assigned2 != $bean->assigned_user && $assigned2 != $GLOBALS['current_user']->id && empty($GLOBALS['sugar_config']['exclude_notifications'][$bean->module_dir])) {
+    if($assigned2 != $bean->assigned_user_id && $assigned2 != $GLOBALS['current_user']->id && empty($GLOBALS['sugar_config']['exclude_notifications'][$bean->module_dir])) {
         $notify_on_save = true;
     }
     $bean->assigned_user_id = $assigned2;
