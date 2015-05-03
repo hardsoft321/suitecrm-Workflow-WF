@@ -10,6 +10,7 @@ Workflow.
 Есть upgradeunsafe файлы. Например, если также ставится SecurtySuite, необходимо разрешить конфликт в файле include/MVC/View/views/view.detail.php
 
 Чтобы использовать WorkflowSecurityForm и SFFormFieldsRequired должен быть установлен пакет SecurityForms.
+Чтобы использовать SendNotificationCopy должен быть установлен пакет SugarBeanMailer.
 
 RDME;
 
@@ -38,7 +39,7 @@ $manifest = array (
   'name' => 'Workflow-WF',
   'published_date' => '2014-06-24',
   'type' => 'module',
-  'version' => '0.7.9.6',
+  'version' => '0.7.9.7',
   'remove_tables' => 'prompt',
   'dependencies' => array(
   ),
