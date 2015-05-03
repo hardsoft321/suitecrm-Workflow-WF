@@ -68,6 +68,7 @@ $mod_strings = array (
 'SFFormFieldsRequired' => 'Required Fields for Status',
 'DefaultCurrentUserList' => 'Current User in Role within Group',
 'ParentStatusAssignedUserList' => 'Assigned for Role in Parent Record or Group User',
+'EmptyUserList' => 'Nobody',
 
 );
 

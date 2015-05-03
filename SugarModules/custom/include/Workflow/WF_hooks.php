@@ -26,7 +26,7 @@ class WF_hooks {
         }
         $status2 = $focus->$statusField;
         $assigned1 = empty($focus->fetched_row['id']) ? '' : $focus->fetched_row['assigned_user_id'];
-        $assigned2 = $focus->assigned_user_id;
+        $assigned2 = isset($focus->assigned_user_id) ? $focus->assigned_user_id : '';
         if($status1 != '' && $status1 != $status2) {
             if(!WFManager::isEventAllowed($focus, $status1, $status2)) {
                 wf_before_save_die('ERR_INVALID_EVENT', $focus);
