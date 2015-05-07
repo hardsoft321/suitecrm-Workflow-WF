@@ -104,9 +104,9 @@ lab321.wf.massConfirm = function(action) {
         dataType: 'json'
     }).done(function(data) {
         lab321.wf.setConfirmErrors(data.errors, formName);
-        $('#'+formName+' #current_status').val(data.editFormData.currentStatus);
         if(data.editFormData) {
-            $('#'+formName).data('assignedusers', data.editFormData.assignedUsers || []);
+            $('#'+formName+'_current_status').val(data.editFormData.currentStatus);
+            $('#'+formName+' select[data-assignedusers]').data('assignedusers', data.editFormData.assignedUsers || []);
             lab321.wf.setStatusOptions((data.editFormData.confirmData || {}).newStatuses || [], formName);
         }
         lab321.wf.onChangeNewStatus(formName);

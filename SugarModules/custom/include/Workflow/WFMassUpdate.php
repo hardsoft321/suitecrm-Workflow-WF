@@ -142,7 +142,7 @@ class WFMassUpdate {
         $res = true;
         foreach($this->beans as $bean) {
             $notify_on_save = false;
-            if($this->assigned2 != $bean->assigned_user && $this->assigned2 != $GLOBALS['current_user']->id && empty($GLOBALS['sugar_config']['exclude_notifications'][$bean->module_dir])) {
+            if($this->assigned2 != $bean->assigned_user_id && $this->assigned2 != $GLOBALS['current_user']->id && empty($GLOBALS['sugar_config']['exclude_notifications'][$bean->module_dir])) {
                 $notify_on_save = true;
             }
             $bean->{$this->statusField} = $this->status2;
