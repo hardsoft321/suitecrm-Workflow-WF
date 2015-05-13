@@ -43,7 +43,7 @@ lab321.wf.confirmStatus = function(formName) {
     lab321.wf.confirmRequest.saveButtonOnclickValue = $('#'+formName+' input[type="submit"]').attr('onclick');
     $('#'+formName+' input[type="submit"]').attr('onclick', 'return false');
 
-    $.ajax('index.php?entryPoint=wf_confirm', {
+    $.ajax($('#'+formName).attr('action'), {
         data: $('#'+formName).serialize() + '&' + $.param({is_ajax_call: 1}),
         type: 'POST',
         dataType: 'json'

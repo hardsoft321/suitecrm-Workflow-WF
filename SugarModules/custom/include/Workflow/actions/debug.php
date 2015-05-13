@@ -189,7 +189,7 @@ while($row = $db->fetchByAssoc($dbRes)) {
     echo "<tr>";
     foreach($row as $name => $value) {
         echo "<td>{$value}";
-        if($name == 'filter_function') {
+        if($value && $name == 'filter_function') {
             echo "<br/>";
             $filter_function = $value;
             if(file_exists('custom/include/Workflow/functions/filters/'.$filter_function.'.php')) {

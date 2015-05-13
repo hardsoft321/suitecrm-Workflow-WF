@@ -457,7 +457,7 @@ class WFManager {
             return;
         $statusBean = self::getStatusBeanByName($status1, $bean->module_name);
         if(!$statusBean) {
-            $GLOBALS['log']->error("WFManager: status not found for {$bean->module_name} {$bean->id}");
+            $GLOBALS['log']->error("WFManager: status {$status1} not found for {$bean->module_name} {$bean->id}");
             return;
         }
         require_once __DIR__."/WFStatusAssigned.php";
@@ -520,7 +520,7 @@ class WFManager {
             $data['statusAssignedUsers'] = $statusAssignedUsers;
 
             /* Кастомный код внутри блока согласования перед сабмитом */
-            if(isset($data['confirmData'])) {
+            if(isset($data['confirmData']) && empty($bean->workflowData['skipWFHooks'])) {
                 $logicHook = new LogicHook();
                 $logicHook->setBean($bean);
                 ob_start();
@@ -532,13 +532,15 @@ class WFManager {
             }
 
             /* Кастомный код внутри панели под всеми блоками */
-            $logicHook = new LogicHook();
-            $logicHook->setBean($bean);
-            ob_start();
-            $logicHook->call_custom_logic($bean->module_dir, 'wf_after_editform', $data);
-            $customView = ob_get_clean();
-            if($customView) {
-                $data['customView'] = $customView;
+            if(empty($bean->workflowData['skipWFHooks'])) {
+                $logicHook = new LogicHook();
+                $logicHook->setBean($bean);
+                ob_start();
+                $logicHook->call_custom_logic($bean->module_dir, 'wf_after_editform', $data);
+                $customView = ob_get_clean();
+                if($customView) {
+                    $data['customView'] = $customView;
+                }
             }
         }
         return $data;

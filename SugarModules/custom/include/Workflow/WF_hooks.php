@@ -78,7 +78,9 @@ class WF_hooks {
         $status2 = $focus->$statusField;
         if($status1 != $status2) {
             WFManager::runAfterEventHooks($focus, $status1, $status2);
-            WFManager::autoFillAssignedUser($focus, $status1);
+            if($status1) {
+                WFManager::autoFillAssignedUser($focus, $status1);
+            }
         }
     }
   }
