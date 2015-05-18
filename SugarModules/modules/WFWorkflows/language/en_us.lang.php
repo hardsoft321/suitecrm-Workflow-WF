@@ -65,6 +65,7 @@ $mod_strings = array (
 'DefaultUserList' => 'Users in Role within Group',
 'OwnerUserList' => 'Assigned User',
 'StatusAssignedUserList' => 'Assigned for Role or Group User',
+'StatusAssignedDefaultUserList' => 'Assigned for Role or Users in Role within Group',
 'SFFormFieldsRequired' => 'Required Fields for Status',
 'DefaultCurrentUserList' => 'Current User in Role within Group',
 'ParentStatusAssignedUserList' => 'Assigned for Role in Parent Record or Group User',

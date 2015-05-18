@@ -68,6 +68,7 @@ $mod_strings = array (
 'DefaultUserList' => 'Все в роли и в группе',
 'OwnerUserList' => 'Ответственный',
 'StatusAssignedUserList' => 'Закрепленный за ролью или групповой',
+'StatusAssignedDefaultUserList' => 'Закрепленный за ролью или все в роли и в группе',
 'SFFormFieldsRequired' => 'Проверка обязательных для статуса полей',
 'DefaultCurrentUserList' => 'Текущий пользователь в роли и в группе',
 'ParentStatusAssignedUserList' => 'Закрепленный за ролью в родительской записи или групповой',
