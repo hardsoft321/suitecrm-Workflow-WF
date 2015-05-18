@@ -301,11 +301,7 @@ class WFManager {
         global $current_user;
 
         $cur_date = $timedate->handle_offset(gmdate($timedate->get_db_date_time_format()), 'd.m.Y H:i', 'd.m.Y H:i', $current_user, 'Europe/Moscow') . " (МСК)";
-        $statusFinal = self::logFinalStatusToArchive($status2, $bean->module_name);
         $confirm_text = '';
-        if(!empty($statusFinal)) {
-            $confirm_text .= $statusFinal.", ".$cur_date.", ".$current_user->full_name."; ";
-        }
         $confirm_text .= 'Перевод на "'.
             self::translateStatus($status2, $bean->module_name) . '", '.
             $cur_date . ', '.
