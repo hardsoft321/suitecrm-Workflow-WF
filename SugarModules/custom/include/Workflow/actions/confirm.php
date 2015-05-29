@@ -30,6 +30,7 @@ $errors = array();
 $saved = null;
 if(empty($errors)) {
     try {
+        $bean->skipValidationHooks = true;
         $saved = $bean->save($notify_on_save);
     }
     catch(WFEventValidationException $ex) {

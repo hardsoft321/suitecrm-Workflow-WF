@@ -150,6 +150,7 @@ class WFMassUpdate {
             foreach($attributes as $name => $value) {
                 $bean->$name = $value;
             }
+            $bean->skipValidationHooks = true;
             $res = $bean->save($notify_on_save) && $res;
         }
         return $res;

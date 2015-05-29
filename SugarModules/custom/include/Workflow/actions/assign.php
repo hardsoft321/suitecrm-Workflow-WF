@@ -39,6 +39,7 @@ if(in_array($status1, $roleStatuses)) {
         $notify_on_save = true;
     }
     $bean->assigned_user_id = $assigned2;
+    $bean->skipValidationHooks = true;
     $bean->save($notify_on_save);
 }
 

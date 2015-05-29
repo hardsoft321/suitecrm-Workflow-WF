@@ -312,7 +312,10 @@ class WFManager {
         $bean->confirm_list = $confirm_text . (isset($bean->confirm_list) ? $bean->confirm_list : '');
 
         if($saveBean) {
+            $oldValue = !empty($bean->skipValidationHooks);
+            $bean->skipValidationHooks = true;
             $bean->save();
+            $bean->skipValidationHooks = $oldValue;
         }
     }
 
@@ -336,7 +339,10 @@ class WFManager {
             '; ';
         $toBean->confirm_list = $confirm_text . (isset($toBean->confirm_list) ? $toBean->confirm_list : '');
         if($saveBean) {
+            $oldValue = !empty($toBean->skipValidationHooks);
+            $toBean->skipValidationHooks = true;
             $toBean->save();
+            $toBean->skipValidationHooks = $oldValue;
         }
     }
 
@@ -409,7 +415,10 @@ class WFManager {
         $bean->confirm_list = $confirm_text . (isset($bean->confirm_list) ? $bean->confirm_list : '');
 
         if($saveBean) {
+            $oldValue = !empty($bean->skipValidationHooks);
+            $bean->skipValidationHooks = true;
             $bean->save();
+            $bean->skipValidationHooks = $oldValue;
         }
     }
 
