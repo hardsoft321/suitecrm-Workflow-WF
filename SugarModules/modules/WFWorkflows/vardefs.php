@@ -43,4 +43,13 @@ $dictionary['WFWorkflow'] = array(
 $dictionary["WFWorkflow"]['indices'][] = array('name'=>'idx_workflow_uniq_d', 'type'=>'index', 'fields'=>array('uniq_name', 'deleted'));
 
 VardefManager::createVardef('WFWorkflows', 'WFWorkflow', array('default'));
+
+$dictionary['WFWorkflow']['relationships']['wfworkflows_modified_user'] = array(
+   'lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',
+   'rhs_module'=> 'WFWorkflows', 'rhs_table'=> 'wf_workflows', 'rhs_key' => 'modified_user_id',
+   'relationship_type'=>'one-to-many');
+$dictionary['WFWorkflow']['relationships']['wfworkflows_created_by'] = array(
+   'lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',
+   'rhs_module'=> 'WFWorkflows', 'rhs_table'=> 'wf_workflows', 'rhs_key' => 'created_by',
+   'relationship_type'=>'one-to-many');
 ?>

@@ -127,4 +127,13 @@ $dictionary['WFStatus'] = array(
 $dictionary["WFStatus"]['indices'][] = array('name'=>'idx_wfstatus_uniq_m_d', 'type'=>'index', 'fields'=>array('uniq_name', 'wf_module', 'deleted'));
 
 VardefManager::createVardef('WFStatuses', 'WFStatus', array('default'));
+
+$dictionary['WFStatus']['relationships']['wfstatuses_modified_user'] = array(
+   'lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',
+   'rhs_module'=> 'WFStatuses', 'rhs_table'=> 'wf_statuses', 'rhs_key' => 'modified_user_id',
+   'relationship_type'=>'one-to-many');
+$dictionary['WFStatus']['relationships']['wfstatuses_created_by'] = array(
+   'lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',
+   'rhs_module'=> 'WFStatuses', 'rhs_table'=> 'wf_statuses', 'rhs_key' => 'created_by',
+   'relationship_type'=>'one-to-many');
 ?>

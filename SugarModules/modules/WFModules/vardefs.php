@@ -20,5 +20,14 @@ $dictionary['WFModule'] = array(
   ),
 );
 
-VardefManager::createVardef('WFModule', 'WFModule', array('default'));
+VardefManager::createVardef('WFModules', 'WFModule', array('default'));
+
+$dictionary['WFModule']['relationships']['wfmodules_modified_user'] = array(
+   'lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',
+   'rhs_module'=> 'WFModules', 'rhs_table'=> 'wf_modules', 'rhs_key' => 'modified_user_id',
+   'relationship_type'=>'one-to-many');
+$dictionary['WFModule']['relationships']['wfmodules_created_by'] = array(
+   'lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',
+   'rhs_module'=> 'WFModules', 'rhs_table'=> 'wf_modules', 'rhs_key' => 'created_by',
+   'relationship_type'=>'one-to-many');
 ?>

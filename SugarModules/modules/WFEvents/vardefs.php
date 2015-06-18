@@ -107,7 +107,16 @@ $dictionary['WFEvent'] = array(
 		),
   ),
 );
-$dictionary["WFStatus"]['indices'][] = array('name'=>'idx_wfevents_st1', 'type'=>'index', 'fields'=>array('status1_id', 'deleted'));
+$dictionary["WFEvent"]['indices'][] = array('name'=>'idx_wfevents_st1', 'type'=>'index', 'fields'=>array('status1_id', 'deleted'));
 
 VardefManager::createVardef('WFEvents', 'WFEvent', array('default'));
+
+$dictionary['WFEvent']['relationships']['wfevents_modified_user'] = array(
+   'lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',
+   'rhs_module'=> 'WFEvents', 'rhs_table'=> 'wf_events', 'rhs_key' => 'modified_user_id',
+   'relationship_type'=>'one-to-many');
+$dictionary['WFEvent']['relationships']['wfevents_created_by'] = array(
+   'lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',
+   'rhs_module'=> 'WFEvents', 'rhs_table'=> 'wf_events', 'rhs_key' => 'created_by',
+   'relationship_type'=>'one-to-many');
 ?>
