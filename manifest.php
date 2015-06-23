@@ -2,18 +2,6 @@
 
 global $sugar_config;
 
-$README = <<<RDME
-Workflow.
-Чтобы подключить workflow к какому-либо модулю, нужен пакет для этого модуля, например Tasks_workflow 
-Добавлены модули для управления переходами: WFModules(Модули с маршрутизацией), WFWorkflows (Маршруты), WFStatuses (Статусы маршрутов), WFEvents (Переходы маршрутов).
-Добавлены поля для сохранения ролей.
-Есть upgradeunsafe файлы. Например, если также ставится SecurtySuite, необходимо разрешить конфликт в файле include/MVC/View/views/view.detail.php
-
-Чтобы использовать WorkflowSecurityForm и SFFormFieldsRequired должен быть установлен пакет SecurityForms.
-Чтобы использовать SendNotificationCopy должен быть установлен пакет SugarBeanMailer.
-
-RDME;
-
 $manifest = array (
   0 => 
   array (
@@ -31,7 +19,6 @@ $manifest = array (
       2 => 'ENT',
     ),
   ),
-  'readme' => $README,
   'author' => 'nlv, pea',
   'description' => 'Workflow',
   'icon' => '',

@@ -1,0 +1,136 @@
+Добавляются модули: WFModules(Модули с маршрутизацией), WFWorkflows (Маршруты), WFStatuses (Статусы маршрутов), WFEvents (Переходы маршрутов).
+
+Чтобы подключить workflow к какому-либо модулю, нужен пакет для этого модуля, например Tasks_workflow.
+
+Есть upgradeunsafe файлы. Например, если также ставится SecurtySuite, необходимо разрешить конфликт в файле include/MVC/View/views/view.detail.php.
+
+Чтобы использовать WorkflowSecurityForm и SFFormFieldsRequired должен быть установлен пакет SecurityForms.
+Чтобы использовать SendNotificationCopy должен быть установлен пакет SugarBeanMailer.
+
+
+Проверка дублирования статусов и переходов (скрипты для mysql):
+
+Для начала удалить старые записи (не во всех запросах стоит deleted = 0)
+delete from wf_statuses where deleted = 1;
+delete from wf_events where deleted = 1;
+
+-- повторяющиеся статусы
+select st.*, dope.c from wf_statuses st, (select uniq_name, wf_module, count(*) c from wf_statuses where deleted = 0 group by uniq_name, wf_module) dope
+where st.uniq_name = dope.uniq_name AND st.wf_module = dope.wf_module and dope.c > 1 and st.deleted = 0
+order by st.uniq_name
+
+-- повторяющиеся статусы, раличающиеся по атрибутам
+select t3.* from (
+	select *, count(*) c from (
+		select * from wf_statuses
+		where deleted = 0
+		group by name, wf_module, uniq_name, role_id, edit_role_type
+			, assigned_list_function, confirm_list_function, front_assigned_list_function, role2_id, confirm_check_list_function, isfinal
+	) t
+	group by uniq_name, wf_module
+) t2,
+wf_statuses t3
+where c > 1
+	and t2.uniq_name = t3.uniq_name and t2.wf_module = t3.wf_module
+
+-- статусы и списки форм
+select st.*,  l.id as list_id, l.list_type, f.cname
+from wf_statuses st
+left join form_fields_lists l on st.id = l.parent_id
+left join (select group_concat(name order by name) as cname, list_id from form_fields where deleted = 0 group by list_id) f ON f.list_id = l.id
+where l.parent_type = 'WFStatuses' and l.deleted = 0
+order by st.uniq_name
+
+
+-- повторяющиеся переходы
+select * from (
+	select s1.uniq_name as status1, s1.wf_module as module1, s2.uniq_name as status2, s2.wf_module as module2, e.*, count(*) c
+	from wf_events e, wf_statuses s1, wf_statuses s2
+	where e.status1_id = s1.id and e.status2_id = s2.id
+		and e.deleted = 0
+	group by s1.wf_module, s1.uniq_name, s2.wf_module, s2.uniq_name, e.workflow_id
+) t
+where c > 1
+
+-- повторяющиеся переходы, раличающиеся по атрибутам
+select * from (
+	select *, count(*) as c from (
+		select s1.uniq_name as status1, s1.wf_module as module1, s2.uniq_name as status2, s2.wf_module as module2, e.*
+		from wf_events e, wf_statuses s1, wf_statuses s2
+		where e.status1_id = s1.id and e.status2_id = s2.id
+			and e.deleted = 0
+		group by s1.wf_module, s1.uniq_name, s2.wf_module, s2.uniq_name, e.workflow_id, e.sort, e.filter_function, e.after_save, e.validate_function
+	) t
+	group by status1, module1, status2, module2, workflow_id
+) t2
+where c > 1
+
+-- повторяющиеся переходы, раличающиеся по атрибутам (не сгруппированные)
+select t3.* from (
+	select *, count(*) as c from (
+		select s1.uniq_name as status1, s1.wf_module as module1, s2.uniq_name as status2, s2.wf_module as module2, e.*
+		from wf_events e, wf_statuses s1, wf_statuses s2
+		where e.status1_id = s1.id and e.status2_id = s2.id
+			and e.deleted = 0
+		group by s1.wf_module, s1.uniq_name, s2.wf_module, s2.uniq_name, e.workflow_id, e.sort, e.filter_function, e.after_save, e.validate_function
+	) t
+	group by status1, module1, status2, module2, workflow_id
+) t2,
+(select s1.uniq_name as status1, s1.wf_module as module1, s2.uniq_name as status2, s2.wf_module as module2, e.*
+		from wf_events e, wf_statuses s1, wf_statuses s2
+		where e.status1_id = s1.id and e.status2_id = s2.id
+			and e.deleted = 0
+) t3
+where c > 1 and t3.status1 = t2.status1 and t3.module1 = t2.module1 and t3.status2 = t2.status2 and t3.module2 = t2.module2
+order by status1, status2
+
+-- повторяющиеся переходы и списки форм
+select t3.*, l.id as list_id, f.cname from (
+		select s1.uniq_name as status1, s1.wf_module as module1, s2.uniq_name as status2, s2.wf_module as module2, e.*, count(*) c
+		from wf_events e, wf_statuses s1, wf_statuses s2
+		where e.status1_id = s1.id and e.status2_id = s2.id
+		group by s1.wf_module, s1.uniq_name, s2.wf_module, s2.uniq_name, e.workflow_id
+) t2,
+(select s1.uniq_name as status1, s1.wf_module as module1, s2.uniq_name as status2, s2.wf_module as module2, e.*
+		from wf_events e, wf_statuses s1, wf_statuses s2
+		where e.status1_id = s1.id and e.status2_id = s2.id
+) t3
+left join form_fields_lists l on t3.id = l.parent_id
+left join (select group_concat(name) as cname, list_id from form_fields where deleted = 0 group by list_id) f ON f.list_id = l.id
+where c > 1 and t3.status1 = t2.status1 and t3.module1 = t2.module1 and t3.status2 = t2.status2 and t3.module2 = t2.module2
+	and l.parent_type = 'WFEvents' and l.deleted = 0
+order by status1, status2
+
+
+-- выгрузить статусы с рабочей сборки (здесь внимательно с одинаковыми именами в разных модулях)
+select dictinct uniq_name from wf_statuses;
+-- на проверяемой сборке смотрим лишние статусы
+select * from wf_statuses where uniq_name not in (
+ -- статусы, которые должны быть
+);
+-- здесь проверить модули на наличие записей в этих статусах
+-- найти переходы в ненужные статусы
+select s1.uniq_name as status1, s1.wf_module as module1, s2.uniq_name as status2, s2.wf_module as module2, e.*
+from wf_events e, wf_statuses s1, wf_statuses s2
+where e.status1_id = s1.id and e.status2_id = s2.id
+    and s2.uniq_name in (
+    -- статусы, которых не должно быть
+    );
+
+
+-- сравнение удаленных и не удаленных переходов и статусов, смотреть id2 на null
+select t2.id as id2, t1.status1, t1.module1, t1.status2, t1.module2, t1.id, t1.deleted, t1.status1_id, t1.s1deleted, t1.status2_id, t1.s2deleted, t1.workflow_id
+from 
+(select s1.uniq_name as status1, s1.wf_module as module1, s2.uniq_name as status2, s2.wf_module as module2, e.*, s1.deleted as s1deleted, s2.deleted as s2deleted
+from wf_events e, wf_statuses s1, wf_statuses s2
+where e.status1_id = s1.id and e.status2_id = s2.id
+-- group by s1.uniq_name, s1.wf_module, s2.uniq_name, s2.wf_module, e.workflow_id
+) t1
+left join 
+(select s1.uniq_name as status1, s1.wf_module as module1, s2.uniq_name as status2, s2.wf_module as module2, e.*
+from wf_events e, wf_statuses s1, wf_statuses s2
+where e.status1_id = s1.id and e.status2_id = s2.id
+	and e.deleted = 0 and s1.deleted = 0 and s2.deleted = 0) t2 
+	on t1.status1 = t2.status1 and t1.module1 = t2.module1 and t1.status2 = t2.status2 and t1.module2 = t2.module2 and t1.workflow_id = t2.workflow_id
+-- where t2.id is null
+order by t1.status1, t1.status2
