@@ -6,10 +6,8 @@ global $mod_strings;
 $popupMeta = array('moduleMain' => 'WFStatus',
 						'varName' => 'WFSTATUS',
 						'orderBy' => 'wf_module',
-//						'whereClauses' => 
-//							array('module' => 'budgets.name'),
-						'searchInputs' =>
-							array('wf_module','name'),
+						'	' =>
+							array('wf_module', 'name', 'uniq_name'),
 						'listviewdefs' => array(
 							'NAME' => array (
 								'width'   => '30',  
@@ -24,9 +22,10 @@ $popupMeta = array('moduleMain' => 'WFStatus',
 							
                                                 ),
 						'searchdefs'   => array(
-										 	'name', 'wf_module'
-										  )
-						);
+						 	'name', '', 
+						 	'uniq_name', 'wf_module' 
+						)
+);
 
 
 ?>

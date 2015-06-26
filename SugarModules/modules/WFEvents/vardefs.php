@@ -10,11 +10,7 @@ $dictionary['WFEvent'] = array(
 			'vname' => 'LBL_STATUS1_ID',
 			'type' => 'id',
 		),
-        /*'status1_uniq_name' => array (
-			'name' => 'status1_uniq_name',
-			'vname' => 'LBL_STATUS1_UNIQ_NAME',
-			'type' => 'id',
-		),*/
+
         'status1_name' => array (
 			'name' => 'status1_name',
 			'rname' => 'name',
@@ -26,6 +22,18 @@ $dictionary['WFEvent'] = array(
 			'dbType' => 'varchar',
 			'len' => '30',
 			'source' => 'non-db',
+			'link' => 'status1',
+		),
+
+		'status1' => array (
+			'name' => 'status1',
+            'type' => 'link',
+            'relationship' => 'wfstatuses1_wfevents',
+            'source' => 'non-db',
+            'link_type' => 'one',
+            'module' => 'WFStatuses',
+            'bean_name' => 'WFStatus',
+            'vname' => 'LBL_WFSTATUSES',
 		),
 		
 		'status2_id' => array (
@@ -34,12 +42,6 @@ $dictionary['WFEvent'] = array(
 			'type' => 'id',
 			'required' => true,
 		),
-        /*'status2_uniq_name' => array (
-			'name' => 'status2_uniq_name',
-			'vname' => 'LBL_STATUS2_UNIQ_NAME',
-			'type' => 'id',
-			'required' => true,
-		),*/
         'status2_name' => array (
 			'name' => 'status2_name',
 			'rname' => 'name',
@@ -52,13 +54,24 @@ $dictionary['WFEvent'] = array(
 			'len' => '30',
 			'source' => 'non-db',
 			'required' => true,
+			'link' => 'status2',
 		),
-		
+
+		'status2' => array (
+			'name' => 'status2',
+            'type' => 'link',
+            'relationship' => 'wfstatuses2_wfevents',
+            'source' => 'non-db',
+            'link_type' => 'one',
+            'module' => 'WFStatuses',
+            'bean_name' => 'WFStatus',
+            'vname' => 'LBL_WFSTATUSES',
+		),
+
 		'workflow_id' => array (
 			'name' => 'workflow_id',
 			'vname' => 'LBL_WORKFLOW_ID',
 			'type' => 'id',
-			//'required' => true,
 		),
         'workflow_name' => array (
 			'name' => 'workflow_name',
@@ -70,20 +83,27 @@ $dictionary['WFEvent'] = array(
 			'module' => 'WFWorkflows',
 			'dbType' => 'varchar',
 			'source' => 'non-db',
-			//'required' => true,
+			'link' => 'workflow',
 		),
+
+		'workflow' => array (
+			'name' => 'workflow',
+            'type' => 'link',
+            'relationship' => 'workflow_wfevents',
+            'source' => 'non-db',
+            'link_type' => 'one',
+            'module' => 'WFWorkflows',
+            'bean_name' => 'WFWorkflow',
+            'vname' => 'LBL_WFWORKFLOW',
+		),
+
 		'sort' => array (
 			'name' => 'sort',
 			'vname' => 'LBL_SORT',
 			'type' => 'int',
 			'default' => '100',
 		),
-		/*'function' => array (
-			'name' => 'function',
-			'vname' => 'LBL_FUNCTION',
-			'type' => 'varchar',
-			'len' => '255',
-		),*/
+
         'filter_function' => array (
 			'name' => 'filter_function',
 			'vname' => 'LBL_FILTER_FUNCTION',
@@ -119,4 +139,37 @@ $dictionary['WFEvent']['relationships']['wfevents_created_by'] = array(
    'lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',
    'rhs_module'=> 'WFEvents', 'rhs_table'=> 'wf_events', 'rhs_key' => 'created_by',
    'relationship_type'=>'one-to-many');
+
+$dictionary['WFEvent']['relationships']['wfstatuses1_wfevents'] = array(
+   'lhs_module'=> 'WFStatuses', 
+   'lhs_table'=> 'wf_statuses', 
+   'lhs_key' => 'id',
+   'rhs_module'=> 'WFEvents', 
+   'rhs_table'=> 'wf_events', 
+   'rhs_key' => 'status1_id',
+   'relationship_type'=>'one-to-many'
+  );
+
+$dictionary['WFEvent']['relationships']['wfstatuses2_wfevents'] = array(
+   'lhs_module'=> 'WFStatuses', 
+   'lhs_table'=> 'wf_statuses', 
+   'lhs_key' => 'id',
+   'rhs_module'=> 'WFEvents', 
+   'rhs_table'=> 'wf_events', 
+   'rhs_key' => 'status2_id',
+   'relationship_type'=>'one-to-many'
+  );
+
+$dictionary['WFEvent']['relationships']['workflow_wfevents'] = array(
+   'lhs_module'=> 'WFWorkflows', 
+   'lhs_table'=> 'wf_workflows', 
+   'lhs_key' => 'id',
+   'rhs_module'=> 'WFEvents', 
+   'rhs_table'=> 'wf_events', 
+   'rhs_key' => 'workflow_id',
+   'relationship_type'=>'one-to-many'
+  );
+
 ?>
+
+
