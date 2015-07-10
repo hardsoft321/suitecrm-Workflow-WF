@@ -16,11 +16,6 @@ $popupMeta = array('moduleMain' => 'WFWorkflow',
 								'label'   => 'LBL_NAME', 
 								'link'    => true,
 							'default' => true),
-							'TYPE' => array (
-								'width'   => '30',  
-								'label'   => 'LBL_TYPE', 
-								'link'    => true,
-							'default' => true),
 							'WF_MODULE' => array (
 								'width'   => '30',  
 								'label'   => 'LBL_WF_MODULE', 

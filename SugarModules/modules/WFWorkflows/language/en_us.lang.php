@@ -61,6 +61,7 @@ $mod_strings = array (
 'ERR_VALIDATE_FUNCTION_NOT_FOUND' => 'Cannot validate',
 
 'DefaultGroupUserList' => 'Group Users in Role within Group',
+'DefaultNonGroupUserList' => 'Non Group Users in Role within Group',
 'DefaultRole2UserList' => 'Users in Role 2 within Group',
 'DefaultUserList' => 'Users in Role within Group',
 'OwnerUserList' => 'Assigned User',

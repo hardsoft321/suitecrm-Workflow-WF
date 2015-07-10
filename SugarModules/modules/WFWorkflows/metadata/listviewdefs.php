@@ -8,12 +8,6 @@ $listViewDefs['WFWorkflows'] = array(
     'link' => true,
     'default' => true
   ),
-  /*'TYPE' => array(
-    'width' => '40', 
-    'label' => 'LBL_TYPE', 
-    'link' => true,
-    'default' => true
-  ),*/
   'WF_MODULE' => array(
     'width' => '40', 
     'label' => 'LBL_LIST_WF_MODULE', 

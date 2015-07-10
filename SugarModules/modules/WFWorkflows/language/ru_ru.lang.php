@@ -64,6 +64,7 @@ $mod_strings = array (
 'ERR_VALIDATE_FUNCTION_NOT_FOUND' => 'При валидации перехода произошла ошибка',
 
 'DefaultGroupUserList' => 'Групповые пользователи в роли и в группе',
+'DefaultNonGroupUserList' => 'Все кроме групповых в роли и в группе',
 'DefaultRole2UserList' => 'Все в роли 2 и в группе',
 'DefaultUserList' => 'Все в роли и в группе',
 'OwnerUserList' => 'Ответственный',

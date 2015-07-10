@@ -64,6 +64,7 @@ class WFManager {
                 e.status1_id IN (SELECT id FROM wf_statuses WHERE uniq_name='{$status1}' AND wf_module = '{$bean->module_name}' AND deleted = 0)
                 AND e.workflow_id = '{$bean->wf_id}'
                 AND e.deleted = 0
+                AND s2.deleted = 0
             ORDER BY e.sort
             ";
         }
@@ -74,6 +75,7 @@ class WFManager {
                 (e.status1_id = '' OR e.status1_id IS NULL)
                 AND e.deleted = 0
                 AND s2.wf_module = '{$bean->module_name}'
+                AND s2.deleted = 0
             ORDER BY e.sort
             ";
         }
