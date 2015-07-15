@@ -40,6 +40,7 @@ $mod_strings = array (
 'LBL_ASSIGNEDS' => 'Ответственные',
 'LBL_CONFIRM_STATUS' => 'Согласование',
 'LBL_NEW_STATUS' => 'Новый статус',
+'LBL_RECIPIENT_LIST' => 'Список рассылки уведомления',
 'ERR_RECORD_NOT_FOUND' => 'Запись не найдена',
 'ERR_STATUS_FIELD_NOT_FOUND' => 'Не удается определить статус',
 'ERR_ROLE_STATUS_NOT_FOUND' => 'Статусы для указанной роли не найдены',

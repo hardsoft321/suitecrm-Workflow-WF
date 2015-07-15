@@ -3,7 +3,7 @@
  * @license http://hardsoft321.org/license/ GPLv3
  * @author  Evgeny Pervushin <pea@lab321.ru>
  */
-
+require_once 'custom/include/Workflow/functions/BaseProcedure.php';
 
 /**
  * Если указан дополнительный ответственный, ему отправляется письмо.
@@ -14,18 +14,35 @@ class SendNotificationCopy extends BaseProcedure
     public function doWork($bean) {
         require_once 'custom/include/SugarBeanMailer.php';
         if(!empty($_POST['assigned_user_copy'])) {
-            $user = BeanFactory::getBean('Users', $_POST['assigned_user_copy']);
-            if($user) {
+            $usersIds = array();
+            if(is_array($_POST['assigned_user_copy'])) {
+                foreach($_POST['assigned_user_copy'] as $fields) {
+                    $usersIds[] = $fields['id'];
+                }
+            }
+            else {
+                $usersIds[] = $_POST['assigned_user_copy'];
+            }
+            $users = array();
+            foreach($usersIds as $id) {
+                if($id) {
+                    $user = BeanFactory::getBean('Users', $id);
+                    if($user) {
+                        $users[] = $user;
+                    }
+                    else {
+                        $GLOBALS['log']->error('SendNotificationCopy: user not found '.$id);
+                    }
+                }
+            }
+            if(!empty($users)) {
                 $assigned = reset($bean->get_notification_recipients());
                 $mailer = new SugarBeanMailer($bean);
-                $mailer->set_notification_recipients(array($user));
+                $mailer->set_notification_recipients($users);
                 $mailer->setTemplate('Default', array(
                     'ASSIGNED_USER' => $assigned->full_name,
                 ));
                 $mailer->sendNotifications();
-            }
-            else {
-                $GLOBALS['log']->error('SendNotificationCopy: не найден пользователь '.$_POST['assigned_user_copy']);
             }
         }
     }

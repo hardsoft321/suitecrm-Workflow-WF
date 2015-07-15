@@ -527,7 +527,7 @@ class WFManager {
             $data['statusAssignedUsers'] = $statusAssignedUsers;
 
             /* Кастомный код внутри блока согласования перед сабмитом */
-            if(isset($data['confirmData']) && empty($bean->workflowData['skipWFHooks'])) {
+            if(!empty($data['confirmData']['newStatuses']) && empty($bean->workflowData['skipWFHooks'])) {
                 $logicHook = new LogicHook();
                 $logicHook->setBean($bean);
                 ob_start();

@@ -84,7 +84,18 @@ class WF_hooks {
         }
     }
   }
-  
+
+    /**
+     * Хук панели выбора пользователей для уведомления при смене статуса
+     */
+    public function displayNotificationFields($bean, $event, $arguments)
+    {
+        require_once 'include/Sugar_Smarty.php';
+        $ss = new Sugar_Smarty();
+        $ss->assign('formName', $arguments['confirmData']['formName']);
+        echo $ss->fetch('custom/include/Workflow/tpls/NotificationFields.tpl');
+    }
+
   protected function getNewWfId($focus) {
     if(empty($focus->fetched_row['id'])) {
         return WFManager::getWorkflowForBean($focus);

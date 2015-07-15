@@ -48,7 +48,12 @@ lab321.wf.confirmStatus = function(formName) {
         type: 'POST',
         dataType: 'json'
     }).done(function(data) {
-        lab321.wf.setConfirmErrors(data.errors, formName);
+        if(typeof data.errors === "undefined") {
+            alert(data);
+        }
+        else {
+            lab321.wf.setConfirmErrors(data.errors, formName);
+        }
         ajaxStatus.hideStatus();
         if(data.saved) {
             ajaxStatus.flashStatus(SUGAR.language.get('app_strings','LBL_SAVED'), 3000);
@@ -56,6 +61,7 @@ lab321.wf.confirmStatus = function(formName) {
         }
     }).fail(function() {
         ajaxStatus.hideStatus();
+        alert(data);
     }).always(function() {
         $('#'+formName+' input[type="submit"]').attr('onclick', lab321.wf.confirmRequest.saveButtonOnclickValue || '');
         lab321.wf.confirmRequest.status = 'done';
@@ -225,4 +231,40 @@ lab321.wf.onChangeRole = function(formName) {
                 userSel.options[i] = new Option($('<p>').html(confirmUsers[status][i][1]).text(), confirmUsers[status][i][0]);
         }
     }
+}
+
+lab321.wf.cloneRecipientField = function(item, idname) {
+    var module = idname;
+    if(typeof lab321.wf.cloneRecipientCount === "undefined") {
+        lab321.wf.cloneRecipientCount = 0;
+    }
+    if(item.siblings('.editlistitem').length >= 10) {
+        return;
+    }
+    var newId = lab321.wf.cloneRecipientCount++;
+    $('<div class="editlistitem">').html(item.html())
+    .find('[name]').each(function() {
+        var name = this.name;
+        this.name = this.name.replace(new RegExp(module+'\\[((new[0-9]+)|(template)|([a-f0-9\-]{36}))\\]'), module+'[new'+newId+']');
+        this.id = this.name;
+
+        var onclick = $(this).attr('onclick');
+        if(onclick && (name.match(/\[btn_clr_.*\]/) || name.match(/btn_clr_.*/))) {
+            $(this).attr('onclick', onclick.replace(/SUGAR\.clearRelateField\(this\.form,\s*'([^']+)',\s*'([^']+)'\)/, function(str, name, id) {
+                name = name.replace(new RegExp(module+'\\[((new[0-9]+)|(template)|([a-f0-9\-]{36}))\\]'), module+'[new'+newId+']');
+                id = id.replace(new RegExp(module+'\\[((new[0-9]+)|(template)|([a-f0-9\-]{36}))\\]'), module+'[new'+newId+']');
+                return "SUGAR.clearRelateField(this.form, '"+name+"', '"+id+"')";
+            }));
+        }
+        else if(onclick && (name.match(/\[btn_.*\]/) || name.match(/btn_.*/))) {
+            $(this).attr('onclick', onclick.replace(/"field_to_name_array":{"id":"([^"]+)","name":"([^"]+)"}/, function(str, id, name) {
+                name = name.replace(new RegExp(module+'\\[((new[0-9]+)|(template)|([a-f0-9\-]{36}))\\]'), module+'[new'+newId+']');
+                id = id.replace(new RegExp(module+'\\[((new[0-9]+)|(template)|([a-f0-9\-]{36}))\\]'), module+'[new'+newId+']');
+                return '"field_to_name_array":{"id":"'+id+'","name":"'+name+'"}';
+            }));
+        }
+    })
+    .end()
+    .insertAfter(item.hasClass('item_template') ? item.siblings(':last') : item)
+    .hide().slideDown({duration:200});
 }

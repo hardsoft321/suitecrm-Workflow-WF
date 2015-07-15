@@ -32,6 +32,11 @@ if(empty($errors)) {
     try {
         $bean->skipValidationHooks = true;
         $saved = $bean->save($notify_on_save);
+        if($saved && !empty($_POST['assigned_user_copy'])) {
+            require_once 'custom/include/Workflow/functions/procedures/SendNotificationCopy.php';
+            $proc = new SendNotificationCopy();
+            $proc->doWork($bean);
+        }
     }
     catch(WFEventValidationException $ex) {
         $errors = $ex->getErrors();

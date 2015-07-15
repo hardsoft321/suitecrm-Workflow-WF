@@ -37,6 +37,7 @@ $mod_strings = array (
 'LBL_ASSIGNEDS' => 'Assigned Users',
 'LBL_CONFIRM_STATUS' => 'Change Status',
 'LBL_NEW_STATUS' => 'New Status',
+'LBL_RECIPIENT_LIST' => 'Mail To',
 'ERR_RECORD_NOT_FOUND' => 'Record not found',
 'ERR_STATUS_FIELD_NOT_FOUND' => 'Status field not found',
 'ERR_ROLE_STATUS_NOT_FOUND' => 'Statuses for role not found',

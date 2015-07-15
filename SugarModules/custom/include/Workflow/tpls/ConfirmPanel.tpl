@@ -32,10 +32,12 @@
     padding-right: 0px;
 }
 .confirmForm tr {margin:15px}
-.confirmForm td {padding:5px}
+.confirmForm td {padding:5px; vertical-align: top;}
 .confirmForm select {width:100%}
 .confirmForm textarea {width:100%}
+.confirmForm textarea#resolution {min-width:240px;}
 .confirmForm table {border:none; margin:5px; min-width:400px}
+.confirmForm .relate_name {position: relative; top: 1px;}
 {/literal}
 </style>
 
