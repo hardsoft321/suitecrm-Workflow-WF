@@ -44,6 +44,7 @@ class SendNotificationCopy extends BaseProcedure
                 ));
                 $mailer->sendNotifications();
             }
+            unset($_POST['assigned_user_copy']); //чтобы два раза не отправить, если SendNotificationCopy настроена на переходе в after_save
         }
     }
 }
