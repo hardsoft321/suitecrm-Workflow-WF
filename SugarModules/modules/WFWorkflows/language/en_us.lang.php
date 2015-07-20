@@ -3,6 +3,7 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
 
 $mod_strings = array (
 'LBL_MODULE_NAME' => 'WFWorkflows' ,
+'LBL_OBJECT_NAME' => 'Workflow',
 'LBL_MODULE_TITLE' => 'WFWorkflow - HOME' ,
 'LBL_SEARCH_FORM_TITLE' => 'List of Workflows' ,
 'LBL_LIST_FORM_TITLE' => 'List of Workflows' ,
@@ -24,6 +25,19 @@ $mod_strings = array (
 'LBL_UNIQ_NAME' => 'Unique Name',
 
 'LBL_BEAN_TYPE' => 'Bean Type Value',
+
+'LBL_CHECK_WORKFLOWS' => 'Workflows Checking',
+'LBL_CONFLICTS_FOUND' => 'Conflicts Found',
+'LBL_ROLE' => 'Role',
+'LBL_EVENT' => 'Event',
+'LBL_STATUS' => 'Status',
+'LBL_STATUS_ROLE_FUNCTIONS_CHECK' => 'Check Assign Functions',
+'LBL_STATUS_ROLE_FUNCTIONS_INFO' => 'Statuses within a workflow with one role must have same values of "Assigned List Function", "Confirm List Function", "Role2".',
+'LBL_STATUS_UNIQ_CHECK' => 'Check Statuses Uniqueness',
+'LBL_STATUS_UNIQ_INFO' => 'Status Unique Name must be unique within module.',
+'LBL_EVENT_UNIQ_CHECK' => 'Check Events Uniqueness',
+'LBL_EVENT_UNIQ_INFO' => 'Event uniqueness depends on status1 and status2 uniq names and module.',
+'MSG_CONFLICT_FOUND_AFTER_SAVE' => 'Conflict Found. More information at "Workflows Checking" page.',
 
 //custom/include/Workflow
 'LBL_TOGGLE_BUTTON' => 'Confirm Panel',

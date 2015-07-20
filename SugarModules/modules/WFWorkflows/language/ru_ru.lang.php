@@ -4,6 +4,7 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
 $mod_strings = array (
 
 'LBL_MODULE_NAME' => 'Маршруты' ,
+'LBL_OBJECT_NAME' => 'Маршрут' ,
 'LBL_MODULE_TITLE' => 'Маршруты - ГЛАВНАЯ' ,
 'LBL_SEARCH_FORM_TITLE' => 'Список маршрутов' ,
 'LBL_LIST_FORM_TITLE' => 'Список маршрутов' ,
@@ -27,6 +28,19 @@ $mod_strings = array (
 'LBL_UNIQ_NAME' => 'Уникальное имя',
 
 'LBL_BEAN_TYPE' => 'Значение поля тип в модуле',
+
+'LBL_CHECK_WORKFLOWS' => 'Проверка маршрутов',
+'LBL_CONFLICTS_FOUND' => 'Найдены конфликты',
+'LBL_ROLE' => 'Роль',
+'LBL_EVENT' => 'Переход',
+'LBL_STATUS' => 'Статус',
+'LBL_STATUS_ROLE_FUNCTIONS_CHECK' => 'Проверка функций смены ответственного на ролях',
+'LBL_STATUS_ROLE_FUNCTIONS_INFO' => 'Статусы в пределах одного маршрута с одной ролью должны иметь одинаковые значения полей "Доступ к смене ответственного", "Список в смене ответственного", "Роль 2". Иначе возможны конфликты.',
+'LBL_STATUS_UNIQ_CHECK' => 'Проверка уникальности имен статусов',
+'LBL_STATUS_UNIQ_INFO' => 'Уникальное имя статуса должно быть уникально в пределах модуля.',
+'LBL_EVENT_UNIQ_CHECK' => 'Проверка уникальности переходов',
+'LBL_EVENT_UNIQ_INFO' => 'Уникальность перехода проверяется на основе уникального имени и модуля статуса1 и статуса2.',
+'MSG_CONFLICT_FOUND_AFTER_SAVE' => 'Найден конфликт. Подробная информация на странице "Проверка маршрутов"',
 
 //custom/include/Workflow
 'LBL_TOGGLE_BUTTON' => 'Панель согласования',

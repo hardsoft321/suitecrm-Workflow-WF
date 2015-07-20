@@ -3,6 +3,7 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
 
 $mod_strings = array (
 'LBL_MODULE_NAME' => 'WFWorkflows' ,
+'LBL_OBJECT_NAME' => 'Workflow',
 'LBL_MODULE_TITLE' => 'WFWorkflow - HOME' ,
 'LBL_SEARCH_FORM_TITLE' => 'Liste der Workflows' ,
 'LBL_LIST_FORM_TITLE' => 'List of Workflows' ,
@@ -24,6 +25,19 @@ $mod_strings = array (
 'LBL_UNIQ_NAME' => 'Eindeutiger Name',
 
 'LBL_BEAN_TYPE' => 'Bean Art Wert',
+
+'LBL_CHECK_WORKFLOWS' => 'Workflows prüfen',
+'LBL_CONFLICTS_FOUND' => 'Konflikte gefunden',
+'LBL_ROLE' => 'Rolle',
+'LBL_EVENT' => 'Ereignis',
+'LBL_STATUS' => 'Status',
+'LBL_STATUS_ROLE_FUNCTIONS_CHECK' => 'Überprüfen Sie Assign-Funktionen',
+'LBL_STATUS_ROLE_FUNCTIONS_INFO' => 'Zustände innerhalb eines Workflows mit einer Rolle müssen dieselben Werte von "Assigned Listenfunktion", "Confirm Listenfunktion", "Role2".',
+'LBL_STATUS_UNIQ_CHECK' => 'Überprüfen Status Einzigartigkeit',
+'LBL_STATUS_UNIQ_INFO' => 'Status Einzigartige Name muss innerhalb Modul sein.',
+'LBL_EVENT_UNIQ_CHECK' => 'Check Events Einzigartigkeit',
+'LBL_EVENT_UNIQ_INFO' => 'Event Einzigartigkeit hängt status1 und status2 uniq Namen und Modul.',
+'MSG_CONFLICT_FOUND_AFTER_SAVE' => 'Konflikt gefunden. Weitere Informationen unter "Workflows prüfen" Seite.',
 
 //custom/include/Workflow
 'LBL_TOGGLE_BUTTON' => 'Bestätigen Steuerung',

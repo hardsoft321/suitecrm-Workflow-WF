@@ -8,4 +8,6 @@ $module_menu[]=	Array("index.php?module=WFWorkflows&action=EditView&return_modul
 
 $module_menu[]=	Array("index.php?module=WFWorkflows&action=index&return_module=WFWorkflows&return_action=DetailView", $mod_strings['LBL_LIST_FORM_TITLE'],"Workflows");
 
+$module_menu[]=	Array("index.php?module=WFWorkflows&action=CheckWorkflows", $mod_strings['LBL_CHECK_WORKFLOWS'],"Workflows");
+
 ?>

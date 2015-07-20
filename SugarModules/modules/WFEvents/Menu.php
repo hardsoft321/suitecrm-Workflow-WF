@@ -12,4 +12,7 @@ global $current_language;
 $statuses_mod_strings = return_module_language($current_language, 'WFStatuses');
 $module_menu[]=	Array("index.php?module=WFStatuses&action=index&return_module=WFStatuses&return_action=DetailView", $statuses_mod_strings['LBL_LIST_FORM_TITLE'],"WFStatuses");
 
+$workflows_mod_strings = return_module_language($current_language, 'WFWorkflows');
+$module_menu[]=	Array("index.php?module=WFWorkflows&action=CheckWorkflows", $workflows_mod_strings['LBL_CHECK_WORKFLOWS'],"Workflows");
+
 ?>

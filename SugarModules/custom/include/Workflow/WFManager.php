@@ -600,6 +600,83 @@ class WFManager {
         return $statuses;
     }
 
+    public static function checkWorkflows() {
+        global $db;
+        $result = array();
+/* Статусы в пределах одного маршрута с одной ролью, но с разными значениями assigned_list_function, confirm_list_function, role2_id */
+        $q =
+"SELECT w.id as workflow_id, w.name as workflow_name, r.id as role_id, r.name as role_name, st.id as status_id, st.name as status_name FROM (
+    SELECT workflow_id, role_id FROM (
+        SELECT e.workflow_id, s.role_id, s.assigned_list_function, s.confirm_list_function, s.role2_id
+        FROM wf_statuses s, wf_events e
+        WHERE
+           s.deleted = 0 AND e.deleted = 0
+            AND (e.status1_id = s.id OR e.status2_id = s.id)
+        GROUP BY e.workflow_id, s.role_id, s.assigned_list_function, s.confirm_list_function, s.role2_id
+    ) role_st
+    GROUP BY workflow_id, role_id
+    HAVING count(*) > 1
+) w_r,
+wf_workflows w,
+acl_roles r,
+wf_statuses st
+WHERE w_r.workflow_id = w.id AND w_r.role_id = r.id
+    AND w.deleted = 0 AND r.deleted = 0
+    AND st.deleted = 0 AND st.role_id = w_r.role_id
+    AND st.id IN (
+            SELECT status1_id FROM wf_events e WHERE e.deleted = 0 AND e.workflow_id = w.id
+            UNION ALL
+            SELECT status2_id FROM wf_events e WHERE e.deleted = 0 AND e.workflow_id = w.id
+        )
+ORDER BY w.name, r.name";
+        $dbRes = $db->query($q);
+        while($row = $db->fetchByAssoc($dbRes)) {
+            $result['wf_st_roles_conflict'][] = $row;
+        }
+
+/* Уникальность uniq_name, wf_module в статусах */
+        $q =
+"SELECT s.name, s.id, s.wf_module FROM (
+    SELECT uniq_name, wf_module FROM wf_statuses
+    WHERE deleted = 0
+    GROUP BY uniq_name, wf_module
+    HAVING count(*) > 1
+) d,
+wf_statuses s
+WHERE s.deleted = 0 AND s.uniq_name = d.uniq_name AND s.wf_module = d.wf_module
+ORDER BY s.wf_module, s.uniq_name
+";
+        $dbRes = $db->query($q);
+        while($row = $db->fetchByAssoc($dbRes)) {
+            $result['wf_st_uniq'][] = $row;
+        }
+
+/* Уникальность переходов */
+        $q =
+"SELECT w.id AS workflow_id, w.name AS workflow_name, e.id, st1.name AS status1_name, st2.name AS status2_name FROM (
+    SELECT s1.uniq_name AS status1, s1.wf_module AS status1_module, s2.uniq_name AS status2, s2.wf_module AS status2_module, e.workflow_id
+    FROM wf_events e, wf_statuses s1, wf_statuses s2
+    WHERE e.status1_id = s1.id AND e.status2_id = s2.id
+        AND e.deleted = 0
+    GROUP BY s1.uniq_name, s1.wf_module, s2.uniq_name, s2.wf_module, e.workflow_id
+    HAVING count(*) > 1
+) d,
+wf_events e, wf_statuses st1, wf_statuses st2, wf_workflows w
+WHERE d.workflow_id = e.workflow_id AND e.deleted = 0
+    AND st1.id = e.status1_id AND st2.id = e.status2_id
+    AND st1.uniq_name = d.status1 AND st1.wf_module = d.status1_module AND st1.deleted = 0
+    AND st2.uniq_name = d.status2 AND st2.wf_module = d.status2_module AND st2.deleted = 0
+    AND e.workflow_id = w.id
+ORDER BY w.name, st1.name, st2.name
+";
+        $dbRes = $db->query($q);
+        while($row = $db->fetchByAssoc($dbRes)) {
+            $result['wf_events_uniq'][] = $row;
+        }
+
+        return $result;
+    }
+
     /**
      * Вычисляет список пользователей
      * $bean бин в маршруте
@@ -668,9 +745,7 @@ class WFManager {
             if(self::canChangeAssignedUser($bean, $row['uniq_name'])) {
                 $res[$row['role_id']]['role_name'] = $row['role_name'];
                 $users = self::getUserList($bean, $row['uniq_name'], 'confirm_list_function');
-                foreach($users as $user_id => $user) {
-                    $res[$row['role_id']]['users'][$user_id] = $user;
-                }
+                $res[$row['role_id']]['users'] = isset($res[$row['role_id']]['users']) ? array_intersect_key($users, $res[$row['role_id']]['users']) : $users;
                 $GLOBALS['log']->debug('WFManager getAllowedRolesData '.$row['uniq_name'].' '.$row['role_name'].' add');
             }
             else {
