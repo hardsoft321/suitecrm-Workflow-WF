@@ -96,6 +96,74 @@ class WF_hooks {
         echo $ss->fetch('custom/include/Workflow/tpls/NotificationFields.tpl');
     }
 
+    /**
+     * Выводит js-код для смены статуса в зависимости от типа.
+     * Запускать после parent::display edit-формы.
+     * Опции для поля статуса в $GLOBALS['app_list_strings'] должны содержать все статусы (маршрутные и не маршрутные).
+     */
+    public static function displayEditViewJs($bean, $statusField)
+    {
+        global $app_list_strings, $db, $current_language;
+        if(!empty($bean->fetched_row['id'])) {
+            return;
+        }
+        $cache_key = "wf_editview_statuses.{$bean->module_name}.{$current_language}";
+        $allFirstStatuses = sugar_cache_retrieve($cache_key);
+        if(empty($allFirstStatuses))
+        {
+            $allFirstStatuses = array();
+            require_once 'custom/include/Workflow/WFManager.php';
+            $typeField = WFManager::getWorkflowTypeField($bean);
+            if(!$typeField) {
+                return;
+            }
+            $q = "SELECT DISTINCT s2.uniq_name, s2.name, w.bean_type
+            FROM wf_events e12
+            INNER JOIN wf_statuses s2 ON s2.id = e12.status2_id
+            INNER JOIN wf_events e23 ON s2.id = e23.status1_id
+            INNER JOIN wf_workflows w ON e23.workflow_id = w.id
+            WHERE
+                (e12.status1_id IS NULL OR e12.status1_id = '')
+                AND e12.deleted = 0
+                AND e23.deleted = 0
+                AND w.deleted = 0 AND w.wf_module = 'Tasks'";
+            $dbRes = $db->query($q);
+            while($row = $db->fetchByAssoc($dbRes)) {
+                $allFirstStatuses[$row['uniq_name']]['name'] = $row['name'];
+                $allFirstStatuses[$row['uniq_name']]['class'] = (empty($allFirstStatuses[$row['uniq_name']]['class']) ? '' : $allFirstStatuses[$row['uniq_name']]['class'])
+                    .' '.implode(' ', explode('^,^', trim($row['bean_type'], '^')));
+            }
+            $allStatuses = $app_list_strings[$bean->field_defs[$statusField]['options']];
+            $wfStatuses = WFManager::getAllStatuses($bean);
+            $notWfStatuses = array_diff_key($allStatuses, $wfStatuses);
+            foreach($notWfStatuses as $key => $name) {
+                $allFirstStatuses[$key]['name'] = $name;
+                $allFirstStatuses[$key]['class'] = (empty($allFirstStatuses[$key]['class']) ? '': $allFirstStatuses[$key]['class']).' no-wf';
+            }
+            sugar_cache_put($cache_key, $allFirstStatuses);
+        }
+        $statusesHtml = '';
+        foreach($allFirstStatuses as $uniq_name => $params) {
+            $statusesHtml .= "<option value='{$uniq_name}' class='{$params['class']}'>".htmlspecialchars($params['name'])."</option>";
+        }
+        echo '<script>
+var statusSelect = $("select#'.$statusField.'");
+statusSelect.html("'.$statusesHtml.'");
+var typeField ="'.$typeField.'";';
+        echo <<<'SCRIPT'
+$('select#'+typeField).change(function() {
+  statusSelect.find('option').attr('disabled', 'disabled').hide();
+  if(!this.value || !statusSelect.find('option.'+this.value).removeAttr('disabled').show().length) {
+    statusSelect.find('option.no-wf').removeAttr('disabled').show();
+  }
+  if(statusSelect.find('option[value="'+statusSelect.val()+'"]').is(':disabled')) {
+    statusSelect.val(statusSelect.find('option').not(':disabled').val());
+  }
+}).change();
+</script>
+SCRIPT;
+    }
+
   protected function getNewWfId($focus) {
     if(empty($focus->fetched_row['id'])) {
         return WFManager::getWorkflowForBean($focus);

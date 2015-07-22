@@ -1,14 +1,18 @@
 <?php
 
 function wf_getNewStatuses($focus = null, $name = null, $value = null, $view = null) {
+    global $app_list_strings;
     require_once "custom/include/Workflow/WFManager.php";
     
-    if($view == 'SearchForm_basic_search' || $view == 'SearchForm_advanced_search' || $view == 'list_view') { /* list_view defined in upgrade_unsafe/../SugarBean.php */
+    if(in_array($view, array('DetailView', 'SearchForm_basic_search', 'SearchForm_advanced_search', 'list_view'))) { /* list_view defined in upgrade_unsafe/../SugarBean.php */
+        if(!empty($app_list_strings[$focus->field_defs[$name]['options']])) {
+            return $app_list_strings[$focus->field_defs[$name]['options']];
+        }
         return WFManager::getAllStatuses($focus);
     }
     
     $res = array();
-    if($view == 'DetailView' || ($view == 'EditView' && !empty($focus->fetched_row['id']))) {
+    if($view == 'EditView' && !empty($focus->fetched_row['id'])) {
         $status = WFManager::getBeanCurrentStatus($focus);
         if($status)
             $res = array_merge($res, array($status->uniq_name => $status->name));
