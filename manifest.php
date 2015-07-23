@@ -26,7 +26,7 @@ $manifest = array (
   'name' => 'Workflow-WF',
   'published_date' => '2014-06-24',
   'type' => 'module',
-  'version' => '0.7.19',
+  'version' => '0.7.19.1',
   'remove_tables' => 'prompt',
   'dependencies' => array(
   ),

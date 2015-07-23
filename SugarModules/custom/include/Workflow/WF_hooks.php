@@ -107,16 +107,16 @@ class WF_hooks {
         if(!empty($bean->fetched_row['id'])) {
             return;
         }
-        $cache_key = "wf_editview_statuses.{$bean->module_name}.{$current_language}";
-        $allFirstStatuses = sugar_cache_retrieve($cache_key);
+        require_once 'custom/include/Workflow/WFManager.php';
+        $typeField = WFManager::getWorkflowTypeField($bean);
+        if(!$typeField) {
+            return;
+        }
+        //$cache_key = "wf_editview_statuses.{$bean->module_name}.{$current_language}";
+        $allFirstStatuses = null; //sugar_cache_retrieve($cache_key);
         if(empty($allFirstStatuses))
         {
             $allFirstStatuses = array();
-            require_once 'custom/include/Workflow/WFManager.php';
-            $typeField = WFManager::getWorkflowTypeField($bean);
-            if(!$typeField) {
-                return;
-            }
             $q = "SELECT DISTINCT s2.uniq_name, s2.name, w.bean_type
             FROM wf_events e12
             INNER JOIN wf_statuses s2 ON s2.id = e12.status2_id
@@ -140,7 +140,7 @@ class WF_hooks {
                 $allFirstStatuses[$key]['name'] = $name;
                 $allFirstStatuses[$key]['class'] = (empty($allFirstStatuses[$key]['class']) ? '': $allFirstStatuses[$key]['class']).' no-wf';
             }
-            sugar_cache_put($cache_key, $allFirstStatuses);
+            //sugar_cache_put($cache_key, $allFirstStatuses);
         }
         $statusesHtml = '';
         foreach($allFirstStatuses as $uniq_name => $params) {
