@@ -9,7 +9,7 @@ class WFWorkflowsViewEdit extends ViewEdit {
         global $db;
         global $app_list_strings;
         
-        $q = "SELECT wf_module, type_field FROM wf_modules WHERE deleted = 0";
+        $q = "SELECT wf_module, type_field FROM wf_modules WHERE deleted = 0 ORDER BY wf_module";
         $qr = $db->query($q);
         $options = array();
         $fields = array();

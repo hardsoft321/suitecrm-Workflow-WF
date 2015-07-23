@@ -104,10 +104,10 @@ class WF_hooks {
     public static function displayEditViewJs($bean, $statusField)
     {
         global $app_list_strings, $db, $current_language;
-        if(!empty($bean->fetched_row['id'])) {
+        require_once 'custom/include/Workflow/WFManager.php';
+        if(!empty($bean->fetched_row['id']) && WFManager::isBeanInWorkflow($bean)) {
             return;
         }
-        require_once 'custom/include/Workflow/WFManager.php';
         $typeField = WFManager::getWorkflowTypeField($bean);
         if(!$typeField) {
             return;
