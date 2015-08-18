@@ -13,7 +13,6 @@ $mod_strings = array (
 
 'LBL_NAME' => 'Name:' ,
 'LBL_WF_MODULE' => 'Module',
-//'LBL_TYPE' => 'Type',
 'LBL_STATUS_FIELD' => 'Status Field',
 
 'LBL_LIST_NAME' => 'Name',
@@ -82,6 +81,7 @@ $mod_strings = array (
 'OwnerUserList' => 'Assigned User',
 'StatusAssignedUserList' => 'Assigned for Role or Group User',
 'StatusAssignedDefaultUserList' => 'Assigned for Role or Users in Role within Group',
+'StatusAssignedOrOwnerUserList' => 'Assigned for Role or Assigned User',
 'SFFormFieldsRequired' => 'Required Fields for Status',
 'DefaultCurrentUserList' => 'Current User in Role within Group',
 'ParentStatusAssignedUserList' => 'Assigned for Role in Parent Record or Group User',

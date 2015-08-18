@@ -482,6 +482,7 @@ class WFManager {
             if(!$statusField) {
                 return array();
             }
+            $data['wf_id'] = $bean->wf_id;
             $status1 = $bean->$statusField;
             $statusBean = self::getStatusBeanByName($status1, $bean->module_name);
 

@@ -15,7 +15,6 @@ $mod_strings = array (
 
 'LBL_NAME' => 'Название:' ,
 'LBL_WF_MODULE' => 'Модуль',
-//'LBL_TYPE' => 'Тип',
 'LBL_STATUS_FIELD' => 'Название поля со статусом',
 
 
@@ -85,6 +84,7 @@ $mod_strings = array (
 'OwnerUserList' => 'Ответственный',
 'StatusAssignedUserList' => 'Закрепленный за ролью или групповой',
 'StatusAssignedDefaultUserList' => 'Закрепленный за ролью или все в роли и в группе',
+'StatusAssignedOrOwnerUserList' => 'Закрепленный за ролью или ответственный',
 'SFFormFieldsRequired' => 'Проверка обязательных для статуса полей',
 'DefaultCurrentUserList' => 'Текущий пользователь в роли и в группе',
 'ParentStatusAssignedUserList' => 'Закрепленный за ролью в родительской записи или групповой',
