@@ -96,7 +96,7 @@ function wf_before_save_die($msg, $bean = null) {
 
 function wf_die($msg, $bean = null) {
     $msg = wf_translate($msg);
-    $GLOBALS['log']->fatal('WFWorkflow: '.$msg.($bean ? $bean->module_name.' '.$bean->id : ''));
+    $GLOBALS['log']->fatal('WFWorkflow: '.$msg.($bean ? ' '.$bean->module_name.' '.$bean->id : ''));
     sugar_die($msg);
 }
 

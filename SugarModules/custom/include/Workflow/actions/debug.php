@@ -55,7 +55,7 @@ echo '<p>Поле типа: ',($typeField ? $typeField : '<span class="error">Н
 echo '<p>Тип: ',$bean->$typeField,'</p>';
 echo '<p>Предполагаемый маршрут: ',WFManager::getWorkflowForBean($bean),'</p>';
 
-echo '<p>Маршрут: '.($bean->wf_id ? $bean->wf_id : '<span class="error">Не найден</span>').'</p>';
+echo '<p>Маршрут: '.($bean->wf_id ? $bean->wf_id.' "'.(BeanFactory::getBean('WFWorkflows', $bean->wf_id)->name).'"' : '<span class="error">Не найден</span>').'</p>';
 $statusField = WFManager::getBeanStatusField($bean);
 if(!$statusField) {
     echo "<p class=\"error\">Поле статуса не определено</p>";

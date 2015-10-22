@@ -59,9 +59,9 @@ lab321.wf.confirmStatus = function(formName) {
             ajaxStatus.flashStatus(SUGAR.language.get('app_strings','LBL_SAVED'), 3000);
             location.reload();
         }
-    }).fail(function() {
+    }).fail(function(data) {
         ajaxStatus.hideStatus();
-        alert(data);
+        alert(data.responseText);
     }).always(function() {
         $('#'+formName+' input[type="submit"]').attr('onclick', lab321.wf.confirmRequest.saveButtonOnclickValue || '');
         lab321.wf.confirmRequest.status = 'done';

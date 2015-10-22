@@ -37,6 +37,7 @@ $mod_strings = array (
 'LBL_EVENT_UNIQ_CHECK' => 'Check Events Einzigartigkeit',
 'LBL_EVENT_UNIQ_INFO' => 'Event Einzigartigkeit hängt status1 und status2 uniq Namen und Modul.',
 'MSG_CONFLICT_FOUND_AFTER_SAVE' => 'Konflikt gefunden. Weitere Informationen unter "Workflows prüfen" Seite.',
+'LBL_STATUSES_WITHOUT_EVENTS' => 'Status ohne Ereignisse',
 
 //custom/include/Workflow
 'LBL_TOGGLE_BUTTON' => 'Bestätigen Steuerung',
@@ -73,6 +74,7 @@ $mod_strings = array (
 'ERR_CONFIRM_DENIED_FOR' => "Sie können nicht Status ändern '#NAME#'",
 'ERR_ASSIGNED_INVALID_FOR' => "Ungültige zugewiesen Benutzer '#NAME#'",
 'ERR_VALIDATE_FUNCTION_NOT_FOUND' => 'Kann nicht validieren',
+'ERR_RECORD_NOT_IN_STATUS' => "Record '#NAME#' muss in status '#STATUS#'",
 
 'DefaultGroupUserList' => 'Group Users in Role within Group',
 'DefaultNonGroupUserList' => 'Non Group Users in Role within Group',

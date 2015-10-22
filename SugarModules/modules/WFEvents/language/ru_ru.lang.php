@@ -23,6 +23,7 @@ $mod_strings = array (
 'LBL_FILTER_FUNCTION' => 'Функция фильтрования статуса:' ,
 'LBL_VALIDATE_FUNCTION' => 'Функция валидации перехода:' ,
 'LBL_AFTER_SAVE' => 'Функция, вызываемая после перехода:' ,
+'LBL_FUNC_PARAMS' => 'Параметры функций:',
 
 'LBL_LIST_NAME' => 'Название',
 'LBL_LIST_STATUS1_ID' => 'ID статуса 1' ,

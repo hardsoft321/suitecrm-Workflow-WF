@@ -70,3 +70,20 @@ OK<br/>
 {/if}
 <br/>
 {******************************************************************************}
+{sugar_translate label='LBL_STATUSES_WITHOUT_EVENTS'}...
+{if !empty($checkResults.wf_statuses_without_events)}
+<table class="list view">
+<tr>
+    <th>{sugar_translate label='LBL_STATUS'}</th>
+</tr>
+{foreach from=$checkResults.wf_statuses_without_events item=item}
+<tr>
+    <td><a href="index.php?module=WFStatuses&action=DetailView&record={$item.id}">{$item.name}</a></td>
+</tr>
+{/foreach}
+</table>
+{else}
+OK<br/>
+{/if}
+<br/>
+{******************************************************************************}

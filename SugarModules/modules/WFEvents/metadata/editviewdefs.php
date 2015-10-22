@@ -29,6 +29,7 @@ $viewdefs ['WFEvents'] = array ( 'EditView' =>
 		array ('sort', ),
         array ('filter_function', 'validate_function'),
         array ('after_save', ''),
+        array ('func_params', ''),
       ),
     ),
   ),

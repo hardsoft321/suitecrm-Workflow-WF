@@ -58,7 +58,7 @@ class WFManager {
                 return array();
             }
 
-            $q = "SELECT s2.uniq_name, s2.name, e.filter_function FROM wf_events e
+            $q = "SELECT s2.uniq_name, s2.name, e.filter_function, e.func_params FROM wf_events e
             LEFT JOIN wf_statuses s2 ON s2.id = e.status2_id
             WHERE
                 e.status1_id IN (SELECT id FROM wf_statuses WHERE uniq_name='{$status1}' AND wf_module = '{$bean->module_name}' AND deleted = 0)
@@ -68,8 +68,20 @@ class WFManager {
             ORDER BY e.sort
             ";
         }
+        elseif(!empty($bean->wf_id) && empty($status1)) {
+            $q = "SELECT s2.uniq_name, s2.name, e12.filter_function, e12.func_params
+            FROM wf_events e12
+            INNER JOIN wf_statuses s2 ON s2.id = e12.status2_id
+            INNER JOIN wf_events e23 ON s2.id = e23.status1_id
+            WHERE
+                (e12.status1_id IS NULL OR e12.status1_id = '')
+                AND e23.workflow_id = '{$bean->wf_id}'
+                AND e12.deleted = 0
+                AND e23.deleted = 0
+            ";
+        }
         else {
-            $q = "SELECT s2.uniq_name, s2.name, e.filter_function FROM wf_events e
+            $q = "SELECT s2.uniq_name, s2.name, e.filter_function, e.func_params FROM wf_events e
             LEFT JOIN wf_statuses s2 ON s2.id = e.status2_id
             WHERE
                 (e.status1_id = '' OR e.status1_id IS NULL)
@@ -82,9 +94,9 @@ class WFManager {
 
         $qr = $db->query($q);
         $res = array();
-        while ($row = $db->fetchByAssoc($qr)) {
+        while ($row = $db->fetchByAssoc($qr, false)) {
             $enabled = true;
-            if($row['filter_function'] && !self::checkBeanAgainstFunction($bean, $row['filter_function'])) {
+            if($row['filter_function'] && !self::checkBeanAgainstFunction($bean, $row['filter_function'], $row)) {
                 $enabled = false;
             }
             if($enabled)
@@ -153,6 +165,7 @@ class WFManager {
         $q = "SELECT e.id, e.validate_function
             , s1.uniq_name AS s1_uniq_name
             , s2.uniq_name AS s2_uniq_name
+            , e.func_params
         FROM wf_events e, wf_statuses s1, wf_statuses s2
         WHERE e.workflow_id = '{$bean->wf_id}'
             AND e.status1_id = s1.id
@@ -164,7 +177,7 @@ class WFManager {
         ";
         $qr = $db->query($q);
         $res = array();
-        while ($row = $db->fetchByAssoc($qr)) {
+        while ($row = $db->fetchByAssoc($qr, false)) {
             $userList = array();
             $functionName = $row['validate_function'];
             if(file_exists(__DIR__.'/functions/validators/'.$functionName.'.php')) {
@@ -178,6 +191,16 @@ class WFManager {
                 $func->status2_data = array(
                     'uniq_name' => $row['s2_uniq_name'],
                 );
+                if(empty($row['func_params'])) {
+                    $func->func_params = array();
+                }
+                else {
+                    $func->func_params = json_decode($row['func_params'], true);
+                    if(json_last_error() != JSON_ERROR_NONE) {
+                        $GLOBALS['log']->error("WFManager: error parsing func_params = {$row['func_params']}, event_id = {$row['id']}, error = ".json_last_error());
+                        return array("Error parsing func_params");
+                    }
+                }
                 $errors = $func->validate($bean);
                 $res = array_merge($res, $errors);
             }
@@ -263,7 +286,7 @@ class WFManager {
 
     public static function getBeanStatusField($bean) {
         global $db;
-        if(!$bean->wf_id)
+        if(empty($bean->wf_id))
             return false;
         if(isset(self::$statusFieldCache[$bean->wf_id]))
             return self::$statusFieldCache[$bean->wf_id];
@@ -430,6 +453,8 @@ class WFManager {
         $q = "SELECT e.after_save
                     , s1.role_id AS s1_role_id
                     , s2.role_id AS s2_role_id
+                    , e.func_params
+                    , e.id
           FROM wf_events e, wf_statuses s1, wf_statuses s2
           WHERE
                 e.status1_id = s1.id AND s1.uniq_name='{$status1}' AND s1.wf_module = '{$bean->module_name}' AND s1.deleted = 0
@@ -440,11 +465,15 @@ class WFManager {
         ";
 
         $res = $db->query($q);
-        while ($row = $db->fetchByAssoc($res)) {
-            if($row['after_save']) {
+        while ($row = $db->fetchByAssoc($res, false)) {
+            if(!$row['after_save']) {
+                continue;
+            }
+            foreach(explode(',', $row['after_save']) as $procName) {
                 require_once __DIR__.'/functions/BaseProcedure.php';
-                require_once 'custom/include/Workflow/functions/procedures/'.$row['after_save'].'.php';
-                $proc = new $row['after_save'];
+                require_once 'custom/include/Workflow/functions/procedures/'.$procName.'.php';
+                $proc = new $procName;
+                $proc->event_id = $row['id'];
                 $proc->status1_data = array(
                     'uniq_name' => $status1,
                     'role_id' => $row['s1_role_id'],
@@ -453,6 +482,15 @@ class WFManager {
                     'uniq_name' => $status2,
                     'role_id' => $row['s2_role_id'],
                 );
+                if(empty($row['func_params'])) {
+                    $proc->func_params = array();
+                }
+                else {
+                    $proc->func_params = json_decode($row['func_params'], true);
+                    if(json_last_error() != JSON_ERROR_NONE) {
+                        $GLOBALS['log']->error("WFManager: error parsing func_params = {$row['func_params']}, event_id={$row['id']}, error = ".json_last_error());
+                    }
+                }
                 $proc->doWork($bean);
             }
         }
@@ -675,6 +713,46 @@ ORDER BY w.name, st1.name, st2.name
             $result['wf_events_uniq'][] = $row;
         }
 
+/* Статусы без переходов в них */
+        $q =
+"SELECT s2.id, s2.name, s2.uniq_name, s2.wf_module FROM wf_statuses s2
+WHERE NOT EXISTS (
+        SELECT 1
+        FROM wf_events e
+        LEFT JOIN wf_statuses s1 ON e.status1_id = s1.id AND s1.deleted = 0
+        WHERE e.status2_id = s2.id AND e.deleted = 0
+            AND (e.status1_id IS NULL OR e.status1_id = '' OR s1.id IS NOT NULL)
+    )
+    AND s2.deleted = 0
+";
+        $dbRes = $db->query($q);
+        while($row = $db->fetchByAssoc($dbRes)) {
+            $result['wf_statuses_without_events'][] = $row;
+        }
+
+/* Несоответствие признака isfinal */
+//SELECT s1.*, 1 as isfinal_mustbe FROM wf_statuses s1
+//WHERE NOT EXISTS (
+//        SELECT 1
+//        FROM wf_events e
+//        LEFT JOIN wf_statuses s2 ON e.status2_id = s2.id AND s2.deleted = 0
+//        WHERE e.status1_id = s1.id AND e.deleted = 0
+//            AND s2.id IS NOT NULL
+//    )
+//    AND s1.deleted = 0
+//    AND s1.isfinal != 1
+//UNION ALL
+//SELECT s1.*, 0 as isfinal_mustbe FROM wf_statuses s1
+//WHERE EXISTS (
+//        SELECT 1
+//        FROM wf_events e
+//        LEFT JOIN wf_statuses s2 ON e.status2_id = s2.id AND s2.deleted = 0
+//        WHERE e.status1_id = s1.id AND e.deleted = 0
+//            AND s2.id IS NOT NULL
+//    )
+//    AND s1.deleted = 0
+//    AND s1.isfinal != 0
+
         return $result;
     }
 
@@ -784,9 +862,19 @@ ORDER BY w.name, st1.name, st2.name
         return false;
     }
 
-    protected static function checkBeanAgainstFunction($bean, $filter_function) {
+    protected static function checkBeanAgainstFunction($bean, $filter_function, $event_data) {
         require_once 'custom/include/Workflow/functions/filters/'.$filter_function.'.php';
         $filter = new $filter_function();
+        $filter->event_data = $event_data;
+        if(empty($event_data['func_params'])) {
+            $filter->func_params = array();
+        }
+        else {
+            $filter->func_params = json_decode($event_data['func_params'], true);
+            if(json_last_error() != JSON_ERROR_NONE) {
+                $GLOBALS['log']->error("WFManager: error parsing func_params = {$event_data['func_params']}, status2 = {$event_data['uniq_name']}, error = ".json_last_error());
+            }
+        }
         return $filter->checkBean($bean);
     }
 

@@ -40,6 +40,7 @@ $mod_strings = array (
 'LBL_EVENT_UNIQ_CHECK' => 'Проверка уникальности переходов',
 'LBL_EVENT_UNIQ_INFO' => 'Уникальность перехода проверяется на основе уникального имени и модуля статуса1 и статуса2.',
 'MSG_CONFLICT_FOUND_AFTER_SAVE' => 'Найден конфликт. Подробная информация на странице "Проверка маршрутов"',
+'LBL_STATUSES_WITHOUT_EVENTS' => 'Статусы без переходов в них',
 
 //custom/include/Workflow
 'LBL_TOGGLE_BUTTON' => 'Панель согласования',
@@ -76,6 +77,7 @@ $mod_strings = array (
 'ERR_CONFIRM_DENIED_FOR' => "Вы не можете сменить статус для записи '#NAME#'",
 'ERR_ASSIGNED_INVALID_FOR' => "Ответственный задан не верно для записи '#NAME#'",
 'ERR_VALIDATE_FUNCTION_NOT_FOUND' => 'При валидации перехода произошла ошибка',
+'ERR_RECORD_NOT_IN_STATUS' => "Запись '#NAME#' должна находиться в статусе '#STATUS#'",
 
 'DefaultGroupUserList' => 'Групповые пользователи в роли и в группе',
 'DefaultNonGroupUserList' => 'Все кроме групповых в роли и в группе',

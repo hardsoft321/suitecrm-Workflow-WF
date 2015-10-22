@@ -37,6 +37,7 @@ $mod_strings = array (
 'LBL_EVENT_UNIQ_CHECK' => 'Check Events Uniqueness',
 'LBL_EVENT_UNIQ_INFO' => 'Event uniqueness depends on status1 and status2 uniq names and module.',
 'MSG_CONFLICT_FOUND_AFTER_SAVE' => 'Conflict Found. More information at "Workflows Checking" page.',
+'LBL_STATUSES_WITHOUT_EVENTS' => 'Statuses without events',
 
 //custom/include/Workflow
 'LBL_TOGGLE_BUTTON' => 'Confirm Panel',
@@ -73,6 +74,7 @@ $mod_strings = array (
 'ERR_CONFIRM_DENIED_FOR' => "You cannot change status for '#NAME#'",
 'ERR_ASSIGNED_INVALID_FOR' => "Invalid assigned user for '#NAME#'",
 'ERR_VALIDATE_FUNCTION_NOT_FOUND' => 'Cannot validate',
+'ERR_RECORD_NOT_IN_STATUS' => "Record '#NAME#' must be in status '#STATUS#'",
 
 'DefaultGroupUserList' => 'Group Users in Role within Group',
 'DefaultNonGroupUserList' => 'Non Group Users in Role within Group',

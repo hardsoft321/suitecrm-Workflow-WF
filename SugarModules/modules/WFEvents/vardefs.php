@@ -125,6 +125,11 @@ $dictionary['WFEvent'] = array(
             'function' => 'wf_getProcedures',
 			'len' => '50',
 		),
+        'func_params' => array(
+            'name' => 'func_params',
+            'vname' => 'LBL_FUNC_PARAMS',
+            'type' => 'text',
+        ),
   ),
 );
 $dictionary["WFEvent"]['indices'][] = array('name'=>'idx_wfevents_st1', 'type'=>'index', 'fields'=>array('status1_id', 'deleted'));

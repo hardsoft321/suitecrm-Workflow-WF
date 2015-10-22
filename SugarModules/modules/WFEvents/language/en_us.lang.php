@@ -22,6 +22,7 @@ $mod_strings = array (
 'LBL_FILTER_FUNCTION' => 'Filter Function:' ,
 'LBL_VALIDATE_FUNCTION' => 'Validate Function:' ,
 'LBL_AFTER_SAVE' => 'After Status Change Function:',
+'LBL_FUNC_PARAMS' => 'Function Parameters:',
 
 'LBL_LIST_NAME' => 'Name',
 'LBL_LIST_STATUS1_ID' => 'Status 1 ID' ,
