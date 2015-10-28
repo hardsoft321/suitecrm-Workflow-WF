@@ -10,9 +10,11 @@ require_once 'custom/include/Workflow/utils.php';
  *
  * При переходе все связанные записи должны находиться в статусе,
  * который указан в параметре related_in_status в поле func_params.
- * Параметр related_relationship определяет связь с записями.
- * Может быть указан параметр where для выбора записей.
- * Может быть указан параметр message для сообщения об отсутствии записей.
+ * Параметры:
+ * related_in_status - статус связанных записей
+ * related_relationship - связь с записями
+ * where - опционально, ограничение на выбор записей
+ * message - опционально, сообщение об отсутствии записей
  */
 class AllRelatedInStatus extends BaseValidator
 {

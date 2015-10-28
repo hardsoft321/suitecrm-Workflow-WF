@@ -3,6 +3,8 @@ require_once __DIR__.'/DefaultUserList.php';
 
 /**
  * Групповые пользователи в роли и в группе
+ * К функции "Все в роли и группе" добавляется условие так, что возвращаются
+ * только групповые пользователи.
  */
 class DefaultGroupUserList extends DefaultUserList {
     

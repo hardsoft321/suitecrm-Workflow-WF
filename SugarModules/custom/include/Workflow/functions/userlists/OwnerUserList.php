@@ -1,6 +1,6 @@
 <?php
 /**
- * Ответственный
+ * Пользователь, указанный в поле Ответственный (assigned_user_id) в записи.
  */
 class OwnerUserList extends BaseUserList {
     

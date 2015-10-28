@@ -8,6 +8,8 @@ require_once __DIR__.'/DefaultUserList.php';
 
 /**
  * Все кроме групповых в роли и в группе
+ * К функции "Все в роли и группе" добавляется условие так, что возвращаются
+ * только не групповые пользователи.
  */
 class DefaultNonGroupUserList extends DefaultUserList {
     

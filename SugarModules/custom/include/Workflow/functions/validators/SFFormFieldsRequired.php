@@ -1,6 +1,7 @@
 <?php
 /**
- * Проверка обязательных для статуса полей
+ * Проверка обязательных для перехода полей.
+ * Поля сохранены как FormField в списке FormFieldsList, список привязан к переходу и имеет тип required_fields.
  */
 class SFFormFieldsRequired extends BaseValidator {
 
