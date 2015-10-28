@@ -2,7 +2,13 @@
 
 <script>
 SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefined" && typeof lab321.wf != "undefined"', function() {ldelim}
+    var assignedLabel = '{sugar_translate label='LBL_ASSIGNED' module='WFWorkflows'}';
+    var formName = '{$formName}';
+    addToValidate(formName, 'new_assign_user', null, true, assignedLabel);
     lab321.wf.onChangeRole('{$formName}');
+    $('#'+formName+' input[type="submit"]').click(function() {ldelim}
+        return check_form('{$formName}');
+    {rdelim});
 {rdelim});
 </script>
 

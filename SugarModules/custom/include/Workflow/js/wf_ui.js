@@ -209,8 +209,9 @@ lab321.wf.onChangeNewStatus = function(formName) {
     var status = $('#'+formName+' #newStatus').val();
     $('#'+formName+' select[data-assignedusers]').each(function(){
         var assignedUsers = $(this).data('assignedusers');
+        $(this).html('');
         if (status && assignedUsers[status] && assignedUsers[status].length > 0) {
-            $(this).html('').append($.map(assignedUsers[status], function(v){
+            $(this).append($.map(assignedUsers[status], function(v){
                 return $('<option>', {value: v[0]}).html(v[1]).get(0);
             }));
         }

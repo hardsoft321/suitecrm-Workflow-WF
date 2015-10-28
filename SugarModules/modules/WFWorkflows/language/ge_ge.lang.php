@@ -39,6 +39,10 @@ $mod_strings = array (
 'MSG_CONFLICT_FOUND_AFTER_SAVE' => 'Konflikt gefunden. Weitere Informationen unter "Workflows prüfen" Seite.',
 'LBL_STATUSES_WITHOUT_EVENTS' => 'Status ohne Ereignisse',
 
+'LBL_FUNCTIONS_DOC' => 'Funktionen',
+'LBL_USAGES' => 'Verwendungen',
+'LBL_USER_LISTS_FUNCTIONS' => 'Benutzerlisten',
+
 //custom/include/Workflow
 'LBL_TOGGLE_BUTTON' => 'Bestätigen Steuerung',
 'LBL_ASSIGNED_CHANGE_TITLE' => 'Ändern Sie Zugewiesene Benutzer',

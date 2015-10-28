@@ -40,13 +40,11 @@ class WFEvent extends SugarBean {
 		return "{$this->workflow_name}: {$this->status1_name} &rarr; {$this->status2_name}";
 	}
 
-	function bean_implements($interface){
-		switch($interface){
-			case 'ACL':return true;
-		}
-		return false;
+	function ACLAccess($view,$is_owner='not_set')
+	{
+		return $GLOBALS['current_user']->isAdmin();
 	}
-	
+
 	function get_list_view_data() {
 		$data = parent::get_list_view_data();
 		

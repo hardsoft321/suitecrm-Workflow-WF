@@ -8,4 +8,8 @@ class WFWorkflowsController extends SugarController
     protected function action_CheckWorkflows() {
         $this->view = 'checkworkflows';
     }
+
+    protected function action_FunctionsDoc() {
+        $this->view = 'functionsdoc';
+    }
 }

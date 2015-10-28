@@ -168,7 +168,7 @@ function statusInfo($bean, $status) {
 
 
 echo '<h2>Переходы</h2>';
-$q = "SELECT s2.uniq_name, s2.name, e.filter_function, e.sort FROM wf_events e
+$q = "SELECT s2.uniq_name, s2.name, e.filter_function, e.sort, e.func_params FROM wf_events e
             LEFT JOIN wf_statuses s2 ON s2.id = e.status2_id
             WHERE
                 e.status1_id IN (SELECT id FROM wf_statuses WHERE uniq_name='{$bean->$statusField}' AND wf_module = '{$bean->module_name}' AND deleted = 0)

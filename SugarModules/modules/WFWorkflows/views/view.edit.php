@@ -25,8 +25,9 @@ class WFWorkflowsViewEdit extends ViewEdit {
             // Список полей
             $fields[$row['wf_module']] = array();
             foreach($bean->field_defs as $field => $def) {
+                $fieldName = translate($def['vname'], $row['wf_module']);
                 if($def['type'] == 'enum')
-                    $fields[$row['wf_module']][$field] = $field;
+                    $fields[$row['wf_module']][$field] = $fieldName ? $fieldName : $field;
             }
         }
         $jsOptions = json_encode($options);

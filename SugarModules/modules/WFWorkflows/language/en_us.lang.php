@@ -39,6 +39,10 @@ $mod_strings = array (
 'MSG_CONFLICT_FOUND_AFTER_SAVE' => 'Conflict Found. More information at "Workflows Checking" page.',
 'LBL_STATUSES_WITHOUT_EVENTS' => 'Statuses without events',
 
+'LBL_FUNCTIONS_DOC' => 'Functions',
+'LBL_USAGES' => 'Usages',
+'LBL_USER_LISTS_FUNCTIONS' => 'User Lists',
+
 //custom/include/Workflow
 'LBL_TOGGLE_BUTTON' => 'Confirm Panel',
 'LBL_ASSIGNED_CHANGE_TITLE' => 'Change Assigned User',

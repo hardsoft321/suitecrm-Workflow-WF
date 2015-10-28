@@ -42,6 +42,10 @@ $mod_strings = array (
 'MSG_CONFLICT_FOUND_AFTER_SAVE' => 'Найден конфликт. Подробная информация на странице "Проверка маршрутов"',
 'LBL_STATUSES_WITHOUT_EVENTS' => 'Статусы без переходов в них',
 
+'LBL_FUNCTIONS_DOC' => 'Функции',
+'LBL_USAGES' => 'Использования',
+'LBL_USER_LISTS_FUNCTIONS' => 'Списки пользователей',
+
 //custom/include/Workflow
 'LBL_TOGGLE_BUTTON' => 'Панель согласования',
 'LBL_ASSIGNED_CHANGE_TITLE' => 'Смена ответственного',
@@ -87,7 +91,7 @@ $mod_strings = array (
 'StatusAssignedUserList' => 'Закрепленный за ролью или групповой',
 'StatusAssignedDefaultUserList' => 'Закрепленный за ролью или все в роли и в группе',
 'StatusAssignedOrOwnerUserList' => 'Закрепленный за ролью или ответственный',
-'SFFormFieldsRequired' => 'Проверка обязательных для статуса полей',
+'SFFormFieldsRequired' => 'Проверка обязательных для перехода полей',
 'DefaultCurrentUserList' => 'Текущий пользователь в роли и в группе',
 'ParentStatusAssignedUserList' => 'Закрепленный за ролью в родительской записи или групповой',
 'EmptyUserList' => 'Никто',

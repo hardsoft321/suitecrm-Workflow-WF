@@ -31,11 +31,9 @@ class WFModule extends SugarBean {
 		return $this->wf_module;
 	}
 
-	function bean_implements($interface){
-		switch($interface){
-			case 'ACL':return true;
-		}
-		return false;
+	function ACLAccess($view,$is_owner='not_set')
+	{
+		return $GLOBALS['current_user']->isAdmin();
 	}
 }
 
