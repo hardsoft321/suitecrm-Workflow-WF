@@ -28,6 +28,27 @@ OK<br/>
 {/if}
 <br/>
 {******************************************************************************}
+{sugar_translate label='LBL_WORKFLOW_UNIQ_CHECK'}...
+{if !empty($checkResults.wf_w_uniq)}
+<p>{sugar_translate label='LBL_CONFLICTS_FOUND'}:<p>
+<table class="list view">
+<tr>
+    <th>{sugar_translate label='LBL_OBJECT_NAME'}</th>
+    <th>{sugar_translate label='LBL_UNIQ_NAME'}</th>
+</tr>
+{foreach from=$checkResults.wf_w_uniq item=item}
+<tr>
+    <td><a href="index.php?module=WFWorkflows&action=DetailView&record={$item.id}">{$item.name}</a></td>
+    <td>{$item.uniq_name}</a></td>
+</tr>
+{/foreach}
+</table>
+<p>{sugar_translate label='LBL_WORKFLOW_UNIQ_INFO'}</p>
+{else}
+OK<br/>
+{/if}
+<br/>
+{******************************************************************************}
 {sugar_translate label='LBL_STATUS_UNIQ_CHECK'}...
 {if !empty($checkResults.wf_st_uniq)}
 <p>{sugar_translate label='LBL_CONFLICTS_FOUND'}:<p>

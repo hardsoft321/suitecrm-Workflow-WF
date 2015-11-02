@@ -673,6 +673,23 @@ ORDER BY w.name, r.name";
             $result['wf_st_roles_conflict'][] = $row;
         }
 
+/* Уникальность uniq_name в маршрутах */
+        $q =
+"SELECT w.name, w.id, w.uniq_name FROM (
+    SELECT uniq_name FROM wf_workflows
+    WHERE deleted = 0
+    GROUP BY uniq_name
+    HAVING count(*) > 1
+) d,
+wf_workflows w
+WHERE w.deleted = 0 AND w.uniq_name = d.uniq_name
+ORDER BY w.uniq_name
+";
+        $dbRes = $db->query($q);
+        while($row = $db->fetchByAssoc($dbRes)) {
+            $result['wf_w_uniq'][] = $row;
+        }
+
 /* Уникальность uniq_name, wf_module в статусах */
         $q =
 "SELECT s.name, s.id, s.wf_module FROM (
