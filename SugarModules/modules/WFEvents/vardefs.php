@@ -130,6 +130,13 @@ $dictionary['WFEvent'] = array(
             'vname' => 'LBL_FUNC_PARAMS',
             'type' => 'text',
         ),
+        'resolution_required' => array(
+            'name' => 'resolution_required',
+            'vname' => 'LBL_RESOLUTION_REQUIRED',
+            'type' => 'bool',
+            'default' => '0',
+            'comment' => 'Indicates if resolution is required'
+        ),
   ),
 );
 $dictionary["WFEvent"]['indices'][] = array('name'=>'idx_wfevents_st1', 'type'=>'index', 'fields'=>array('status1_id', 'deleted'));

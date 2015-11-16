@@ -11,7 +11,7 @@ require_once 'custom/include/Workflow/utils.php';
  * При переходе все связанные записи должны находиться в статусе,
  * который указан в параметре related_in_status в поле func_params.
  * Параметры:
- * related_in_status - статус связанных записей
+ * related_in_status - статус связанных записей; может быть массив нескольких доступных статусов
  * related_relationship - связь с записями
  * where - опционально, ограничение на выбор записей
  * message - опционально, сообщение об отсутствии записей
@@ -48,9 +48,17 @@ class AllRelatedInStatus extends BaseValidator
                 $errors[] = "Can't find status field for {$relBean->module_name} {$relBean->id}";
                 continue;
             }
-            if($relBean->$statusField != $this->func_params['related_in_status']) {
-                $statusName = $relBean->db->getOne("SELECT name FROM wf_statuses
-                    WHERE uniq_name = '{$this->func_params['related_in_status']}' AND wf_module = '{$relBean->module_name}' AND deleted = 0");
+            $match = is_array($this->func_params['related_in_status'])
+                ? in_array($relBean->$statusField, $this->func_params['related_in_status'])
+                : $relBean->$statusField == $this->func_params['related_in_status'];
+            if(!$match) {
+                $uniq_names = is_array($this->func_params['related_in_status']) ? $this->func_params['related_in_status'] : array($this->func_params['related_in_status']);
+                $names = array();
+                foreach($uniq_names as $uniq_name) {
+                    $names[] = $relBean->db->getOne("SELECT name FROM wf_statuses
+                        WHERE uniq_name = '{$uniq_name}' AND wf_module = '{$relBean->module_name}' AND deleted = 0");
+                }
+                $statusName = implode(' / ', $names);
                 $errors[] = wf_translate('ERR_RECORD_NOT_IN_STATUS', array(
                     '#NAME#' => $relBean->name,
                     '#STATUS#' => $statusName,

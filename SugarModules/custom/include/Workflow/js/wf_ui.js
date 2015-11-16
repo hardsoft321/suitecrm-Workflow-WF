@@ -86,6 +86,9 @@ lab321.wf.massConfirm = function(action) {
         return;
     }
     if(action == 'save') {
+        if(!check_form(formName)) {
+            return;
+        }
         ajaxStatus.showStatus(SUGAR.language.get('app_strings','LBL_SAVING'));
     }
     lab321.wf.massConfirmRequest.status = 'sent';
@@ -113,6 +116,7 @@ lab321.wf.massConfirm = function(action) {
         if(data.editFormData) {
             $('#'+formName+'_current_status').val(data.editFormData.currentStatus);
             $('#'+formName+' select[data-assignedusers]').data('assignedusers', data.editFormData.assignedUsers || []);
+            $('#'+formName).data('resolutionrequired', (data.editFormData.confirmData || {}).resolutionRequiredData || []);
             lab321.wf.setStatusOptions((data.editFormData.confirmData || {}).newStatuses || [], formName);
         }
         lab321.wf.onChangeNewStatus(formName);
@@ -216,6 +220,10 @@ lab321.wf.onChangeNewStatus = function(formName) {
             }));
         }
     });
+    var resolutionRequiredData = $('#'+formName).data('resolutionrequired');
+    var resolutionRequired = status && resolutionRequiredData[status] == 1;
+    $('#'+formName+' #resolution').toggleValidators(formName, resolutionRequired);
+    $('#'+formName+' label[for="resolution"]').next('span.required').toggle(resolutionRequired);
 }
 
 lab321.wf.onChangeRole = function(formName) {
@@ -268,4 +276,33 @@ lab321.wf.cloneRecipientField = function(item, idname) {
     .end()
     .insertAfter(item.hasClass('item_template') ? item.siblings(':last') : item)
     .hide().slideDown({duration:200});
+}
+
+jQuery.fn.extend({
+    toggleValidators: function(formname, enable) {
+        return this.each(function() {
+            if(enable) {
+                var storedValidators = $(this).data('validators') || [];
+                for(var i = 0; i < storedValidators.length; i++)
+                    validate[formname][validate[formname].length] = storedValidators[i];
+                $(this).data('validators', []);
+            }
+            else {
+                var activeValidators = findValidators(formname, this.name);
+                var storedValidators = $(this).data('validators') || [];
+                $(this).data('validators', activeValidators.concat(storedValidators));
+                removeFromValidate(formname, this.name);
+            }
+        });
+    }
+});
+
+function findValidators(formname, field) {
+    var result = [];
+    if(typeof validate[formname] !== 'undefined') {
+        for (var i = 0; i < validate[formname].length; i++)
+            if (validate[formname][i][nameIndex] == field)
+                result.push(validate[formname][i]);
+    }
+    return result;
 }

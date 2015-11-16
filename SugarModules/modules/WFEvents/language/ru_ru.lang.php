@@ -24,6 +24,7 @@ $mod_strings = array (
 'LBL_VALIDATE_FUNCTION' => 'Функция валидации перехода:' ,
 'LBL_AFTER_SAVE' => 'Функция, вызываемая после перехода:' ,
 'LBL_FUNC_PARAMS' => 'Параметры функций:',
+'LBL_RESOLUTION_REQUIRED' => 'Обязательность резолюции:',
 
 'LBL_LIST_NAME' => 'Название',
 'LBL_LIST_STATUS1_ID' => 'ID статуса 1' ,

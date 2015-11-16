@@ -23,6 +23,7 @@ $mod_strings = array (
 'LBL_VALIDATE_FUNCTION' => 'Validate Function:' ,
 'LBL_AFTER_SAVE' => 'After Status Change Function:',
 'LBL_FUNC_PARAMS' => 'Function Parameters:',
+'LBL_RESOLUTION_REQUIRED' => 'Resolution is required:',
 
 'LBL_LIST_NAME' => 'Name',
 'LBL_LIST_STATUS1_ID' => 'Status 1 ID' ,

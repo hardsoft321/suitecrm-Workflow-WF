@@ -30,7 +30,7 @@ $viewdefs ['WFEvents'] = array (  'DetailView' =>
         array ('status1_name', 'status2_name'),
         array ('sort', ),
         array ('filter_function', 'validate_function'),
-        array ('after_save', ''),
+        array ('after_save', 'resolution_required'),
         array ('func_params', ''),
       ),
     ),

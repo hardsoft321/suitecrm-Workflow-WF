@@ -44,6 +44,15 @@ class WFManager {
     }
 
     public static function getNextStatuses($bean, $status1 = null) {
+        $res = array();
+        $statusesEvents = self::getNextStatusesEvents($bean, $status1);
+        foreach($statusesEvents as $row) {
+            $res[$row['uniq_name']] = $row['name'];
+        }
+        return $res;
+    }
+
+    public static function getNextStatusesEvents($bean, $status1 = null) {
         global $db;
 
         if(isset($bean->wf_id) && $bean->wf_id && $status1 === null) {
@@ -58,7 +67,7 @@ class WFManager {
                 return array();
             }
 
-            $q = "SELECT s2.uniq_name, s2.name, e.filter_function, e.func_params FROM wf_events e
+            $q = "SELECT s2.uniq_name, s2.name, e.filter_function, e.func_params, e.resolution_required FROM wf_events e
             LEFT JOIN wf_statuses s2 ON s2.id = e.status2_id
             WHERE
                 e.status1_id IN (SELECT id FROM wf_statuses WHERE uniq_name='{$status1}' AND wf_module = '{$bean->module_name}' AND deleted = 0)
@@ -69,7 +78,7 @@ class WFManager {
             ";
         }
         elseif(!empty($bean->wf_id) && empty($status1)) {
-            $q = "SELECT s2.uniq_name, s2.name, e12.filter_function, e12.func_params
+            $q = "SELECT s2.uniq_name, s2.name, e12.filter_function, e12.func_params, e12.resolution_required
             FROM wf_events e12
             INNER JOIN wf_statuses s2 ON s2.id = e12.status2_id
             INNER JOIN wf_events e23 ON s2.id = e23.status1_id
@@ -81,7 +90,7 @@ class WFManager {
             ";
         }
         else {
-            $q = "SELECT s2.uniq_name, s2.name, e.filter_function, e.func_params FROM wf_events e
+            $q = "SELECT s2.uniq_name, s2.name, e.filter_function, e.func_params, e.resolution_required FROM wf_events e
             LEFT JOIN wf_statuses s2 ON s2.id = e.status2_id
             WHERE
                 (e.status1_id = '' OR e.status1_id IS NULL)
@@ -100,7 +109,7 @@ class WFManager {
                 $enabled = false;
             }
             if($enabled)
-                $res[$row['uniq_name']] = $row['name'];
+                $res[] = $row;
         }
         return $res;
     }
@@ -524,7 +533,15 @@ class WFManager {
             $status1 = $bean->$statusField;
             $statusBean = self::getStatusBeanByName($status1, $bean->module_name);
 
-            $statuses = self::getNextStatuses($bean, $status1);
+            $statusesEvents = self::getNextStatusesEvents($bean, $status1);
+            $statuses = array();
+            $resolutionRequiredData = array();
+            foreach($statusesEvents as $row) {
+                $statuses[$row['uniq_name']] = $row['name'];
+                if(empty($resolutionRequiredData[$row['uniq_name']])) {
+                    $resolutionRequiredData[$row['uniq_name']] = $row['resolution_required'];
+                }
+            }
             $assignedUsers = self::getUserList($bean, $statuses, 'front_assigned_list_function');
             $assignedUsersData = array();
             foreach($assignedUsers as $status => $userList) {
@@ -556,6 +573,7 @@ class WFManager {
                     'formName' => 'confirmForm',
                     'newStatuses' => $statuses,
                     'assignedUsersData' => $assignedUsersData,
+                    'resolutionRequiredData' => $resolutionRequiredData,
                 );
             }
             $data['assignedUsers'] = $assignedUsersData;

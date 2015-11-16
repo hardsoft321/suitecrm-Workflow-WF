@@ -11,17 +11,14 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
     var formName = '{$formName}';
     addToValidate(formName, 'resolution', null, true, resolutionLabel);
     addToValidate(formName, 'assigned_user', null, true, assignedLabel);
-    $('#'+formName+' input[type="submit"]').click(function() {ldelim}
-        return check_form('{$formName}');
-    {rdelim});
-    
     lab321.wf.onChangeNewStatus(formName);
 {rdelim});
 </script>
 
 <div id="confirm_block">
 <h4>{if !empty($workflow.confirmData.title)}{$workflow.confirmData.title}{else}{sugar_translate label='LBL_CONFIRM_STATUS' module='WFWorkflows'}{/if}</h4>
-<form id='{$formName}' name='{$formName}' action='index.php?entryPoint=wf_confirm' method='POST' class="confirmForm">
+<form id='{$formName}' name='{$formName}' action='index.php?entryPoint=wf_confirm' method='POST' class="confirmForm"
+    data-resolutionrequired = "{$workflow.confirmData.resolutionRequiredData|@json_encode|escape:"html"}">
     <input type='hidden' id='record' name='record' value='{$fields.id.value}'> 
     <input type='hidden' id='module' name='module' value='{$module}'>
 
