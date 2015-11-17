@@ -187,8 +187,10 @@ class WFManager {
         $qr = $db->query($q);
         $res = array();
         while ($row = $db->fetchByAssoc($qr, false)) {
-            $userList = array();
-            $functionName = $row['validate_function'];
+            if(empty($row['validate_function'])) {
+                continue;
+            }
+            foreach(explode('^,^', trim($row['validate_function'], '^')) as $functionName) {
             if(file_exists(__DIR__.'/functions/validators/'.$functionName.'.php')) {
                 require_once __DIR__.'/functions/BaseValidator.php';
                 require_once __DIR__.'/functions/validators/'.$functionName.'.php';
@@ -217,6 +219,7 @@ class WFManager {
                 $GLOBALS['log']->error("WFManager: validate function $functionName not found");
                 $errors = array(wf_translate('ERR_VALIDATE_FUNCTION_NOT_FOUND'));
                 $res = array_merge($res, $errors);
+            }
             }
         }
         return $res;
@@ -478,7 +481,7 @@ class WFManager {
             if(!$row['after_save']) {
                 continue;
             }
-            foreach(explode(',', $row['after_save']) as $procName) {
+            foreach(explode('^,^', trim($row['after_save'], '^')) as $procName) {
                 require_once __DIR__.'/functions/BaseProcedure.php';
                 require_once 'custom/include/Workflow/functions/procedures/'.$procName.'.php';
                 $proc = new $procName;

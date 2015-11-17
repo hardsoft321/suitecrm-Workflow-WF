@@ -114,14 +114,14 @@ $dictionary['WFEvent'] = array(
         'validate_function' => array (
 			'name' => 'validate_function',
 			'vname' => 'LBL_VALIDATE_FUNCTION',
-			'type' => 'enum',
+			'type' => 'multienum',
             'function' => 'wf_getValidateFunctions',
 			'len' => '50',
 		),
         'after_save' => array (
 			'name' => 'after_save',
 			'vname' => 'LBL_AFTER_SAVE',
-			'type' => 'enum',
+			'type' => 'multienum',
             'function' => 'wf_getProcedures',
 			'len' => '50',
 		),

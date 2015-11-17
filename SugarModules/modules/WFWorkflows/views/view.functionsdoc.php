@@ -130,12 +130,12 @@ class WFWorkflowsViewFunctionsDoc extends SugarView
     {
         global $db;
         $usages = array();
-        $q = "SELECT w.name AS wf_name, e.id AS event_id, s1.name AS status1_name, s2.name AS status2_name
+        $q = "SELECT w.name AS wf_name, e.id AS event_id, s1.name AS status1_name, s2.name AS status2_name, e.validate_function
         FROM wf_events e
         INNER JOIN wf_workflows w ON e.workflow_id = w.id
         INNER JOIN wf_statuses s2 ON e.status2_id = s2.id
         LEFT JOIN wf_statuses s1 ON e.status1_id = s1.id
-        WHERE e.validate_function = '$class'
+        WHERE e.validate_function LIKE '%^$class^%'
              AND e.deleted = 0
              AND w.deleted = 0
              AND s2.deleted = 0
@@ -144,7 +144,9 @@ class WFWorkflowsViewFunctionsDoc extends SugarView
         ";
         $dbRes = $db->query($q);
         while($row = $db->fetchByAssoc($dbRes)) {
-            $usages[] = $row;
+            if(in_array($class, explode('^,^', trim($row['validate_function'], '^')))) {
+                $usages[] = $row;
+            }
         }
         return $usages;
     }
@@ -158,7 +160,7 @@ class WFWorkflowsViewFunctionsDoc extends SugarView
         INNER JOIN wf_workflows w ON e.workflow_id = w.id
         INNER JOIN wf_statuses s2 ON e.status2_id = s2.id
         LEFT JOIN wf_statuses s1 ON e.status1_id = s1.id
-        WHERE e.after_save LIKE '%$class%'
+        WHERE e.after_save LIKE '%^$class^%'
              AND e.deleted = 0
              AND w.deleted = 0
              AND s2.deleted = 0
@@ -167,7 +169,7 @@ class WFWorkflowsViewFunctionsDoc extends SugarView
         ";
         $dbRes = $db->query($q);
         while($row = $db->fetchByAssoc($dbRes)) {
-            if(in_array($class, explode(',', $row['after_save']))) {
+            if(in_array($class, explode('^,^', trim($row['after_save'], '^')))) {
                 $usages[] = $row;
             }
         }

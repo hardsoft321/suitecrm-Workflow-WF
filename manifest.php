@@ -26,13 +26,9 @@ $manifest = array (
   'name' => 'Workflow-WF',
   'published_date' => '2014-06-24',
   'type' => 'module',
-  'version' => '0.8.2',
   'remove_tables' => 'prompt',
-  'dependencies' => array(
-  ),
+  'version' => '0.8.3',
 );
-
-
 $installdefs = array (
   'id' => 'Workflow-WF',
   'beans' =>
