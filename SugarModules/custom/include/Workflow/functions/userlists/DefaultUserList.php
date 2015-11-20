@@ -36,13 +36,25 @@ class DefaultUserList extends BaseUserList {
     }
 
     protected function getBeanGroups($bean) {
+        global $db;
         if(!isset($bean->workflowData) || !isset($bean->workflowData['allRecordGroups'])) {
             if(!isset($bean->workflowData)) {
                 $bean->workflowData = array();
             }
             require_once('modules/SecurityGroups/SecurityGroup.php');
             $groupFocus = new SecurityGroup();
-            $bean->workflowData['allRecordGroups'] = $groupFocus->getAllRecordGroupsIds($bean->id, $bean->module_name);
+            if(method_exists($groupFocus, 'getAllRecordGroupsIds')) { //SecurityTeams321
+                $bean->workflowData['allRecordGroups'] = $groupFocus->getAllRecordGroupsIds($bean->id, $bean->module_name);
+            }
+            else {
+                $groups = array();
+                $queryGroups = "SELECT securitygroup_id AS id FROM securitygroups_records WHERE record_id = '{$bean->id}' AND module = '{$bean->module_name}' AND deleted = 0";
+                $res = $db->query($queryGroups);
+                while($row = $db->fetchByAssoc($res)) {
+                    $groups[$row['id']] = $row['id'];
+                }
+                $bean->workflowData['allRecordGroups'] = $groups;
+            }
         }
         return $bean->workflowData['allRecordGroups'];
     }

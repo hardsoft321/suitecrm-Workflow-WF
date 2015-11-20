@@ -12,7 +12,7 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
 {rdelim});
 </script>
 
-<div id="assign_block">
+<div id="assign_block" class="wf_block">
   <h4>{if !empty($workflow.assignFormTitle)}{$workflow.assignFormTitle}{else}{sugar_translate label='LBL_ASSIGNED_CHANGE_TITLE' module='WFWorkflows'}{/if}</h4>
   <form id='{$formName}' name='{$formName}' action='index.php?entryPoint=wf_assign' method='POST'
         data-confirmusers = "{$workflow.confirmUsersString|escape:"html"}"

@@ -15,7 +15,7 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
 {rdelim});
 </script>
 
-<div id="confirm_block">
+<div id="confirm_block" class="wf_block">
 <h4>{if !empty($workflow.confirmData.title)}{$workflow.confirmData.title}{else}{sugar_translate label='LBL_CONFIRM_STATUS' module='WFWorkflows'}{/if}</h4>
 <form id='{$formName}' name='{$formName}' action='index.php?entryPoint=wf_confirm' method='POST' class="confirmForm"
     data-resolutionrequired = "{$workflow.confirmData.resolutionRequiredData|@json_encode|escape:"html"}">

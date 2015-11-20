@@ -3,6 +3,9 @@
     or !empty($workflow.customView)}
 <style>{* TODO: вынести css в файл (и из inline-style) *}
 {literal}
+.wf_block {
+    margin-top: 10px;
+}
 #status-assigned {
     margin-top: 5px;
     margin-bottom: 15px;

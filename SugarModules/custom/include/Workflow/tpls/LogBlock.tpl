@@ -1,4 +1,4 @@
-<div id="log_block">
+<div id="log_block" class="wf_block">
   <h4>{sugar_translate label='LBL_ASSIGNEDS' module='WFWorkflows'}</h4>
   <div id='status-assigned' style="margin-top: 5px; margin-bottom: 15px; border: 1px solid #abc3d7; padding: 5px; padding-right: 0px;">
       <table>
