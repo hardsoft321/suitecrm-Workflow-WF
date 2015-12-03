@@ -91,7 +91,10 @@ function wf_confirm_die($msg, $bean = null) {
 }
 
 function wf_before_save_die($msg, $bean = null) {
-    wf_die($msg, $bean);
+    require_once 'custom/include/Workflow/WFSavingException.php';
+    $msg = wf_translate($msg);
+    $msg = 'wf_before_save: '.$msg.($bean ? ' '.$bean->module_name.' '.$bean->id : '');
+    throw new WFSavingException($msg);
 }
 
 function wf_die($msg, $bean = null) {

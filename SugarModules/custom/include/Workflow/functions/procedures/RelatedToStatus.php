@@ -74,5 +74,8 @@ class RelatedToStatus extends BaseProcedure
         catch(WFEventValidationException $ex) {
             $GLOBALS['log']->info("RelatedToStatus: ".$ex->getMessage());
         }
+        catch(WFSavingException $ex) {
+            $GLOBALS['log']->info("RelatedToStatus : ".$ex->getMessage());
+        }
     }
 }

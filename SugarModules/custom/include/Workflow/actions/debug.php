@@ -47,7 +47,7 @@ echo '</pre>';
 
 echo '<h2>Запись</h2>';
 if(isset($bean->name)) {
-    echo "<p>Имя: {$bean->name}</p>";
+    echo "<p>Имя: <a href=\"index.php?module={$bean->module_name}&action=DetailView&record={$bean->id}\">{$bean->name}</a></p>";
 }
 echo "<p>ID: {$bean->id}</p>";
 $typeField = WFManager::getWorkflowTypeField($bean);
@@ -185,7 +185,7 @@ foreach($head as $field) {
 }
 echo "<th>статус</th>";
 echo "</tr>";
-while($row = $db->fetchByAssoc($dbRes)) {
+while($row = $db->fetchByAssoc($dbRes, false)) {
     echo "<tr>";
     foreach($row as $name => $value) {
         echo "<td>{$value}";
@@ -195,6 +195,16 @@ while($row = $db->fetchByAssoc($dbRes)) {
             if(file_exists('custom/include/Workflow/functions/filters/'.$filter_function.'.php')) {
                 require_once 'custom/include/Workflow/functions/filters/'.$filter_function.'.php';
                 $filter = new $filter_function();
+                $filter->event_data = $row;
+                if(empty($row['func_params'])) {
+                    $filter->func_params = array();
+                }
+                else {
+                    $filter->func_params = json_decode($row['func_params'], true);
+                    if(json_last_error() != JSON_ERROR_NONE) {
+                        echo "Error parsing func_params = {$row['func_params']}, error = ".json_last_error();
+                    }
+                }
                 echo $filter->checkBean($bean) ? '<span class="success">Доступен</span>' : '<span class="error">Не доступен</span>';
             }
             else {

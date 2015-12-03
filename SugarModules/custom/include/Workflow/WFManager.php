@@ -67,7 +67,8 @@ class WFManager {
                 return array();
             }
 
-            $q = "SELECT s2.uniq_name, s2.name, e.filter_function, e.func_params, e.resolution_required FROM wf_events e
+            $q = "SELECT s2.uniq_name, s2.name, e.filter_function, e.func_params, e.resolution_required, e.validate_function
+            FROM wf_events e
             LEFT JOIN wf_statuses s2 ON s2.id = e.status2_id
             WHERE
                 e.status1_id IN (SELECT id FROM wf_statuses WHERE uniq_name='{$status1}' AND wf_module = '{$bean->module_name}' AND deleted = 0)
@@ -78,7 +79,7 @@ class WFManager {
             ";
         }
         elseif(!empty($bean->wf_id) && empty($status1)) {
-            $q = "SELECT s2.uniq_name, s2.name, e12.filter_function, e12.func_params, e12.resolution_required
+            $q = "SELECT s2.uniq_name, s2.name, e12.filter_function, e12.func_params, e12.resolution_required, e12.validate_function
             FROM wf_events e12
             INNER JOIN wf_statuses s2 ON s2.id = e12.status2_id
             INNER JOIN wf_events e23 ON s2.id = e23.status1_id
@@ -90,7 +91,8 @@ class WFManager {
             ";
         }
         else {
-            $q = "SELECT s2.uniq_name, s2.name, e.filter_function, e.func_params, e.resolution_required FROM wf_events e
+            $q = "SELECT s2.uniq_name, s2.name, e.filter_function, e.func_params, e.resolution_required, e.validate_function
+            FROM wf_events e
             LEFT JOIN wf_statuses s2 ON s2.id = e.status2_id
             WHERE
                 (e.status1_id = '' OR e.status1_id IS NULL)

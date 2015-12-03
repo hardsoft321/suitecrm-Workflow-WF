@@ -278,6 +278,10 @@ lab321.wf.cloneRecipientField = function(item, idname) {
     .hide().slideDown({duration:200});
 }
 
+function wf_debug() {
+    location.href = 'index.php?entryPoint=wf_debug&module='+$('input#module').val()+'&record='+$('input#record').val();
+}
+
 jQuery.fn.extend({
     toggleValidators: function(formname, enable) {
         return this.each(function() {
