@@ -125,8 +125,9 @@ lab321.wf.massConfirm = function(action) {
             ajaxStatus.flashStatus(SUGAR.language.get('app_strings','LBL_SAVED'), 3000);
             $('#'+formName+' #resolution').val('');
         }
-    }).fail(function() {
+    }).fail(function(data) {
         ajaxStatus.hideStatus();
+        alert(data.responseText);
     }).always(function() {
         $('#'+formName+' input[type="submit"]').attr('onclick', lab321.wf.massConfirmRequest.saveButtonOnclickValue || '');
         if(lab321.wf.massConfirmRequest.bSubmitAfterCheck) {

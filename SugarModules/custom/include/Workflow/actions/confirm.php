@@ -1,6 +1,10 @@
 <?php
 if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
 
+if(empty($GLOBALS['current_user']) || empty($GLOBALS['current_user']->id)) {
+    sugar_die(translate('LBL_SESSION_EXPIRED', 'Users'));
+}
+
 require_once ('custom/include/Workflow/WFManager.php');
 require_once 'custom/include/Workflow/utils.php';
 
