@@ -28,7 +28,7 @@ $manifest = array (
   'published_date' => '2014-06-24',
   'type' => 'module',
   'remove_tables' => 'prompt',
-  'version' => '0.9.3',
+  'version' => '0.9.4',
 );
 $installdefs = array (
   'id' => 'Workflow-WF',
