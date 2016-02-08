@@ -105,15 +105,13 @@ class WF_hooks {
     {
         global $app_list_strings, $db, $current_language;
         require_once 'custom/include/Workflow/WFManager.php';
-        if(!empty($bean->fetched_row['id']) && WFManager::isBeanInWorkflow($bean)) {
-            return;
-        }
         $typeField = WFManager::getWorkflowTypeField($bean);
         if(!$typeField) {
             return;
         }
-        //$cache_key = "wf_editview_statuses.{$bean->module_name}.{$current_language}";
-        $allFirstStatuses = null; //sugar_cache_retrieve($cache_key);
+
+      if(empty($bean->fetched_row['id']) || !WFManager::isBeanInWorkflow($bean)) {
+        $allFirstStatuses = null;
         if(empty($allFirstStatuses))
         {
             $allFirstStatuses = array();
@@ -140,7 +138,6 @@ class WF_hooks {
                 $allFirstStatuses[$key]['name'] = $name;
                 $allFirstStatuses[$key]['class'] = (empty($allFirstStatuses[$key]['class']) ? '': $allFirstStatuses[$key]['class']).' no-wf';
             }
-            //sugar_cache_put($cache_key, $allFirstStatuses);
         }
         $statusesHtml = '';
         foreach($allFirstStatuses as $uniq_name => $params) {
@@ -156,12 +153,29 @@ $('select#'+typeField).change(function() {
   if(!this.value || !statusSelect.find('option.'+this.value).removeAttr('disabled').show().length) {
     statusSelect.find('option.no-wf').removeAttr('disabled').show();
   }
-  if(statusSelect.find('option[value="'+statusSelect.val()+'"]').is(':disabled')) {
+  var selected = statusSelect.find('option[value="'+statusSelect.val()+'"]');
+  if(!selected.length || selected.is(':disabled')) {
     statusSelect.val(statusSelect.find('option').not(':disabled').val());
   }
 }).change();
 </script>
 SCRIPT;
+      }
+      else if(WFManager::isBeanInWorkflow($bean)) {
+        $res = array();
+        $status = WFManager::getBeanCurrentStatus($bean);
+        if($status) {
+            $res[$status->uniq_name] = $status->name;
+        }
+        $res = array_merge($res, WFManager::getNextStatuses($bean));
+        $statusesHtml = '';
+        foreach($res as $uniq_name => $name) {
+            $statusesHtml .= "<option value='{$uniq_name}'>".htmlspecialchars($name)."</option>";
+        }
+        echo '<script>
+$("select#'.$statusField.'").html("'.$statusesHtml.'");
+</script>';
+      }
     }
 
   protected function getNewWfId($focus) {

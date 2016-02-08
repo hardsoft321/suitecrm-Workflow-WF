@@ -69,7 +69,17 @@ if(isset($bean->assigned_user_id)) {
 
 echo '<h3>Группы записи</h3>';
 $groupFocus = new SecurityGroup();
-$groups = $groupFocus->getAllRecordGroupsIds($bean->id, $bean->module_name);
+if(method_exists($groupFocus, 'getAllRecordGroupsIds')) { //SecurityTeams321
+    $groups = $groupFocus->getAllRecordGroupsIds($bean->id, $bean->module_name);
+}
+else {
+    $groups = array();
+    $queryGroups = "SELECT securitygroup_id AS id FROM securitygroups_records WHERE record_id = '{$bean->id}' AND module = '{$bean->module_name}' AND deleted = 0";
+    $res = $db->query($queryGroups);
+    while($row = $db->fetchByAssoc($res)) {
+        $groups[$row['id']] = $row['id'];
+    }
+}
 echo '<ul>';
 foreach($groups as $group_id) {
     echo "<li>".BeanFactory::getBean('SecurityGroups', $group_id)->name."</li>";

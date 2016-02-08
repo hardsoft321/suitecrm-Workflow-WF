@@ -280,7 +280,7 @@ lab321.wf.cloneRecipientField = function(item, idname) {
 }
 
 function wf_debug() {
-    location.href = 'index.php?entryPoint=wf_debug&module='+$('input#module').val()+'&record='+$('input#record').val();
+    location.href = 'index.php?entryPoint=wf_debug&module='+$('form[name="DetailView"] input[name="module"]').val()+'&record='+$('form[name="DetailView"] input[name="record"]').val();
 }
 
 jQuery.fn.extend({
