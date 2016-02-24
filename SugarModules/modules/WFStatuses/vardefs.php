@@ -19,30 +19,12 @@ $dictionary['WFStatus'] = array(
 		  'len' => '255',
           'required' => true,
         ),
-        /* 'parent_status_id' => array (
-          'name' => 'parent_status_id',
-          'vname' => 'LBL_PARENT_STATUS_ID',
-          'type' => 'char',
-		  'len' => '36',
-          'required' => false,
-        ),
-        'parent_status_name' => array (
-			'name' => 'parent_status_name',
-			'rname' => 'name',
-			'id_name' => 'parent_status_id',
-			'vname' => 'LBL_PARENT_STATUS_NAME',
-			'type' => 'relate',
-			'table' => 'wf_statuses',
-			'module' => 'WFStatuses',
-			'source' => 'non-db',
-			'required' => false,
-		),*/
-        
+
 		'role_id' => array (
 			'name' => 'role_id',
 			'vname' => 'LBL_ROLE_ID',
 			'type' => 'id',
-			'required' => true,
+			'required' => false,
 		),
         'role_name' => array (
 			'name' => 'role_name',
@@ -54,7 +36,7 @@ $dictionary['WFStatus'] = array(
 			'module' => 'ACLRoles',
 			'dbType' => 'varchar',
 			'source' => 'non-db',
-			'required' => true,
+			'required' => false,
 		),
 
 		'role2_id' => array (

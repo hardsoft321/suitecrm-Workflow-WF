@@ -63,6 +63,7 @@ $mod_strings = array (
 'LBL_RECIPIENT_LIST' => 'Список рассылки уведомления',
 'ERR_RECORD_NOT_FOUND' => 'Запись не найдена',
 'ERR_STATUS_FIELD_NOT_FOUND' => 'Не удается определить статус',
+'ERR_STATUS_NOT_FOUND' => 'Статус не найден',
 'ERR_ROLE_STATUS_NOT_FOUND' => 'Статусы для указанной роли не найдены',
 'ERR_ASSIGN_DENIED' => 'У Вас нет прав на смену ответственного',
 'ERR_INVALID_ASSIGNED' => 'Указанного пользователя нельзя назначить ответственным',

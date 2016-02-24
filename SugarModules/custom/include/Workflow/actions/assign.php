@@ -9,10 +9,7 @@ require_once 'custom/include/Workflow/utils.php';
 
 $bean = BeanFactory::getBean($_POST['module'], $_POST['record']);
 if (empty($bean->id))
-    wf_assign_die('ERR_RECORD_NOT_FOUND', $bean);
-
-$role_id = $db->quote($_POST['role']);
-$assigned2 = $db->quote($_POST['new_assign_user']);
+    wf_assign_die('ERR_RECORD_NOT_FOUND');
 
 $statusField = WFManager::getBeanStatusField($bean);
 if(!$statusField) {
@@ -20,15 +17,36 @@ if(!$statusField) {
 }
 $status1 = $bean->$statusField;
 
-$roleStatuses = WFManager::getStatusesWithRole($role_id, $bean->wf_id);
+$status_id = '';
+$role_id = '';
+if(strpos($_POST['role'], 'status_') === 0) {
+    $status_id = substr($_POST['role'], strlen('status_'));
+    $roleStatusBean = BeanFactory::getBean('WFStatuses', $status_id);
+    if(!$roleStatusBean) {
+        wf_assign_die('ERR_STATUS_NOT_FOUND', $bean);
+    }
+    $status = $roleStatusBean->uniq_name;
+    $roleStatuses = array($status);
+}
+else {
+    $role_id = $db->quote($_POST['role']);
+    $roleStatusBean = BeanFactory::newBean('WFStatuses');
+    $roleStatusBean->role_id = $role_id;
+    $roleStatuses = WFManager::getStatusesWithRole($role_id, $bean->wf_id);
+}
+
+$assigned2 = $db->quote($_POST['new_assign_user']);
+
 if(empty($roleStatuses)) {
     wf_assign_die('ERR_ROLE_STATUS_NOT_FOUND', $bean);
 }
 foreach($roleStatuses as $st) {
     if(!WFManager::canChangeAssignedUser($bean, $st)) { 
+        $GLOBALS['log']->fatal("WFWorkflow assign: check against $st status...");
         wf_assign_die('ERR_ASSIGN_DENIED', $bean);
     }
     if(!WFManager::isInConfirmUsers($assigned2, $bean, $st)) {
+        $GLOBALS['log']->fatal("WFWorkflow assign: check against $st status...");
         wf_assign_die('ERR_INVALID_ASSIGNED', $bean);
     }
 }
@@ -43,8 +61,8 @@ if(in_array($status1, $roleStatuses)) {
     $bean->save($notify_on_save);
 }
 
-WFManager::logAssignedChange($bean, $status1, $assigned2, true, $role_id);
-WFStatusAssigned::setAssignedUser($role_id, $bean->id, $bean->module_name, $assigned2);
+WFManager::logAssignedChange($bean, $status1, $assigned2, true, $roleStatusBean);
+WFStatusAssigned::setAssignedUser($roleStatusBean, $bean->id, $bean->module_name, $assigned2);
 
 $url = "index.php?action={$_POST['return_action']}&module={$_POST['return_module']}&record={$_POST['return_record']}";
 header("Location: $url");

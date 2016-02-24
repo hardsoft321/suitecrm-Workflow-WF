@@ -60,6 +60,7 @@ $mod_strings = array (
 'LBL_RECIPIENT_LIST' => 'Mail To',
 'ERR_RECORD_NOT_FOUND' => 'Record not found',
 'ERR_STATUS_FIELD_NOT_FOUND' => 'Status field not found',
+'ERR_STATUS_NOT_FOUND' => 'Status not found',
 'ERR_ROLE_STATUS_NOT_FOUND' => 'Statuses for role not found',
 'ERR_ASSIGN_DENIED' => 'Access denied',
 'ERR_INVALID_ASSIGNED' => 'Invalid assigned user',

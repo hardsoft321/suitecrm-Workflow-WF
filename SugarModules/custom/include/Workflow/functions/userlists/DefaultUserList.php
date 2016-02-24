@@ -37,8 +37,8 @@ class DefaultUserList extends BaseUserList {
 
     protected function getBeanGroups($bean) {
         global $db;
-        if(!isset($bean->workflowData) || !isset($bean->workflowData['allRecordGroups'])) {
-            if(!isset($bean->workflowData)) {
+        if(empty($bean->workflowData) || !isset($bean->workflowData['allRecordGroups'])) {
+            if(empty($bean->workflowData)) {
                 $bean->workflowData = array();
             }
             require_once('modules/SecurityGroups/SecurityGroup.php');

@@ -395,25 +395,27 @@ class WFManager {
         }
     }
 
-    public static function logAssignedChange($bean, $status1, $assigned2, $saveBean = true, $role_id = null) {
+    public static function logAssignedChange($bean, $status1, $assigned2, $saveBean = true, $statusBean = null) {
         global $db;
         global $timedate;
         global $current_user;
         global $app_list_strings;
 
         $role_name = null;
-        if($role_id === null) {
+        if($statusBean === null) {
             $q = "SELECT s.role_id, r.name FROM wf_statuses s, acl_roles r WHERE s.role_id = r.id AND s.id = '$status1'";
             $row = $db->fetchOne($q);
             if($row) {
                 $role_id = $row['role_id'];
                 $role_name = $row['name'];
+                $statusBean = BeanFactory::newBean('WFStatuses');
+                $statusBean->role_id = $role_id;
             }
         }
 
         $assigned1_name = '';
-        if($role_id) {
-            $userList = WFStatusAssigned::getAssignedUsers($role_id, $bean->id, $bean->module_name);
+        if($statusBean) {
+            $userList = WFStatusAssigned::getAssignedUsers($statusBean, $bean->id, $bean->module_name);
             if(count($userList) == 1) {
                 $assigned1_user = reset($userList);
                 if($assigned1_user->id == $assigned2) {
@@ -429,8 +431,8 @@ class WFManager {
                 $assigned1 = $user->id;
             }
 
-            if(!$role_name) {
-                $q = "SELECT name FROM acl_roles WHERE id = '$role_id'";
+            if(!empty($statusBean->role_id) && !$role_name) {
+                $q = "SELECT name FROM acl_roles WHERE id = '{$statusBean->role_id}'";
                 $row = $db->fetchOne($q);
                 if($row) {
                     $role_name = $row['name'];
@@ -443,7 +445,9 @@ class WFManager {
 
         $cur_date = $timedate->handle_offset(gmdate($timedate->get_db_date_time_format()), 'd.m.Y H:i', 'd.m.Y H:i', $current_user, 'Europe/Moscow') . " (МСК)";
 
-        $confirm_text = "{$assigned2_name} установлен как ответственный для роли '{$role_name}', ";
+        $confirm_text = !empty($statusBean->role_id)
+            ? "{$assigned2_name} установлен как ответственный для роли '{$role_name}', "
+            : "{$assigned2_name} установлен как ответственный для статуса '{$statusBean->name}', ";
         if($assigned1_name) {
             $confirm_text .= "предыдущий ответственный $assigned1_name, ";
         }
@@ -846,23 +850,26 @@ WHERE NOT EXISTS (
 
     protected static function getAllowedRolesData($bean) {
         global $db;
-        $q = "SELECT DISTINCT s.uniq_name, s.role_id, r.name AS role_name
-        FROM wf_statuses s, acl_roles r, wf_events e
+        $q = "SELECT DISTINCT s.id AS status_id, s.uniq_name, s.name AS status_name, s.role_id, r.name AS role_name
+        FROM wf_statuses s
+        LEFT JOIN acl_roles r ON r.id = s.role_id AND r.deleted = 0
+        INNER JOIN wf_events e ON (e.status1_id = s.id OR e.status2_id = s.id)
         WHERE
             s.wf_module='{$bean->module_name}' AND s.deleted = 0
-            AND s.role_id = r.id
-            AND r.deleted = 0
-            AND e.deleted = 0 AND (e.status1_id = s.id OR e.status2_id = s.id)
+            AND e.deleted = 0
             AND e.workflow_id = '{$bean->wf_id}'";
         $qr = $db->query($q);
         $res = array();
         $rolesPermissions = array();
         while($row = $db->fetchByAssoc($qr)) {
+            if(empty($row['role_id'])) {
+                $row['role_id'] = 'status_'.$row['status_id'];
+            }
             if(isset($rolesPermissions[$row['role_id']]) && $rolesPermissions[$row['role_id']] === false) {
                 continue;
             }
             if(self::canChangeAssignedUser($bean, $row['uniq_name'])) {
-                $res[$row['role_id']]['role_name'] = $row['role_name'];
+                $res[$row['role_id']]['role_name'] = !empty($row['role_name']) ? $row['role_name'] : $row['status_name'];
                 $users = self::getUserList($bean, $row['uniq_name'], 'confirm_list_function');
                 $res[$row['role_id']]['users'] = isset($res[$row['role_id']]['users']) ? array_intersect_key($users, $res[$row['role_id']]['users']) : $users;
                 $GLOBALS['log']->debug('WFManager getAllowedRolesData '.$row['uniq_name'].' '.$row['role_name'].' add');
