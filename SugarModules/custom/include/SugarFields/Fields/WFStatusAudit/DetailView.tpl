@@ -9,8 +9,8 @@
         var cl = confirm_list.split(";");
         document.getElementById('confirmtext').value='';
         var i=0;
-        for (i=0; i<(cl.length-1); i++) {
-        if (i>0) {
+        for (i=0; i<cl.length; i++) {
+        if (i>0 && i!=cl.length-1) {
             document.getElementById('confirmtext').value=document.getElementById('confirmtext').value+"<hr noshade size=1 width=340 style='margin: 0;'>";
         }
         document.getElementById('confirmtext').value=document.getElementById('confirmtext').value+cl[i];
