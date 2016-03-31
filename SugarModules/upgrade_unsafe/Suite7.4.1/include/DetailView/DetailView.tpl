@@ -45,9 +45,7 @@
 
 *}
 {if !empty($workflow)}
-  <div class="confirm-panel-wr" style="margin-bottom:5px">
   {include file="custom/include/Workflow/tpls/ConfirmPanel.tpl" workflow=$workflow}
-  </div>
 {/if}
 {{include file=$headerTpl}}
 {sugar_include include=$includes}

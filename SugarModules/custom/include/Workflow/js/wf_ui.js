@@ -196,17 +196,12 @@ lab321.wf.setConfirmErrors = function(errors, formName) {
 };
 
 lab321.wf.togglePanel = function() {
-    var id = 'confirm_panel';
-    var panel = document.getElementById(id);
-    if (panel.style.display == 'none') {
-        panel.style.display = 'block';
-        document.getElementById(id + "_toggle_img").src = 'themes/default/images/basic_search.gif';
+    var expanded = $('#confirm-panel-wr').hasClass('expanded');
+    $('#confirm-panel-wr').toggleClass('expanded');
+    if(!expanded) {
         if ((lab321.wf.massConfirmRequest || {}).status == 'delay') {
             lab321.wf.massConfirm('check');
         }
-    } else {
-        panel.style.display = 'none';
-        document.getElementById(id + "_toggle_img").src = 'themes/default/images/advanced_search.gif';
     }
 }
 
