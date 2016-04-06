@@ -16,5 +16,9 @@ $entry_point_registry['wf_debug'] = array (
   'file' => 'custom/include/Workflow/actions/debug.php',
   'auth' => true,
 );
+$entry_point_registry['wf_panel_body'] = array (
+  'file' => 'custom/include/Workflow/actions/panel_body.php',
+  'auth' => false,
+);
 
 ?>

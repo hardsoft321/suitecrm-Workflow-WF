@@ -529,6 +529,35 @@ class WFManager {
         WFStatusAssigned::setAssignedUser($statusBean->role_id, $bean->id, $bean->module_name, $current_user->id);
     }
 
+    /**
+     * Режимы панели:
+     * immediate.closed - панель загружается вместе со страницей
+     * immediate.opened - панель загружается вместе со страницей и сразу открывается
+     * lazy - панель загружается и открывается при нажатии пользователем на кнопку открытия
+     * delayed.closed - панель загружается отдельным запросом после загрузки страницы
+     * delayed.opened - панель загружается отдельным запросом после загрузки страницы и открывается
+     */
+    public static function getEditPanelData($bean) {
+        global $sugar_config;
+        if(!self::isBeanInWorkflow($bean)) {
+            return array();
+        }
+        $panel_mode = !empty($sugar_config['wf_workflow_panel_mode']) ? $sugar_config['wf_workflow_panel_mode'] : 'lazy';
+        $data = array();
+        if($panel_mode == 'immediate.closed' || $panel_mode == 'immediate.opened') {
+            $data = self::getEditFormData($bean);
+            if(!empty($data)) { //если данных нет, то панель вообще не показываем
+                $data['panelmode'] = $panel_mode;
+            }
+        }
+        else {
+            $data['panelmode'] = $panel_mode;
+        }
+        $data['record'] = $bean->id;
+        $data['module'] = $bean->module_name;
+        return $data;
+    }
+
     public static function getEditFormData($bean) {
         $data = array();
         if(self::isBeanInWorkflow($bean)) {
@@ -575,8 +604,9 @@ class WFManager {
             require_once __DIR__.'/WFStatusAssigned.php';
             $statusAssignedUsers = WFStatusAssigned::getAllAssignedUsers($bean->id, $bean->module_name);
             
+            $data['record'] = $bean->id;
+            $data['module'] = $bean->module_name;
             $data['currentStatus'] = $status1;
-            $data['include_script'] = self::getVersionedScript();
             if(!empty($statuses)) {
                 $data['confirmData'] = array(
                     'formName' => 'confirmForm',
@@ -617,12 +647,6 @@ class WFManager {
             }
         }
         return $data;
-    }
-
-    public static function getVersionedScript() {
-        require_once __DIR__.'/config.php';
-        global $wf_config;
-        return getVersionedScript('custom/include/Workflow/js/wf_ui.js', $wf_config['js_custom_version']);
     }
 
     public static function getStatusesWithRole($role_id, $wf_id) {

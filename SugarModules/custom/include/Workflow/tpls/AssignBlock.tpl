@@ -14,14 +14,13 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
 
 <div id="assign_block" class="wf_block">
   <h4>{if !empty($workflow.assignFormTitle)}{$workflow.assignFormTitle}{else}{sugar_translate label='LBL_ASSIGNED_CHANGE_TITLE' module='WFWorkflows'}{/if}</h4>
-  <form id='{$formName}' name='{$formName}' action='index.php?entryPoint=wf_assign' method='POST'
+  <form id='{$formName}' name='{$formName}' action='index.php?entryPoint=wf_assign' method='POST' class="wf_block_body"
         data-confirmusers = "{$workflow.confirmUsersString|escape:"html"}">
-    <input type='hidden' id='record' name='record' value='{$fields.id.value}'> 
-    <input type='hidden' id='module' name='module' value='{$module}'>
-
-    <input type='hidden' id='return_module' name='return_module' value = '{$return_module}'>
-    <input type='hidden' id='return_action' name='return_action' value = '{$return_action}'>
-    <input type='hidden' id='return_record' name='return_record' value = '{$return_record}'>
+    <input type='hidden' name='record' value='{$workflow.record}'>
+    <input type='hidden' name='module' value='{$workflow.module}'>
+    <input type='hidden' name='return_module' value='{$workflow.module}'>
+    <input type='hidden' name='return_action' value='DetailView'>
+    <input type='hidden' name='return_record' value='{$workflow.record}'>
 
     <table>
       <tr margin="15">

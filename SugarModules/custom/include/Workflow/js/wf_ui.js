@@ -195,14 +195,40 @@ lab321.wf.setConfirmErrors = function(errors, formName) {
     $('#'+formName+' .errors').html(html);
 };
 
-lab321.wf.togglePanel = function() {
+lab321.wf.togglePanel = function(show) {
     var expanded = $('#confirm-panel-wr').hasClass('expanded');
+    if(typeof show !== "undefined") {
+        if(expanded === show) {
+            return;
+        }
+    }
     $('#confirm-panel-wr').toggleClass('expanded');
-    if(!expanded) {
+    if(!expanded) { //не было развернуто, а теперь стало
         if ((lab321.wf.massConfirmRequest || {}).status == 'delay') {
             lab321.wf.massConfirm('check');
         }
+        if(!$('#confirm-panel-wr #confirm_panel > *').length) {
+            ajaxStatus.showStatus(SUGAR.language.get('app_strings','LBL_LOADING'));
+            lab321.wf.loadPanelBody(function() {
+                ajaxStatus.hideStatus();
+            });
+        }
     }
+}
+
+lab321.wf.loadPanelBody = function(callback) {
+    if(!lab321.wf.panelRequest) {
+        lab321.wf.panelRequest = {};
+    }
+    if(lab321.wf.panelRequest.status == 'sent') {
+        return;
+    }
+    lab321.wf.panelRequest.status = 'sent';
+    $('#confirm_panel').load('index.php?entryPoint=wf_panel_body&target_module='+$('#confirm_panel_title input[name="module"]').val()
+        +'&record='+$('#confirm_panel_title input[name="record"]').val(), null, function() {
+            lab321.wf.panelRequest.status = 'done';
+            callback();
+    });
 }
 
 lab321.wf.onChangeNewStatus = function(formName) {

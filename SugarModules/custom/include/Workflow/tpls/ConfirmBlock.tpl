@@ -17,14 +17,11 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
 
 <div id="confirm_block" class="wf_block">
 <h4>{if !empty($workflow.confirmData.title)}{$workflow.confirmData.title}{else}{sugar_translate label='LBL_CONFIRM_STATUS' module='WFWorkflows'}{/if}</h4>
-<form id='{$formName}' name='{$formName}' action='index.php?entryPoint=wf_confirm' method='POST' class="confirmForm"
+<form id='{$formName}' name='{$formName}' action='index.php?entryPoint=wf_confirm' method='POST' class="confirmForm wf_block_body"
     data-resolutionrequired = "{$workflow.confirmData.resolutionRequiredData|@json_encode|escape:"html"}">
-    <input type='hidden' id='record' name='record' value='{$fields.id.value}'> 
-    <input type='hidden' id='module' name='module' value='{$module}'>
+    <input type='hidden' id='record' name='record' value='{$workflow.record}'>
+    <input type='hidden' id='module' name='module' value='{$workflow.module}'>
 
-    <input type='hidden' id='return_module' name='return_module' value = '{$return_module}'>
-    <input type='hidden' id='return_action' name='return_action' value = '{$return_action}'>
-    <input type='hidden' id='return_record' name='return_record' value = '{$return_record}'>
     <input type="hidden" name="current_status" id="{$formName}_current_status" value="{$workflow.currentStatus}" />
 
     <div class="errors required validation_message"><ul></ul></div>

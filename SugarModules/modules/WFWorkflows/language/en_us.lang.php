@@ -47,6 +47,7 @@ $mod_strings = array (
 
 //custom/include/Workflow
 'LBL_TOGGLE_BUTTON' => 'Confirm Panel',
+'LBL_EXPAND' => 'Expand',
 'LBL_ASSIGNED_CHANGE_TITLE' => 'Change Assigned User',
 'LBL_ROLE' => 'Role',
 'LBL_NEW_ASSIGNED' => 'New Assigned User',

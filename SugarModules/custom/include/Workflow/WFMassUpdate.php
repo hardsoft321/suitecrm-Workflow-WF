@@ -173,7 +173,6 @@ class WFMassUpdate {
         require_once 'include/Sugar_Smarty.php';
         $ss = new Sugar_Smarty();
         $workflow = array(
-            'include_script' => WFManager::getVersionedScript(),
             'currentStatus' => '',
             'confirmData' => array(
                 'formName' => 'confirmForm',
@@ -181,9 +180,11 @@ class WFMassUpdate {
                 'assignedUsersData' => array(),
                 'confirmFunc' => 'lab321.wf.massConfirmSave',
             ),
+            'parentView' => 'list',
+            'panelmode' => 'immediate.closed',
         );
         $ss->assign('workflow', $workflow);
         
-        echo $ss->fetch('custom/include/Workflow/tpls/AfterListFrame.tpl');
+        $ss->display('custom/include/Workflow/tpls/ConfirmPanel.tpl');
     }
 }

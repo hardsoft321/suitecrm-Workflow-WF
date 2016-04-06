@@ -24,7 +24,7 @@ if($_REQUEST['checkedRecords']['mode'] == 'entire') {
 }
 else {
     $massUpdate = new WFMassUpdate();
-    $massUpdate->setBeans($_REQUEST['module'], $_REQUEST['checkedRecords']['items']);
+    $massUpdate->setBeans($_REQUEST['module'], !empty($_REQUEST['checkedRecords']['items']) ? $_REQUEST['checkedRecords']['items'] : array());
     
     if($_REQUEST['action'] == 'save') {
         $massUpdate->setNextStatus($_REQUEST['status'], $_REQUEST['assigned_user']);

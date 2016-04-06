@@ -59,7 +59,7 @@ class WorkflowSecurityForm extends SecurityForm {
         $diff = parent::getDataChangesToUnset($bean);
         $statusField = WFManager::getBeanStatusField($bean);
         foreach($diff as $field => $changes) {
-            if($field == $statusField || $field == 'assigned_user_id') {
+            if($field == $statusField || $field == 'assigned_user_id' || $field == 'confirm_list') {
                 unset($diff[$field]);
             }
         }

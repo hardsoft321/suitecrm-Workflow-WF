@@ -194,6 +194,7 @@ class="yui-navset detailview_tabs"
                 {{/if}}
 				{{$colData.field.suffix}}
 				{{if !empty($colData.field.name)}}
+				{else} {counter name="fieldsHidden"}{* <- PEA HS321 *}
 				{/if}
 				{{/if}}
 

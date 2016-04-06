@@ -47,6 +47,7 @@ $mod_strings = array (
 
 //custom/include/Workflow
 'LBL_TOGGLE_BUTTON' => 'Bestätigen Steuerung',
+'LBL_EXPAND' => 'Erweitern',
 'LBL_ASSIGNED_CHANGE_TITLE' => 'Ändern Sie Zugewiesene Benutzer',
 'LBL_ROLE' => 'Rolle',
 'LBL_NEW_ASSIGNED' => 'Neu Zugewiesene Benutzer',

@@ -84,15 +84,9 @@ class ViewDetail extends SugarView
 * NLV WORKFLOW-WF START
 **************************/
         require_once ('custom/include/Workflow/WFManager.php');
-        $workflowData = WFManager::getEditFormData($this->bean);
+        $workflowData = WFManager::getEditPanelData($this->bean);
         if(!empty($workflowData)) {
             $this->dv->ss->assign('workflow', $workflowData);
-            
-                        // TODO это вообще должно определятся и так
-                    //$this->dv->ss->assign("module", $this->module);
-              $this->dv->ss->assign("return_module", $this->module);
-              $this->dv->ss->assign("return_action", $this->action);
-              $this->dv->ss->assign("return_record", $this->bean->id);
         }
 /*************************
 * NLV WORKFLOW-WF END

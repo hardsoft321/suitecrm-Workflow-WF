@@ -50,6 +50,7 @@ $mod_strings = array (
 
 //custom/include/Workflow
 'LBL_TOGGLE_BUTTON' => 'Панель согласования',
+'LBL_EXPAND' => 'Развернуть',
 'LBL_ASSIGNED_CHANGE_TITLE' => 'Смена ответственного',
 'LBL_ROLE' => 'Роль',
 'LBL_NEW_ASSIGNED' => 'Новый ответственный',

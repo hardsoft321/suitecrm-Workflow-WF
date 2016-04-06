@@ -1,5 +1,5 @@
-#confirm-panel-wr {margin-top: 7px; margin-bottom: 15px}
-#confirm_panel_dummy {padding-left: 13px; margin-bottom: 5px}
+#confirm-panel-wr {margin-top: 7px; margin-bottom: 15px; padding-bottom: 5px}
+#confirm_panel_dummy {padding-left: 13px}
 #confirm_panel_dummy:hover {cursor:pointer}
 #confirm-panel-wr #confirm_panel {display: none}
 #confirm-panel-wr.expanded #confirm_panel {display: block}
@@ -12,12 +12,11 @@
 #confirm-panel-wr table {width: initial; background-color: initial}
 #confirm-panel-wr td {border: none}
 .wf_block {margin-top: 10px}
-#status-assigned {margin-top: 5px; margin-bottom: 15px; border: 1px solid #abc3d7; padding: 5px; padding-right: 0px}
+.wf_block_body {margin-top: 5px; margin-bottom: 15px; border: 1px solid #abc3d7; padding: 5px; padding-right: 0px}
 #status-assigned table {border-spacing: 0px}
 #status-assigned .role {background-color: #F6F6F6}
 #status-assigned td, #status-assigned th {padding: 5px 6px 5px 6px; font-size: 12px}
 #confirm-panel-wr #status-assigned td {border-bottom: 1px solid #CBDAE6}
-.confirmForm {margin-top: 5px; border-style: solid; border-width: 1px; border-color: #abc3d7; padding: 5px; padding-right: 0px}
 .confirmForm tr {margin:15px}
 .confirmForm td {padding:5px; vertical-align: top}
 #confirm_panel td > select {width:100%}
@@ -30,4 +29,3 @@
 #confirm_panel_title_btn:hover {cursor: pointer}
 #confirm_panel_title_btn {outline: none}
 #confirm_panel_title_btn h4:hover {color: #000}
-#confirm_panel {margin-top: -10px}
