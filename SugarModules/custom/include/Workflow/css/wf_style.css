@@ -1,5 +1,5 @@
 #confirm-panel-wr {margin-top: 7px; margin-bottom: 15px; padding-bottom: 5px}
-#confirm_panel_dummy {padding-left: 13px}
+#confirm_panel_dummy {padding-left: 13px; text-transform: lowercase;}
 #confirm_panel_dummy:hover {cursor:pointer}
 #confirm-panel-wr #confirm_panel {display: none}
 #confirm-panel-wr.expanded #confirm_panel {display: block}

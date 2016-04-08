@@ -2,7 +2,7 @@
 <script src="{sugar_getjspath file='custom/include/Workflow/js/wf_ui.js'}"></script>
 <input type="hidden" id="confirm_panel_mode" data-panelmode="{$workflow.panelmode}" />
 
-<div id="confirm-panel-wr" class="detail view">
+<div id="confirm-panel-wr" class="detail view {$workflow.parentView}">
   {include file="custom/include/Workflow/tpls/ToggleButton.tpl"}
   <div id="confirm_panel">
   {if empty($workflow.panelmode) || $workflow.panelmode == "immediate.closed" || $workflow.panelmode == "immediate.opened"}
@@ -11,11 +11,11 @@
   </div>
 </div>
 
-{if $workflow.parentView == 'list' || $workflow.panelmode == "immediate.opened" || $workflow.panelmode == "delayed.closed"
+{if $workflow.parentView == 'list-view' || $workflow.panelmode == "immediate.opened" || $workflow.panelmode == "delayed.closed"
     || $workflow.panelmode == "delayed.opened"}
 <script type="text/javascript">
 SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefined" && typeof lab321.wf != "undefined"', function() {ldelim}
-    {if $workflow.parentView == "list"}
+    {if $workflow.parentView == "list-view"}
     lab321.wf.setListViewHandlers();
     {/if}
 

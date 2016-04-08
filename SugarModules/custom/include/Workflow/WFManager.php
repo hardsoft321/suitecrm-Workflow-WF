@@ -555,6 +555,7 @@ class WFManager {
         }
         $data['record'] = $bean->id;
         $data['module'] = $bean->module_name;
+        $data['parentView'] = 'detail-view';
         return $data;
     }
 

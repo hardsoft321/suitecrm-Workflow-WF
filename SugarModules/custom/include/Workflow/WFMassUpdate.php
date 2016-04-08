@@ -180,7 +180,7 @@ class WFMassUpdate {
                 'assignedUsersData' => array(),
                 'confirmFunc' => 'lab321.wf.massConfirmSave',
             ),
-            'parentView' => 'list',
+            'parentView' => 'list-view',
             'panelmode' => 'immediate.closed',
         );
         $ss->assign('workflow', $workflow);
