@@ -14,5 +14,5 @@
 </a>
 </div>
 <div id="confirm_panel_dummy" onclick="lab321.wf.togglePanel();return false;" title="{sugar_translate label='LBL_EXPAND' module='WFWorkflows'}">
-    <a href="#">+ {sugar_translate label='LBL_EXPAND' module='WFWorkflows'}</a>
+    <div class="dots"></div>
 </div>

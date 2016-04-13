@@ -524,9 +524,9 @@ class WFManager {
             return;
         }
         require_once __DIR__."/WFStatusAssigned.php";
-        if(WFStatusAssigned::hasAssignedUser($statusBean->role_id, $bean->id, $bean->module_name))
+        if(WFStatusAssigned::hasAssignedUser($statusBean, $bean->id, $bean->module_name))
             return;
-        WFStatusAssigned::setAssignedUser($statusBean->role_id, $bean->id, $bean->module_name, $current_user->id);
+        WFStatusAssigned::setAssignedUser($statusBean, $bean->id, $bean->module_name, $current_user->id);
     }
 
     /**
