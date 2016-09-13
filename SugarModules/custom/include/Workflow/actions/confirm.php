@@ -32,6 +32,10 @@ $bean->$statusField = $_POST['status'];
 $bean->last_resolution = $_POST['resolution'];
 $bean->assigned_user_id = $_POST['assigned_user'];
 
+if(!empty($_POST['notification_copy_used'])) {
+    $bean->notify_to = isset($_POST['notify_to']) ? $_POST['notify_to'] : '';
+}
+
 $errors = array();
 
 $saved = null;
@@ -39,7 +43,7 @@ if(empty($errors)) {
     try {
         $bean->skipValidationHooks = true;
         $saved = $bean->save($notify_on_save);
-        if($saved && !empty($_POST['assigned_user_copy'])) {
+        if($saved && !empty($_POST['notification_copy_used']) && !empty($_POST['notification_copy'])) {
             require_once 'custom/include/Workflow/functions/procedures/SendNotificationCopy.php';
             $proc = new SendNotificationCopy();
             $proc->doWork($bean);

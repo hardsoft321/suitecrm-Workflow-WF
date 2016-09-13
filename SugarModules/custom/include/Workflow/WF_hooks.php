@@ -90,10 +90,17 @@ class WF_hooks {
      */
     public function displayNotificationFields($bean, $event, $arguments)
     {
-        require_once 'include/Sugar_Smarty.php';
-        $ss = new Sugar_Smarty();
-        $ss->assign('formName', $arguments['confirmData']['formName']);
-        echo $ss->fetch('custom/include/Workflow/tpls/NotificationFields.tpl');
+        require_once 'custom/include/NotificationCopy/NotificationCopy.php';
+        $formName = $arguments['confirmData']['formName'];
+        echo '<tr class="assigned_copy">
+<td><label>'.translate("LBL_RECIPIENT_LIST", "WFWorkflows").':</label></td>
+<td>';
+        $params = array(
+            'show_just_store' => true,
+            'hide_label' => true,
+        );
+        echo NotificationCopy::getFormFieldHtml($bean, $formName, $params);
+        echo '</td></tr>';
     }
 
     /**

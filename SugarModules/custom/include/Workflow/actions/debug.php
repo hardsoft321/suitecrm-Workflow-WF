@@ -67,7 +67,7 @@ if(isset($bean->assigned_user_id)) {
     echo "<p>Ответственный: ".($bean->assigned_user_id ? BeanFactory::getBean('Users', $bean->assigned_user_id)->user_name : '')."</p>";
 }
 
-echo '<h3>Группы записи</h3>';
+echo '<h3>Группы записи (включая родительские)</h3>';
 $groupFocus = new SecurityGroup();
 if(method_exists($groupFocus, 'getAllRecordGroupsIds')) { //SecurityTeams321
     $groups = $groupFocus->getAllRecordGroupsIds($bean->id, $bean->module_name);
@@ -129,8 +129,11 @@ function statusInfo($bean, $status) {
     global $db, $current_user;
     ob_start();
     $q = "SELECT id, name, uniq_name, role_id, role2_id, edit_role_type,
-                            assigned_list_function, confirm_list_function, front_assigned_list_function, 
-                            confirm_check_list_function, isfinal
+                            front_assigned_list_function,
+                            assigned_list_function,
+                            confirm_list_function,
+                            confirm_check_list_function,
+                            isfinal
                         FROM wf_statuses WHERE uniq_name = '{$status}' AND wf_module = '{$bean->module_name}' AND deleted = 0";
     $dbRes = $db->query($q);
     $status = array();
