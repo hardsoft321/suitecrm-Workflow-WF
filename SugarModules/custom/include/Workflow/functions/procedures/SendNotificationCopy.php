@@ -16,6 +16,6 @@ class SendNotificationCopy extends BaseProcedure
     public function doWork($bean) {
         require_once 'custom/include/NotificationCopy/NotificationCopy.php';
         $nc = new NotificationCopy();
-        $nc->send($bean);
+        $nc->send($bean, $bean->object_name);
     }
 }
