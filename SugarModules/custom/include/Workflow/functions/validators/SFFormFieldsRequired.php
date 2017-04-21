@@ -6,20 +6,25 @@
 class SFFormFieldsRequired extends BaseValidator {
 
     public function validate($bean) {
-        require_once 'custom/include/Workflow/utils.php';
-        $errors = array();
         $list = BeanFactory::newBean('FormFieldsLists');
         $list = $list->retrieve_by_string_fields(array('parent_id' => $this->event_id, 'parent_type' => 'WFEvents', 'list_type' => 'required_fields'));
+        return $this->validateWithList($bean, $list);
+    }
+
+    public function validateWithList($bean, $list) {
+        require_once 'custom/include/Workflow/utils.php';
+        $errors = array();
+        $links = array();
         if($list && $list->load_relationship('fields')) {
             foreach($list->fields->getBeans() as $fieldBean) {
                 $field = $fieldBean->name;
                 $link = "";
                 $linkfield = "";
-                list ($link, $linkfield) = explode ("/", $field);
-
                 if (strpos ($field, "/")) {
+                  list ($link, $linkfield) = explode ("/", $field);
                   $fdef = $bean->getFieldDefinition($link);
                 } else {
+                  $link = $field;
                   $fdef = $bean->getFieldDefinition($field);
                 }
 
@@ -35,8 +40,7 @@ class SFFormFieldsRequired extends BaseValidator {
                   }
                 }
             }
-//            $errors[] = 'links: ' . print_r($links, true);
-//            $errors[] = 'linkfields: ' . print_r($linkfields, true);
+
             foreach ($links as $k => $v) {
               $bean->load_relationship($k);
               $bs = $bean->$k->getBeans();
