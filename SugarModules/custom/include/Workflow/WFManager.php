@@ -584,7 +584,7 @@ class WFManager {
             $assignedUsers = self::getUserList($bean, $statuses, 'front_assigned_list_function');
             $assignedUsersData = array();
             foreach($assignedUsers as $status => $userList) {
-                $assignedUsersData[$status] = array();
+                $assignedUsersData[$status] = array(array('', ''));
                 foreach($userList as $user) {
                     $assignedUsersData[$status][] = array($user->id, $user->first_name.' '.$user->last_name);
                 }
@@ -596,6 +596,7 @@ class WFManager {
             foreach($rolesData as $role_id => $roleData) {
                 $roles[$role_id] = $roleData['role_name'];
                 if(isset($roleData['users'])) {
+                    $confirmUsersData[$role_id][] = array('', '');
                     foreach($roleData['users'] as $user_id => $user) {
                         $confirmUsersData[$role_id][] = array($user_id, $user->first_name.' '.$user->last_name);
                     }
