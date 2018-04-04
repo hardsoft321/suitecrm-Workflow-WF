@@ -4,22 +4,8 @@ global $sugar_config;
 $sugarVersion = isset($sugar_config['suitecrm_version']) ? 'Suite'.$sugar_config['suitecrm_version'] : $sugar_config['sugar_version'];
 
 $manifest = array (
-  0 => 
-  array (
-    'acceptable_sugar_versions' => 
-    array (
-		'exact_matches' => array (1 => '6.5.16')
-    ),
-  ),
-  1 => 
-  array (
-    'acceptable_sugar_flavors' => 
-    array (
-      0 => 'CE',
-      1 => 'PRO',
-      2 => 'ENT',
-    ),
-  ),
+  'acceptable_sugar_versions' => array (),
+  'acceptable_sugar_flavors' => array ('CE'),
   'author' => 'nlv, pea',
   'description' => 'Workflow',
   'icon' => '',
@@ -28,7 +14,7 @@ $manifest = array (
   'published_date' => '2014-06-24',
   'type' => 'module',
   'remove_tables' => 'prompt',
-  'version' => '0.11.9',
+  'version' => '0.11.10',
 );
 $installdefs = array (
   'id' => 'Workflow-WF',
@@ -78,8 +64,8 @@ $installdefs = array (
   'copy' => 
   array (
     array (
-      'from' => '<basepath>/SugarModules/custom/include/',
-      'to' => 'custom/include',
+      'from' => '<basepath>/SugarModules/custom/',
+      'to' => 'custom/',
     ),
     array (
       'from' => '<basepath>/SugarModules/modules',

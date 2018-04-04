@@ -32,6 +32,7 @@ $mod_strings = array (
 'LBL_ASSIGNED_LIST_FUNCTION' => 'Assigned List Function',
 'LBL_CONFIRM_LIST_FUNCTION' => 'Confirm List Function',
 'LBL_CONFIRM_CHECK_LIST_FUNCTION' => 'Confirm Check List Function',
+'LBL_ISFINAL' => 'Is Final',
 
 );
 

@@ -1,4 +1,4 @@
-#confirm-panel-wr {margin-top: 7px; margin-bottom: 15px; padding-bottom: 5px}
+#confirm-panel-wr {margin-top: 7px; margin-bottom: 15px; padding: 10px}
 #confirm_panel_dummy {padding-left: 13px; text-transform: lowercase;}
 #confirm_panel_dummy:hover {cursor:pointer}
 #confirm_panel_dummy > div.dots {border: 1px solid #c4c4c4; width: 16px; height: 8px; background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAICAIAAAB/FOjAAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC42/Ixj3wAAAC9JREFUKFNj+E4iYCBR/XcKNEwGA4iFuNhAKYQNWBV9/PgRWRxFA5GeocAPRNoAAOuwZG6T/01PAAAAAElFTkSuQmCC')}
