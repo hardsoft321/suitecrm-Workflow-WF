@@ -40,7 +40,7 @@ class WFEvent extends SugarBean {
 		return "{$this->workflow_name}: {$this->status1_name} &rarr; {$this->status2_name}";
 	}
 
-	function ACLAccess($view,$is_owner='not_set')
+	function ACLAccess($view, $is_owner='not_set', $in_group = 'not_set')
 	{
 		return $GLOBALS['current_user']->isAdmin();
 	}

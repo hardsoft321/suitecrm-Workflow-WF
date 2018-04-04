@@ -46,7 +46,7 @@ $mod_strings = array (
 'LBL_USER_LISTS_FUNCTIONS' => 'Benutzerlisten',
 
 //custom/include/Workflow
-'LBL_TOGGLE_BUTTON' => 'Bestätigen Steuerung',
+'LBL_TOGGLE_BUTTON' => 'BPM-Systemsteuerung',
 'LBL_EXPAND' => 'Erweitern',
 'LBL_ASSIGNED_CHANGE_TITLE' => 'Ändern Sie Zugewiesene Benutzer',
 'LBL_ROLE' => 'Rolle',

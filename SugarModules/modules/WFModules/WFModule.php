@@ -31,7 +31,7 @@ class WFModule extends SugarBean {
 		return $this->wf_module;
 	}
 
-	function ACLAccess($view,$is_owner='not_set')
+	function ACLAccess($view, $is_owner='not_set', $in_group = 'not_set')
 	{
 		return $GLOBALS['current_user']->isAdmin();
 	}
