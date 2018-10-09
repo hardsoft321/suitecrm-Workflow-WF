@@ -107,7 +107,7 @@ class WFManager {
         $res = array();
         while ($row = $db->fetchByAssoc($qr, false)) {
             $enabled = true;
-            if($row['filter_function'] && !self::checkBeanAgainstFunction($bean, $row['filter_function'], $row)) {
+            if($row['filter_function'] && !self::checkBeanAgainstFunctions($bean, $row['filter_function'], $row)) {
                 $enabled = false;
             }
             if($enabled)
@@ -674,7 +674,7 @@ class WFManager {
      */
     public static function getFirstNonEmptyStatuses($wf_id) {
         global $db;
-        $q = "SELECT DISTINCT s2.uniq_name
+        $q = "SELECT DISTINCT s2.uniq_name, e12.sort
             FROM wf_events e12
             INNER JOIN wf_statuses s2 ON s2.id = e12.status2_id
             INNER JOIN wf_events e23 ON s2.id = e23.status1_id
@@ -683,6 +683,7 @@ class WFManager {
                 AND e23.workflow_id = '{$wf_id}'
                 AND e12.deleted = 0
                 AND e23.deleted = 0
+            ORDER BY e12.sort
             ";
         $qr = $db->query($q);
         $statuses = array();
@@ -924,7 +925,7 @@ WHERE NOT EXISTS (
         return $row ? $row['id'] : false;
     }
 
-    protected static function getStatusBeanByName($status, $module_name) {
+    public static function getStatusBeanByName($status, $module_name) {
         global $db;
         $row = $db->fetchOne("SELECT * FROM wf_statuses WHERE uniq_name='{$status}' AND wf_module='{$module_name}' AND deleted = 0");
         if($row) {
@@ -933,6 +934,14 @@ WHERE NOT EXISTS (
             return $statusBean;
         }
         return false;
+    }
+
+    protected static function checkBeanAgainstFunctions($bean, $filter_functions, $event_data) {
+        foreach(explode('^,^', trim($filter_functions, '^')) as $filter_function) {
+            if (!self::checkBeanAgainstFunction($bean, $filter_function, $event_data))
+                return false;
+        }
+        return true;
     }
 
     protected static function checkBeanAgainstFunction($bean, $filter_function, $event_data) {

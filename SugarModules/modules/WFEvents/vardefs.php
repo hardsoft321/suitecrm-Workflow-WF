@@ -107,7 +107,7 @@ $dictionary['WFEvent'] = array(
         'filter_function' => array (
 			'name' => 'filter_function',
 			'vname' => 'LBL_FILTER_FUNCTION',
-			'type' => 'enum',
+			'type' => 'multienum',
             'function' => 'wf_getFilterFunctions',
 			'len' => '250',
 		),

@@ -19,6 +19,7 @@ $searchdefs ['WFStatuses'] = array (
     'advanced_search' => array (
       'name' => array('name'=>'name','query_type'=>'default'),
       'uniq_name' => array('name'=>'uniq_name','query_type'=>'default'),
+      'wf_module' => array('name'=>'wf_module','query_type'=>'default'),
     ),
   ),
 );

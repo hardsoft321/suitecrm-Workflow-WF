@@ -112,7 +112,7 @@ class WFWorkflowsViewFunctionsDoc extends SugarView
         INNER JOIN wf_workflows w ON e.workflow_id = w.id
         INNER JOIN wf_statuses s2 ON e.status2_id = s2.id
         LEFT JOIN wf_statuses s1 ON e.status1_id = s1.id
-        WHERE e.filter_function = '$class'
+        WHERE e.filter_function LIKE '%$class%'
              AND e.deleted = 0
              AND w.deleted = 0
              AND s2.deleted = 0

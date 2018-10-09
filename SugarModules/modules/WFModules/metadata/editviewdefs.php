@@ -5,7 +5,7 @@ $viewdefs ['WFModules'] = array ( 'EditView' =>
     'templateMeta' => array (
       'form' =>  array (
         'buttons' => array (
-           /*'SAVE',*/
+           'SAVE',
            'CANCEL',
         ),
       ),
@@ -23,9 +23,9 @@ $viewdefs ['WFModules'] = array ( 'EditView' =>
       'useTabs' => false,
     ),
     'panels' => array (
-      /*'lbl_information' => array (
-      ),*/
-      
+      'lbl_information' => array (
+        array ('wf_module', 'type_field'),
+      ),
     ),
   ),
 );
