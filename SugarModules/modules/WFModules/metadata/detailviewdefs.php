@@ -5,9 +5,9 @@ $viewdefs ['WFModules'] = array (  'DetailView' =>
     'templateMeta' => array (
       'form' => array (
         'buttons' => array (
-           /*'EDIT',
+           'EDIT',
            'DUPLICATE',
-           'DELETE',*/
+           'DELETE',
         ),
       ),
       'maxColumns' => '2',

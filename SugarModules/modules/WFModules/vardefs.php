@@ -8,15 +8,25 @@ $dictionary['WFModule'] = array(
         'wf_module' => array (
           'name' => 'wf_module',
           'vname' => 'LBL_WF_MODULE',
-          'type' => 'varchar',
+          'type' => 'enum',
           'required' => true,
+          'function' => array(
+            'include' => 'modules/WFModules/wfmodule_fields.php',
+            'name' => 'wfmodule_wfmodule_options',
+            'returns' => 'options',
+          ),
         ),
-		'type_field' => array (
-			'name' => 'type_field',
-			'vname' => 'LBL_TYPE_FIELD',
-			'type' => 'varchar',
-			'required' => true,
-		),		
+        'type_field' => array (
+          'name' => 'type_field',
+          'vname' => 'LBL_TYPE_FIELD',
+          'type' => 'enum',
+          'required' => true,
+          'function' => array(
+            'include' => 'modules/WFModules/wfmodule_fields.php',
+            'name' => 'wfmodule_typefield_options',
+            'returns' => 'options',
+          ),
+        ),
   ),
 );
 

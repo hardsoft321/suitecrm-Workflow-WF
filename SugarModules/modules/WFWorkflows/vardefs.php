@@ -31,12 +31,23 @@ $dictionary['WFWorkflow'] = array(
           'type' => 'enum',
 		  'len' => '30',
           'required' => true,
+          'function' => array(
+            'include' => 'modules/WFWorkflows/wfworkflow_fields.php',
+            'name' => 'wfworkflow_statusfield_options',
+            'returns' => 'options',
+          ),
         ),
         'bean_type' => array (
           'name' => 'bean_type',
           'vname' => 'LBL_BEAN_TYPE',
           'type' => 'multienum',
+          'isMultiSelect' => true,
           'required' => true,
+          'function' => array(
+            'include' => 'modules/WFWorkflows/wfworkflow_fields.php',
+            'name' => 'wfworkflow_beantype_options',
+            'returns' => 'options',
+          ),
         ),
   ),
 );

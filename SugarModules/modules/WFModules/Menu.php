@@ -5,5 +5,6 @@ global $mod_strings;
 $module_menu = Array();
 
 $module_menu[]=	Array("index.php?module=WFModules&action=index&return_module=WFModules&return_action=DetailView", $mod_strings['LBL_LIST_FORM_TITLE'],"WFModules");
+$module_menu[]=	Array("index.php?module=WFModules&action=EditView&return_module=WFModules&return_action=DetailView", $mod_strings['LBL_NEW_FORM_TITLE'],"WFModules");
 
 ?>
