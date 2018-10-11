@@ -27,6 +27,18 @@ $viewdefs ['WFModules'] = array (  'DetailView' =>
     'panels' => array (
       'lbl_information' => array (
         array ('wf_module', 'type_field'),
+        array (
+          array(
+            'name' => 'utility_fields',
+            'customCode' => '{$utility_fields}',
+            'customLabel' => 'Utility Fields',
+          ),
+          array(
+            'name' => 'logic_hooks',
+            'customCode' => '{$logic_hooks}',
+            'customLabel' => 'Logic Hooks',
+          ),
+        ),
       ),
     ),
   ),

@@ -22,4 +22,48 @@ class WFWorkflowsController extends SugarController
             $this->bean->bean_type = str_replace('^'.WF_EMPTY_BEANTYPE_VALUE.'^', '^^', $this->bean->bean_type);
         }
     }
+
+    public function action_createVardefs()
+    {
+        $this->bean->createUtilityVardefsFile();
+    }
+
+    public function post_createVardefs()
+    {
+        parent::post_save();
+    }
+
+    public function action_removeVardefs()
+    {
+        $this->bean->removeUtilityVardefsFile();
+    }
+
+    public function post_removeVardefs()
+    {
+        parent::post_save();
+    }
+
+    public function action_createLang()
+    {
+        if (!empty($_POST['lang'])) {
+            $this->bean->createLangVardefsFile($_POST['lang']);
+        }
+    }
+
+    public function post_createLang()
+    {
+        parent::post_save();
+    }
+
+    public function action_removeLang()
+    {
+        if (!empty($_POST['lang'])) {
+            $this->bean->removeLangVardefsFile($_POST['lang']);
+        }
+    }
+
+    public function post_removeLang()
+    {
+        parent::post_save();
+    }
 }

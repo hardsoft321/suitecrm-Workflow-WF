@@ -40,6 +40,18 @@ $viewdefs ['WFWorkflows'] = array (  'DetailView' =>
                 'customCode'=>'{$fields.bean_type.value}'
             )
         ),
+        array(
+          array(
+            'name' => 'utility_fields',
+            'customCode' => '{$utility_fields}',
+            'customLabel' => 'Utility Fields',
+          ),
+          array(
+            'name' => 'status_settings',
+            'customCode' => '{$status_settings}',
+            'customLabel' => 'Status Settings',
+          ),
+        ),
       ),
     ),
   ),
