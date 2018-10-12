@@ -83,6 +83,8 @@ class WFModule extends SugarBean {
     'vname' => 'LBL_CONFIRM_LIST',
     'audited' => false,
     'massupdate' => false,
+    'inline_edit' => false,
+    'importable' => 'false',
 );
 
 /**
@@ -94,6 +96,66 @@ class WFModule extends SugarBean {
     'source' => 'non-db',
     'audited' => false,
     'massupdate' => false,
+);
+
+/**
+ * Confirm block
+ */
+\$dictionary['{$objectName}']['fields']['wf_confirm_block'] = array(
+    'name' => 'wf_confirm_block',
+    'vname' => 'LBL_CONFIRM_STATUS',
+    'type' => 'text',
+    'source' => 'non-db',
+    'audited' => false,
+    'massupdate' => false,
+    'inline_edit' => false,
+    'importable' => 'false',
+    'function' => array(
+        'include' => 'custom/include/Workflow/utils.php',
+        'name' => 'wf_confirmBlock',
+        'returns' => 'html',
+    ),
+    'studio' => true,
+);
+
+/**
+ * Assign block
+ */
+\$dictionary['{$objectName}']['fields']['wf_assign_block'] = array(
+    'name' => 'wf_assign_block',
+    'vname' => 'LBL_ASSIGNED_CHANGE_TITLE',
+    'type' => 'text',
+    'source' => 'non-db',
+    'audited' => false,
+    'massupdate' => false,
+    'inline_edit' => false,
+    'importable' => 'false',
+    'function' => array(
+        'include' => 'custom/include/Workflow/utils.php',
+        'name' => 'wf_assignBlock',
+        'returns' => 'html',
+    ),
+    'studio' => true,
+);
+
+/**
+ * Assigned users block
+ */
+\$dictionary['{$objectName}']['fields']['wf_assigned_block'] = array(
+    'name' => 'wf_assigned_block',
+    'vname' => 'LBL_ASSIGNEES',
+    'type' => 'text',
+    'source' => 'non-db',
+    'audited' => false,
+    'massupdate' => false,
+    'inline_edit' => false,
+    'importable' => 'false',
+    'function' => array(
+        'include' => 'custom/include/Workflow/utils.php',
+        'name' => 'wf_assigneesBlock',
+        'returns' => 'html',
+    ),
+    'studio' => true,
 );
 
 PHP;

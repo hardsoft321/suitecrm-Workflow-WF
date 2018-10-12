@@ -1,11 +1,18 @@
+{if !empty($workflow.statusAssignedUsers)}
+
 <div id="log_block" class="wf_block">
-  <h4>{sugar_translate label='LBL_ASSIGNEDS' module='WFWorkflows'}</h4>
   <div id='status-assigned' class="wf_block_body">
-      <table>
-        <tr><th>{sugar_translate label='LBL_ROLE' module='WFWorkflows'}</th><th>{sugar_translate label='LBL_ASSIGNED' module='WFWorkflows'}</th></tr>
-        {foreach from=$workflow.statusAssignedUsers item="sa"}
-          <tr><td class="role">{$sa.role_name}</td><td class="user_name">{$sa.first_name} {$sa.last_name}</td></tr>
-        {/foreach}
-      </table>
+    {foreach from=$workflow.statusAssignedUsers item="sa"}
+    <div class="col-xs-12">
+      <div class="col-xs-12 col-sm-4 label">
+        <label class="role">{$sa.role_name}:</label>
+      </div>
+      <div class="col-xs-12 col-sm-8 edit-view-field " type="text" field="status">
+        <span class="user_name">{$sa.first_name} {$sa.last_name}</span>
+      </div>
+    </div>
+    {/foreach}
   </div>
 </div>
+
+{/if}

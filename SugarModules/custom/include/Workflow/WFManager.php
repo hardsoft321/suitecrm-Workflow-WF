@@ -609,6 +609,7 @@ class WFManager {
             $data['record'] = $bean->id;
             $data['module'] = $bean->module_name;
             $data['currentStatus'] = $status1;
+            $data['currentStatusName'] = $statusBean ? $statusBean->name : $status1;
             if(!empty($statuses)) {
                 $data['confirmData'] = array(
                     'formName' => 'confirmForm',

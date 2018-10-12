@@ -59,6 +59,7 @@ $mod_strings = array (
 'LBL_RESOLUTION' => 'Резолюция',
 'LBL_ASSIGNED' => 'Ответственный',
 'LBL_ASSIGNEDS' => 'Ответственные',
+'LBL_ASSIGNEES' => 'Ответственные',
 'LBL_CONFIRM_STATUS' => 'Согласование',
 'LBL_NEW_STATUS' => 'Новый статус',
 'LBL_RECIPIENT_LIST' => 'Список рассылки уведомления',

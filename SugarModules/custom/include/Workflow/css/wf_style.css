@@ -13,12 +13,13 @@
 #confirm-panel-wr.expanded #confirm_panel_toggle_img_closed {display: none}
 #confirm-panel-wr table {width: initial; background-color: initial}
 #confirm-panel-wr td {border: none}
+#confirm_panel {overflow: auto}
 .wf_block {margin-top: 10px}
-.wf_block_body {margin-top: 5px; margin-bottom: 15px; border: 1px solid #abc3d7; padding: 5px; padding-right: 0px}
+/* .wf_block_body {margin-top: 5px; margin-bottom: 15px; border: 1px solid #abc3d7; padding: 5px; padding-right: 0px} */
 #status-assigned table {border-spacing: 0px}
 #status-assigned .role {background-color: #F6F6F6}
 #status-assigned td, #status-assigned th {padding: 5px 6px 5px 6px; font-size: 12px}
-#confirm-panel-wr #status-assigned td {border-bottom: 1px solid #CBDAE6}
+/* #confirm-panel-wr #status-assigned td {border-bottom: 1px solid #CBDAE6} */
 .confirmForm tr {margin:15px}
 .confirmForm td {padding:5px; vertical-align: top}
 #confirm_panel td > select {width:100%}

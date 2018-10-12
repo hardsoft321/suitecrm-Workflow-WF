@@ -17,3 +17,6 @@ $app_strings['LBL_STATUS_CHANGE'] = 'Перевод на статус';
 $app_strings['LBL_RESOLUTION'] = 'Резолюция';
 
 $app_strings['LBL_CONFIRM_ERRORS_TITLE'] = 'Чтобы перевести запись на выбранный статус, необходимо исправить следующие ошибки: ';
+$app_strings['LBL_CONFIRM_STATUS'] = 'Согласование';
+$app_strings['LBL_ASSIGNED_CHANGE_TITLE'] = 'Смена ответственного';
+$app_strings['LBL_ASSIGNEES'] = 'Ответственные';

@@ -56,6 +56,7 @@ $mod_strings = array (
 'LBL_RESOLUTION' => 'Auflösung',
 'LBL_ASSIGNED' => 'Zugewiesene Benutzer',
 'LBL_ASSIGNEDS' => 'Zugewiesene Benutzer',
+'LBL_ASSIGNEES' => 'Zugewiesene Benutzer',
 'LBL_CONFIRM_STATUS' => 'Status ändern',
 'LBL_NEW_STATUS' => 'Neuer Status',
 'LBL_RECIPIENT_LIST' => 'Mail an',

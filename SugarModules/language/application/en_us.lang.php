@@ -17,3 +17,6 @@ $app_strings['LBL_STATUS_CHANGE'] = 'Status Changed To';
 $app_strings['LBL_RESOLUTION'] = 'Resolution';
 
 $app_strings['LBL_CONFIRM_ERRORS_TITLE'] = 'Errors: ';
+$app_strings['LBL_CONFIRM_STATUS'] = 'Change Status';
+$app_strings['LBL_ASSIGNED_CHANGE_TITLE'] = 'Change Assigned User';
+$app_strings['LBL_ASSIGNEES'] = 'Assigned Users';

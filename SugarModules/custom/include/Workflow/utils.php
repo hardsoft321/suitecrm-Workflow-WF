@@ -122,4 +122,36 @@ function wf_set_mod_strings($mod) {
     }
     $GLOBALS['mod_strings'] = return_module_language($current_language, $mod);
 }
-?>
+
+function wf_confirmBlock($focus, $name = null, $value = null, $view = null) {
+    require_once 'custom/include/Workflow/WFManager.php';
+    require_once 'include/Sugar_Smarty.php';
+    if (!isset($focus->wf_workflowData)) {
+        $focus->wf_workflowData = WFManager::getEditFormData($focus);
+    }
+    $ss = new Sugar_Smarty();
+    $ss->assign('workflow', $focus->wf_workflowData);
+    return $ss->fetch('custom/include/Workflow/tpls/ConfirmBlock.tpl');
+}
+
+function wf_assignBlock($focus, $name = null, $value = null, $view = null) {
+    require_once 'custom/include/Workflow/WFManager.php';
+    require_once 'include/Sugar_Smarty.php';
+    if (!isset($focus->wf_workflowData)) {
+        $focus->wf_workflowData = WFManager::getEditFormData($focus);
+    }
+    $ss = new Sugar_Smarty();
+    $ss->assign('workflow', $focus->wf_workflowData);
+    return $ss->fetch('custom/include/Workflow/tpls/AssignBlock.tpl');
+}
+
+function wf_assigneesBlock($focus, $name = null, $value = null, $view = null) {
+    require_once 'custom/include/Workflow/WFManager.php';
+    require_once 'include/Sugar_Smarty.php';
+    if (!isset($focus->wf_workflowData)) {
+        $focus->wf_workflowData = WFManager::getEditFormData($focus);
+    }
+    $ss = new Sugar_Smarty();
+    $ss->assign('workflow', $focus->wf_workflowData);
+    return $ss->fetch('custom/include/Workflow/tpls/LogBlock.tpl');
+}

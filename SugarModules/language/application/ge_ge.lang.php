@@ -17,3 +17,6 @@ $app_strings['LBL_STATUS_CHANGE'] = 'Status geändert um';
 $app_strings['LBL_RESOLUTION'] = 'Auflösung';
 
 $app_strings['LBL_CONFIRM_ERRORS_TITLE'] = 'Fehler: ';
+$app_strings['LBL_CONFIRM_STATUS'] = 'Status ändern';
+$app_strings['LBL_ASSIGNED_CHANGE_TITLE'] = 'Ändern Sie Zugewiesene Benutzer';
+$app_strings['LBL_ASSIGNEES'] = 'Zugewiesene Benutzer';
