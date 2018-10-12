@@ -34,6 +34,9 @@ $mod_strings = array (
 'LBL_CONFIRM_CHECK_LIST_FUNCTION' => 'Confirm Check List Function',
 'LBL_ISFINAL' => 'Is Final',
 
+'LBL_EVENTS_TO_STATUS' => 'Events to this Status',
+'LBL_EVENTS_FROM_STATUS' => 'Events from this Status',
+
 );
 
 

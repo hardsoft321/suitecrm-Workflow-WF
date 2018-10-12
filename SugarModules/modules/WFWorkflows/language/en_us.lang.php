@@ -88,6 +88,7 @@ $mod_strings = array (
 'DefaultGroupUserList' => 'Group Users in Role within Group',
 'DefaultNonGroupUserList' => 'Non Group Users in Role within Group',
 'DefaultRole2UserList' => 'Users in Role 2 within Group',
+'DefaultRoleOrRole2UserList' => 'Users in Role within Group or Users in Role 2 within Group',
 'DefaultUserList' => 'Users in Role within Group',
 'OwnerUserList' => 'Assigned User',
 'StatusAssignedUserList' => 'Assigned for Role or Group User',

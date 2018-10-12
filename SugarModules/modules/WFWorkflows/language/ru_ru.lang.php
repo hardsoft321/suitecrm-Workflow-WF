@@ -91,6 +91,7 @@ $mod_strings = array (
 'DefaultGroupUserList' => 'Групповые пользователи в роли и в группе',
 'DefaultNonGroupUserList' => 'Все кроме групповых в роли и в группе',
 'DefaultRole2UserList' => 'Все в роли 2 и в группе',
+'DefaultRoleOrRole2UserList' => 'Все в роли и в группе или все в роли 2 и в группе',
 'DefaultUserList' => 'Все в роли и в группе',
 'OwnerUserList' => 'Ответственный',
 'StatusAssignedUserList' => 'Закрепленный за ролью или групповой',

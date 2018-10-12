@@ -36,6 +36,9 @@ $mod_strings = array (
 
 'LBL_ISFINAL' => 'Финальный',
 
+'LBL_EVENTS_TO_STATUS' => 'Переходы в этот статус',
+'LBL_EVENTS_FROM_STATUS' => 'Переходы из этого статуса',
+
 );
 
 

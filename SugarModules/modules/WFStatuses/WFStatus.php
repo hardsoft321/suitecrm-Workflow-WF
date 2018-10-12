@@ -83,6 +83,33 @@ class WFStatus extends SugarBean {
 	{
 		return $GLOBALS['current_user']->isAdmin();
 	}
+
+	function getEventsToStatusQuery()
+	{
+		return "
+SELECT wf_events.*, s1.name AS status1_name, s2.name AS status2_name, w.name AS workflow_name
+FROM wf_events
+LEFT JOIN wf_statuses s1 ON wf_events.status1_id = s1.id
+LEFT JOIN wf_statuses s2 ON wf_events.status2_id = s2.id
+LEFT JOIN wf_workflows w ON w.id = wf_events.workflow_id
+WHERE s2.id = '{$this->id}'
+  AND wf_events.deleted = 0
+  AND (s1.deleted = 0 OR (s1.id IS NULL AND (wf_events.status1_id IS NULL OR wf_events.status1_id = '')))
+  AND s2.deleted = 0 AND w.deleted = 0
+";
+	}
+
+	function getEventsFromStatusQuery()
+	{
+		return "
+SELECT wf_events.*, s1.name AS status1_name, s2.name AS status2_name, w.name AS workflow_name
+FROM wf_events, wf_statuses s1, wf_statuses s2, wf_workflows w
+WHERE s1.id = '{$this->id}'
+  AND wf_events.status1_id = s1.id AND wf_events.status2_id = s2.id
+  AND w.id = wf_events.workflow_id
+  AND wf_events.deleted = 0 AND s1.deleted = 0 AND s2.deleted = 0 AND w.deleted = 0
+";
+	}
 }
 
 require_once ("custom/include/Workflow/utils.php");

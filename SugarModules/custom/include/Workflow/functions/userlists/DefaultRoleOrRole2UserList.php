@@ -16,9 +16,5 @@ class DefaultRoleOrRole2UserList extends DefaultUserList {
         return array_merge($users, parent::getList($bean));
     }
 
-    public function getName() {
-        return 'Все в роли и в группе или все в роли 2 и в группе';
-    }
-
 }
 ?>
