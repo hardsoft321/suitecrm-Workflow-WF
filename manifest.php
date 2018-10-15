@@ -1,8 +1,5 @@
 <?php
 
-global $sugar_config;
-$sugarVersion = isset($sugar_config['suitecrm_version']) ? 'Suite'.$sugar_config['suitecrm_version'] : $sugar_config['sugar_version'];
-
 $manifest = array (
   'acceptable_sugar_versions' => array (),
   'acceptable_sugar_flavors' => array ('CE'),
@@ -70,10 +67,6 @@ $installdefs = array (
     array (
       'from' => '<basepath>/SugarModules/modules',
       'to' => 'modules',
-    ),
-    array (
-      'from' => "<basepath>/SugarModules/upgrade_unsafe/{$sugarVersion}/",
-      'to' => '.',
     ),
   ),
   'language' => 
