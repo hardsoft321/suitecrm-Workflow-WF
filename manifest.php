@@ -11,7 +11,8 @@ $manifest = array (
   'published_date' => '2014-06-24',
   'type' => 'module',
   'remove_tables' => 'prompt',
-  'version' => '0.11.12',
+  'readme' => 'See README.md', // file_get_contents(__DIR__ . '/README.md'),
+  'version' => '0.12.0',
 );
 $installdefs = array (
   'id' => 'Workflow-WF',

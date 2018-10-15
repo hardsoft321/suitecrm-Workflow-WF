@@ -1,13 +1,3 @@
-Добавляются модули: WFModules(Модули с маршрутизацией), WFWorkflows (Маршруты), WFStatuses (Статусы маршрутов), WFEvents (Переходы маршрутов).
-
-Чтобы подключить workflow к какому-либо модулю, нужен пакет для этого модуля, например Tasks_workflow.
-
-Есть upgradeunsafe файлы. Например, если также ставится SecurtySuite, необходимо разрешить конфликт в файле include/MVC/View/views/view.detail.php.
-
-Чтобы использовать WorkflowSecurityForm и SFFormFieldsRequired должен быть установлен пакет SecurityForms.
-Чтобы использовать SendNotificationCopy должен быть установлен пакет SugarBeanMailer.
-
-
 Проверка дублирования статусов и переходов (скрипты для mysql):
 
 Для начала удалить старые записи (не во всех запросах стоит deleted = 0)
@@ -19,7 +9,7 @@ select st.*, dope.c from wf_statuses st, (select uniq_name, wf_module, count(*) 
 where st.uniq_name = dope.uniq_name AND st.wf_module = dope.wf_module and dope.c > 1 and st.deleted = 0
 order by st.uniq_name
 
--- повторяющиеся статусы, раличающиеся по атрибутам
+-- повторяющиеся статусы, различающиеся по атрибутам
 select t3.* from (
 	select *, count(*) c from (
 		select * from wf_statuses
@@ -52,7 +42,7 @@ select * from (
 ) t
 where c > 1
 
--- повторяющиеся переходы, раличающиеся по атрибутам
+-- повторяющиеся переходы, различающиеся по атрибутам
 select * from (
 	select *, count(*) as c from (
 		select s1.uniq_name as status1, s1.wf_module as module1, s2.uniq_name as status2, s2.wf_module as module2, e.*
@@ -65,7 +55,7 @@ select * from (
 ) t2
 where c > 1
 
--- повторяющиеся переходы, раличающиеся по атрибутам (не сгруппированные)
+-- повторяющиеся переходы, различающиеся по атрибутам (не сгруппированные)
 select t3.* from (
 	select *, count(*) as c from (
 		select s1.uniq_name as status1, s1.wf_module as module1, s2.uniq_name as status2, s2.wf_module as module2, e.*
