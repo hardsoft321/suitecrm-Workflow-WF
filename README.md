@@ -31,9 +31,20 @@ Notes: `SendNotificationCopy` function depends on `SugarBeanMailer` package.
 
 Finally, go to `Administration` -> `Studio`.
 Select your module -> `Layouts` -> `Detail View`.
-Create panel with fields: `Change Status`, `Change Assigned User` and `Assigned Users`.
+Create panel with control fields: `Change Status`, `Change Assigned User` and `Assigned Users`.
 `Change Status` field is required for others.
 `Confirm List` field is not ready to use.
 
 Create a record of your module.
 Ensure that your user has role from first workflow status and your user and module record have common groups.
+
+Note: Assigned user can be changed only by new field.
+Standard field will throw exception if new user is not allowed.
+(TODO: fix Suite theme to work with hideIf option like Sugar CE do)
+
+## See also
+
+ - [suitecrm-workflow-opportunities](https://github.com/hardsoft321/suitecrm-workflow-opportunities) creates utility files for `Opportunities` module (you still need to add control fields to DetailView).
+ - [demo321-en-data](https://github.com/hardsoft321/demo321-en-data) inserts demo data: some users, roles, groups and workflow for Opportunities.
+[dbgit](https://github.com/hardsoft321/suitecrm-dbgit) package required.
+ - [suitecrm-workflow-bpmn](https://github.com/hardsoft321/suitecrm-workflow-bpmn) displays workflow in BPM notation.
