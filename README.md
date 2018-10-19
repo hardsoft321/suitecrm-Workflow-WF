@@ -47,12 +47,15 @@ Change other panels display type to `Panel` if new panel display type is disable
 Edit panel name before adding fields.
 Click `Save & Deploy`.
 
-Create a record of your module.
-Ensure that your user has role from first workflow status and your user and module record share same group.
-
+Also you should modify `Edit View` layout in `Studio`.
+Remove regular status field as it is replaced with `Change Status` field.
 Note: Assigned user can be changed only by new field.
 Standard field will throw exception if new user is not allowed.
 (TODO: fix Suite theme to work with hideIf option like Sugar CE do)
+
+Create a record of your module.
+Ensure that your user has role from first workflow status and your user and module record share same group.
+
 
 ## See also
 
