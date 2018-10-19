@@ -1,17 +1,17 @@
 <?php
 
 $admin_options_defs = array();
-$admin_options_defs['WF']['Workflows'] = array (
-    'WorkFlow',
-    'LBL_WF_WORKFLOWS_TITLE',
-    'LBL_WF_WORKFLOWS_DESC',
-    './index.php?module=WFWorkflows&action=index',
-);
 $admin_options_defs['WF']['Modules'] = array (
     'WorkFlow',
     'LBL_WF_MODULES_TITLE',
     'LBL_WF_MODULES_DESC',
     './index.php?module=WFModules&action=index',
+);
+$admin_options_defs['WF']['Workflows'] = array (
+    'WorkFlow',
+    'LBL_WF_WORKFLOWS_TITLE',
+    'LBL_WF_WORKFLOWS_DESC',
+    './index.php?module=WFWorkflows&action=index',
 );
 $admin_options_defs['WF']['Statuses'] = array (
     'WorkFlow',

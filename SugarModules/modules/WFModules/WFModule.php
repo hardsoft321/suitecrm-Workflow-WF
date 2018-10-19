@@ -45,10 +45,10 @@ class WFModule extends SugarBean {
 	{
 		$utility_fields_file_name = $this->getUtilityVardefsFileName();
 		if (!file_exists($utility_fields_file_name)) {
-			if (empty($GLOBALS['beanList'][$this->wf_module])) {
-				throw new Exception("Can't find object for module " . $this->wf_module);
+			$objectName = BeanFactory::newBean($this->wf_module)->object_name;
+			if (empty($objectName)) {
+				throw new Exception("Can't find object name for module " . $this->wf_module);
 			}
-			$objectName = $GLOBALS['beanList'][$this->wf_module];
 			mkdir_recursive(dirname($utility_fields_file_name));
 			$code = <<<PHP
 <?php
