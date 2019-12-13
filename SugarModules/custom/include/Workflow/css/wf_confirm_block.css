@@ -1,0 +1,13 @@
+.detail-view-field[field="wf_confirm_block"]
+, .detail-view-field[field="wf_assign_block"]
+, .detail-view-field[field="wf_assigned_block"]
+, .detail-view-field[field="wf_status_audit"]
+, .detail-view-field[field="confirm_list"]
+, .wf_confirm_block_label, .wf_assign_block_label, .wf_assigned_block_label, .wf_status_audit_label, .confirm_list_label
+{
+    width: 100%;
+}
+.detail-view-row .wf_block .label {white-space: normal}
+.wf_block select, .wf_block textarea, .wf_block input[type="text"], #confirmForm textarea {width: 100%}
+.wf_block input[type="submit"] {white-space: normal; height: inherit}
+#wf_assigned_block_span {display: block}

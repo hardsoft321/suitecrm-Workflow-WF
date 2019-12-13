@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="{sugar_getjspath file='custom/include/Workflow/css/wf_confirm_block.css'}" />
 <script src="{sugar_getjspath file='custom/include/Workflow/js/wf_ui.js'}"></script>
 
 {assign var='formName' value=$workflow.confirmData.formName}
@@ -7,7 +8,7 @@
     <script>if(typeof console != "undefined") console.error('confirmData.formName was empty and is set to "{$formName}"');</script>
 {/if}
 
-<div class="row edit-view-row">
+<div class="row edit-view-row wf_block">
 <form id='{$formName}' name='{$formName}' action='index.php?entryPoint=wf_confirm' method='POST' class="confirmForm wf_block_body"
     data-resolutionrequired = "{$workflow.confirmData.resolutionRequiredData|@json_encode|escape:"html"}">
     <input type='hidden' id='record' name='record' value='{$workflow.record}'>
@@ -77,6 +78,11 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
     addToValidate(formName, 'resolution', null, true, resolutionLabel);
     addToValidate(formName, 'assigned_user', null, true, assignedLabel);
     lab321.wf.onChangeNewStatus(formName);
+    $('.detail-view-field[field="wf_confirm_block"]').parent().children('.label').addClass('wf_confirm_block_label')
+    $('.detail-view-field[field="wf_assign_block"]').parent().children('.label').addClass('wf_assign_block_label')
+    $('.detail-view-field[field="wf_assigned_block"]').parent().children('.label').addClass('wf_assigned_block_label')
+    $('.detail-view-field[field="wf_status_audit"]').parent().children('.label').addClass('wf_status_audit_label')
+    $('.detail-view-field[field="confirm_list"]').parent().children('.label').addClass('confirm_list_label')
 {rdelim});
 </script>
 
@@ -86,5 +92,7 @@ SUGAR.util.doWhen('document.readyState == "complete" && typeof lab321 != "undefi
 </div>
 
 {if !empty($workflow.customView)}
+<div class="wf_block wf_confirm_custom_block">
   {$workflow.customView}
+</div
 {/if}
