@@ -3,7 +3,8 @@
 
 $dictionary['WFStatus'] = array(
   'table' => 'wf_statuses',
-  'unified_search' => true,
+  'unified_search' => false,
+  'audited' => true,
   'fields' => array (
         'wf_module' => array (
           'name' => 'wf_module',
@@ -11,6 +12,7 @@ $dictionary['WFStatus'] = array(
           'type' => 'enum',
           'function' => 'wf_getModulesList',
           'required' => true,
+		  'audited' => true,
         ),
 		'uniq_name' => array (
           'name' => 'uniq_name',
@@ -18,6 +20,7 @@ $dictionary['WFStatus'] = array(
           'type' => 'varchar',
 		  'len' => '255',
           'required' => true,
+		  'audited' => true,
         ),
 
 		'role_id' => array (
@@ -25,6 +28,7 @@ $dictionary['WFStatus'] = array(
 			'vname' => 'LBL_ROLE_ID',
 			'type' => 'id',
 			'required' => false,
+			'audited' => true,
 		),
         'role_name' => array (
 			'name' => 'role_name',
@@ -37,6 +41,7 @@ $dictionary['WFStatus'] = array(
 			'dbType' => 'varchar',
 			'source' => 'non-db',
 			'required' => false,
+			'audited' => true,
 		),
 
 		'role2_id' => array (
@@ -44,6 +49,7 @@ $dictionary['WFStatus'] = array(
 			'vname' => 'LBL_ROLE2_ID',
 			'type' => 'id',
 			'required' => false,
+			'audited' => true,
 		),
         'role2_name' => array (
 			'name' => 'role2_name',
@@ -56,6 +62,7 @@ $dictionary['WFStatus'] = array(
 			'dbType' => 'varchar',
 			'source' => 'non-db',
 			'required' => false,
+			'audited' => true,
 		),
 
         'edit_role_type' => array (
@@ -66,6 +73,7 @@ $dictionary['WFStatus'] = array(
 		  'options' => 'edit_role_types',
 		  'default' => 'owner',
           'required' => true,
+		  'audited' => true,
         ),
         'front_assigned_list_function' => array (
 			'name' => 'front_assigned_list_function',
@@ -73,6 +81,7 @@ $dictionary['WFStatus'] = array(
 			'type' => 'enum',
             'function' => 'wf_getAssignedListFunctions',
 			'len' => '50',
+			'audited' => true,
 		),
         'assigned_list_function' => array (
 			'name' => 'assigned_list_function',
@@ -80,6 +89,7 @@ $dictionary['WFStatus'] = array(
 			'type' => 'enum',
             'function' => 'wf_getAssignedListFunctions',
 			'len' => '50',
+			'audited' => true,
 		),
 		'confirm_list_function' => array (
 			'name' => 'confirm_list_function',
@@ -87,6 +97,7 @@ $dictionary['WFStatus'] = array(
 			'type' => 'enum',
             'function' => 'wf_getAssignedListFunctions',
 			'len' => '50',
+			'audited' => true,
 		),
 		'confirm_check_list_function' => array (
 			'name' => 'confirm_check_list_function',
@@ -94,6 +105,7 @@ $dictionary['WFStatus'] = array(
 			'type' => 'enum',
             'function' => 'wf_getAssignedListFunctions',
 			'len' => '50',
+			'audited' => true,
 		),
             'isfinal' => array (
                         'name' => 'isfinal',
@@ -101,6 +113,7 @@ $dictionary['WFStatus'] = array(
                         'type' => 'bool',
                         'reportable'=>false,
                         'default'=>'0',
+                        'audited' => true,
                         'comment' => 'Indicates if item has been archived'
                 ),
 
@@ -109,6 +122,8 @@ $dictionary['WFStatus'] = array(
 $dictionary["WFStatus"]['indices'][] = array('name'=>'idx_wfstatus_uniq_m_d', 'type'=>'index', 'fields'=>array('uniq_name', 'wf_module', 'deleted'));
 
 VardefManager::createVardef('WFStatuses', 'WFStatus', array('default'));
+
+$dictionary['WFStatus']['fields']['name']['audited'] = true;
 
 $dictionary['WFStatus']['relationships']['wfstatuses_modified_user'] = array(
    'lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',

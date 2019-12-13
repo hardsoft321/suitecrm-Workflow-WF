@@ -3,7 +3,8 @@
 
 $dictionary['WFModule'] = array(
   'table' => 'wf_modules',
-  'unified_search' => true,
+  'unified_search' => false,
+  'audited' => true,
   'fields' => array (
         'wf_module' => array (
           'name' => 'wf_module',
@@ -15,6 +16,7 @@ $dictionary['WFModule'] = array(
             'name' => 'wfmodule_wfmodule_options',
             'returns' => 'options',
           ),
+          'audited' => true,
         ),
         'type_field' => array (
           'name' => 'type_field',
@@ -26,6 +28,7 @@ $dictionary['WFModule'] = array(
             'name' => 'wfmodule_typefield_options',
             'returns' => 'options',
           ),
+          'audited' => true,
         ),
   ),
 );

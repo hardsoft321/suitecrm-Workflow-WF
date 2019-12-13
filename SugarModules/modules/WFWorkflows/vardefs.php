@@ -3,7 +3,8 @@
 
 $dictionary['WFWorkflow'] = array(
   'table' => 'wf_workflows',
-  'unified_search' => true,
+  'unified_search' => false,
+  'audited' => true,
   'fields' => array (
         'wf_module' => array (
           'name' => 'wf_module',
@@ -11,6 +12,7 @@ $dictionary['WFWorkflow'] = array(
           'type' => 'enum',
           'function' => 'wf_getModulesList',
           'required' => true,
+          'audited' => true,
         ),
 		/*'type' => array (
           'name' => 'type',
@@ -24,6 +26,7 @@ $dictionary['WFWorkflow'] = array(
           'type' => 'varchar',
 		  'len' => '30',
           'required' => true,
+          'audited' => true,
         ),
         'status_field' => array (
           'name' => 'status_field',
@@ -36,6 +39,7 @@ $dictionary['WFWorkflow'] = array(
             'name' => 'wfworkflow_statusfield_options',
             'returns' => 'options',
           ),
+          'audited' => true,
         ),
         'bean_type' => array (
           'name' => 'bean_type',
@@ -48,12 +52,15 @@ $dictionary['WFWorkflow'] = array(
             'name' => 'wfworkflow_beantype_options',
             'returns' => 'options',
           ),
+          'audited' => true,
         ),
   ),
 );
 $dictionary["WFWorkflow"]['indices'][] = array('name'=>'idx_workflow_uniq_d', 'type'=>'index', 'fields'=>array('uniq_name', 'deleted'));
 
 VardefManager::createVardef('WFWorkflows', 'WFWorkflow', array('default'));
+
+$dictionary['WFWorkflow']['fields']['name']['audited'] = true;
 
 $dictionary['WFWorkflow']['relationships']['wfworkflows_modified_user'] = array(
    'lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',

@@ -3,12 +3,14 @@
 
 $dictionary['WFEvent'] = array(
   'table' => 'wf_events',
-  'unified_search' => true,
+  'unified_search' => false,
+  'audited' => true,
   'fields' => array (
         'status1_id' => array (
 			'name' => 'status1_id',
 			'vname' => 'LBL_STATUS1_ID',
 			'type' => 'id',
+			'audited' => true,
 		),
 
         'status1_name' => array (
@@ -23,6 +25,7 @@ $dictionary['WFEvent'] = array(
 			'len' => '30',
 			'source' => 'non-db',
 			'link' => 'status1',
+			'audited' => true,
 		),
 
 		'status1' => array (
@@ -41,6 +44,7 @@ $dictionary['WFEvent'] = array(
 			'vname' => 'LBL_STATUS2_ID',
 			'type' => 'id',
 			'required' => true,
+			'audited' => true,
 		),
         'status2_name' => array (
 			'name' => 'status2_name',
@@ -55,6 +59,7 @@ $dictionary['WFEvent'] = array(
 			'source' => 'non-db',
 			'required' => true,
 			'link' => 'status2',
+			'audited' => true,
 		),
 
 		'status2' => array (
@@ -72,6 +77,7 @@ $dictionary['WFEvent'] = array(
 			'name' => 'workflow_id',
 			'vname' => 'LBL_WORKFLOW_ID',
 			'type' => 'id',
+			'audited' => true,
 		),
         'workflow_name' => array (
 			'name' => 'workflow_name',
@@ -84,6 +90,7 @@ $dictionary['WFEvent'] = array(
 			'dbType' => 'varchar',
 			'source' => 'non-db',
 			'link' => 'workflow',
+			'audited' => true,
 		),
 
 		'workflow' => array (
@@ -102,6 +109,7 @@ $dictionary['WFEvent'] = array(
 			'vname' => 'LBL_SORT',
 			'type' => 'int',
 			'default' => '100',
+			'audited' => true,
 		),
 
         'filter_function' => array (
@@ -110,6 +118,7 @@ $dictionary['WFEvent'] = array(
 			'type' => 'multienum',
             'function' => 'wf_getFilterFunctions',
 			'len' => '250',
+			'audited' => true,
 		),
         'validate_function' => array (
 			'name' => 'validate_function',
@@ -117,6 +126,7 @@ $dictionary['WFEvent'] = array(
 			'type' => 'multienum',
             'function' => 'wf_getValidateFunctions',
 			'len' => '250',
+			'audited' => true,
 		),
         'after_save' => array (
 			'name' => 'after_save',
@@ -124,17 +134,20 @@ $dictionary['WFEvent'] = array(
 			'type' => 'multienum',
             'function' => 'wf_getProcedures',
 			'len' => '250',
+			'audited' => true,
 		),
         'func_params' => array(
             'name' => 'func_params',
             'vname' => 'LBL_FUNC_PARAMS',
             'type' => 'text',
+            'audited' => true,
         ),
         'resolution_required' => array(
             'name' => 'resolution_required',
             'vname' => 'LBL_RESOLUTION_REQUIRED',
             'type' => 'bool',
             'default' => '0',
+            'audited' => true,
             'comment' => 'Indicates if resolution is required'
         ),
   ),
