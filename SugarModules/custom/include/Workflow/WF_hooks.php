@@ -85,6 +85,28 @@ class WF_hooks {
     }
   }
 
+    function assignCreator($focus)
+    {
+        $isNew = !empty($focus->date_entered);
+        if (!$isNew) {
+            return;
+        }
+        require_once 'custom/include/Workflow/WFManager.php';
+        require_once 'custom/include/Workflow/WFStatusAssigned.php';
+        $statusField = WFManager::getBeanStatusField($focus);
+        if(!$statusField) {
+            $GLOBALS['log']->error("WF_hooks::assignCreator: no status field for {$focus->module_name} {$focus->id}");
+            return;
+        }
+        $statusBean = WFManager::getStatusBeanByName($focus->$statusField, $focus->module_name);
+        if (!$statusBean) {
+            $GLOBALS['log']->error("WF_hooks::assignCreator: no status bean for {$focus->module_name} {$focus->id}");
+            return;
+        }
+        $user_id = !empty($focus->assigned_user_id) ? $focus->assigned_user_id : $GLOBALS['current_user']->id;
+        WFStatusAssigned::setAssignedUser($statusBean, $focus->id, $focus->module_name, $user_id);
+    }
+
     /**
      * Хук панели выбора пользователей для уведомления при смене статуса
      */
