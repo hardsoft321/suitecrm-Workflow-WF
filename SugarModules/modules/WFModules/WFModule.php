@@ -72,6 +72,7 @@ class WFModule extends SugarBean {
     'vname' => 'LBL_CONFIRM_LIST',
     'type' => 'WFStatusAudit',
     'source' => 'non-db',
+    'inline_edit' => false,
 );
 
 /**
